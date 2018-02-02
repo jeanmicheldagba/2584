@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jeu2584;
 
-/**
- *
- * @author Sylvain
- */
 public class Case implements Parametres {
 
     private int x, y, valeur;
@@ -71,7 +62,7 @@ public class Case implements Parametres {
         }
     }
 
-    public Case getVoisinDirect(int direction) {
+    public Case getVoisinDirect(int direction) { // retourne la case la plus proche dans la direction donnée
         if (direction == HAUT) {
             for (int i = this.y - 1; i >= 0; i--) {
                 for (Case c : grille.getGrille()) {
