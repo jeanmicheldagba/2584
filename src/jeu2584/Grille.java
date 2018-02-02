@@ -71,7 +71,8 @@ public class Grille implements Parametres {
         Case[] extremites = this.getCasesExtremites(direction);
         deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
         for (int i = 0; i < TAILLE; i++) {
-            switch (direction) {
+            this.deplacerCasesRecursif(extremites, i, direction, 0);
+            /*switch (direction) {
                 case HAUT:
                     this.deplacerCasesRecursif(extremites, i, direction, 0);
                     break;
@@ -84,7 +85,7 @@ public class Grille implements Parametres {
                 default:
                     this.deplacerCasesRecursif(extremites, i, direction, 0);
                     break;
-            }
+            }*/
         }
         return deplacement;
     }
