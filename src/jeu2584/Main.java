@@ -24,7 +24,7 @@ public class Main implements Parametres {
         g.getGrille().remove(c);
         System.out.println(g);*/
         
-        while (!g.partieFinie()) {
+        while (!g.partiePerdue()) {
             System.out.println("Déplacer vers la Droite (d), Gauche (g), Haut (h), ou Bas (b) ?");
             String s = sc.nextLine();
             s.toLowerCase();

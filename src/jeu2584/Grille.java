@@ -50,7 +50,7 @@ public class Grille implements Parametres {
         return valeurMax;
     }
 
-    public boolean partieFinie() {
+    public boolean partiePerdue() {
         if (this.grille.size() < TAILLE * TAILLE) {
             return false;
         } else {

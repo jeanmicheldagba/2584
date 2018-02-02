@@ -139,7 +139,7 @@ public class GUI2584 extends javax.swing.JFrame implements Parametres {
             if (g.getValeurMax() >= OBJECTIF) {
                 this.finPartie("Gagné ! Score = "+g.getValeurMax());
             }
-            if (g.partieFinie()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
+            if (g.partiePerdue()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
         }
     }//GEN-LAST:event_boutonHautMouseClicked
 
@@ -157,7 +157,7 @@ public class GUI2584 extends javax.swing.JFrame implements Parametres {
             if (g.getValeurMax() >= 2048) {
                 this.finPartie("Gagné ! Score = "+g.getValeurMax());
             }
-            if (g.partieFinie()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
+            if (g.partiePerdue()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
         }
     }//GEN-LAST:event_boutonGaucheMouseClicked
 
@@ -175,7 +175,7 @@ public class GUI2584 extends javax.swing.JFrame implements Parametres {
             if (g.getValeurMax() >= 2048) {
                 this.finPartie("Gagné ! Score = "+g.getValeurMax());
             }
-            if (g.partieFinie()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
+            if (g.partiePerdue()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
         }
     }//GEN-LAST:event_boutonDroiteMouseClicked
 
@@ -193,7 +193,7 @@ public class GUI2584 extends javax.swing.JFrame implements Parametres {
             if (g.getValeurMax() >= 2048) {
                 this.finPartie("Gagné ! Score = "+g.getValeurMax());
             }
-            if (g.partieFinie()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
+            if (g.partiePerdue()) this.finPartie("Perdu ! Score = "+g.getValeurMax());
         }
     }//GEN-LAST:event_boutonBasMouseClicked
 
