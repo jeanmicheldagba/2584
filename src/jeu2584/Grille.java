@@ -173,6 +173,7 @@ public class Grille implements Parametres {
         return result;
     }
 
+    //affiche message de victoire et quitte le jeu
     public void victory() {
         System.out.println("Bravo ! Vous avez atteint " + this.valeurMax);
         System.exit(0);

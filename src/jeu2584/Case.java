@@ -99,6 +99,37 @@ public class Case implements Parametres {
         return null;
     }
 
+    public boolean fibonacciVoisin(Case c){
+        x=this.valeur;
+        y=c.getValeur();
+        
+        if(x==y){
+            if(x==1) return true;
+            else return false;
+        }
+        
+        boolean trouve=false;
+        int a=1;
+        int b=1;
+        int fib=a+b;
+        
+        while(!trouve){            
+            if(fib>x || fib>y) return false;
+            else if(x==fib || y==fib){
+                trouve=true;
+            } 
+            b=a;
+            a=fib;  
+            fib=a+b;            
+        }
+        if(x==fib || y==fib){
+            return true;
+        } 
+        return false;
+        
+        
+    }
+
     @Override
     public String toString() {
         return "Case(" + this.x + "," + this.y + "," + this.valeur + ")";
