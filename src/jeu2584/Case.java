@@ -103,29 +103,35 @@ public class Case implements Parametres {
         x=this.valeur;
         y=c.getValeur();
         
+        //Si les deux cases valent 1, elles sont voisines car F(1)=F(2)=1
         if(x==y){
             if(x==1) return true;
             else return false;
         }
         
         boolean trouve=false;
+        //on commence avec a : F(n-2)=F(1)=1 et b : F(n-1)=F(2)=1
         int a=1;
         int b=1;
         int fib=a+b;
         
-        while(!trouve){            
+        while(!trouve){ 
+            //Si fib est supérieur à une des valeurs, c'est qu'elle n'appartient à la suite
             if(fib>x || fib>y) return false;
+            
+            //Si on trouve une des valeurs, on sort à la fin de la boucle
             else if(x==fib || y==fib){
                 trouve=true;
             } 
+            
+            //on itère fibonacci
             b=a;
             a=fib;  
             fib=a+b;            
         }
-        if(x==fib || y==fib){
-            return true;
-        } 
-        return false;
+        
+        //on a trouvé une des valeurs dans Fibonacci, on rend vrai ssi l'autre valeur est F(n+1)
+        return x==fib || y==fib;
         
         
     }

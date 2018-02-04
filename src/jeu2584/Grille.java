@@ -57,6 +57,7 @@ public class Grille implements Parametres {
             for (Case c : this.grille) {
                 for (int i = 1; i <= 2; i++) {
                     if (c.getVoisinDirect(i) != null) {
+                        //on teste si la case voisine est voisine dans la suite de Fibonacci
                         if (c.fibonacciVoisin(c.getVoisinDirect(i))) {
                             return false;
                         }
