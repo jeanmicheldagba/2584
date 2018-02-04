@@ -91,8 +91,11 @@ public class Grille implements Parametres {
         return deplacement;
     }
 
-    private void fusion(Case c) {
-        c.setValeur(c.getValeur() * 2);
+    //Incrémente c de la valeur add
+    private void fusion(Case c, int add) {
+        c.setValeur(c.getValeur()+add);
+        
+        //actualise valeur max
         if (this.valeurMax < c.getValeur()) {
             this.valeurMax = c.getValeur();
         }
@@ -125,8 +128,9 @@ public class Grille implements Parametres {
             }
             Case voisin = extremites[rangee].getVoisinDirect(-direction);
             if (voisin != null) {
-                if (extremites[rangee].valeurEgale(voisin)) {
-                    this.fusion(extremites[rangee]);
+                if (extremites[rangee].fibonacciVoisin(voisin)) {
+                    //fusionne les voisines dans Fibonacci (somme des 2 cases)
+                    this.fusion(extremites[rangee], voisin.getValeur());
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     this.grille.remove(voisin);
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
@@ -189,7 +193,10 @@ public class Grille implements Parametres {
         if (this.grille.size() < TAILLE*TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
             Random ra = new Random();
-            int valeur = (1 + ra.nextInt(2)) * 2;
+            
+            //la case a une probabilité de 0.75 d'avoir la valeur 1 et 0.25 d'avoir 2
+            int valeur = ra.nextDouble()>0.75 ? 2 : 1;
+            
             // on crée toutes les cases encore libres
             for (int x = 0; x < TAILLE; x++) {
                 for (int y = 0; y < TAILLE; y++) {
@@ -203,7 +210,9 @@ public class Grille implements Parametres {
             Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
             ajout.setGrille(this);
             this.grille.add(ajout);
-            if ((this.grille.size() == 1) || (this.valeurMax == 2 && ajout.getValeur() == 4)) { // Mise à jour de la valeur maximale présente dans la grille si c'est la première case ajoutée ou si on ajoute un 4 et que l'ancien max était 2
+            
+            //actualise valeurMax
+            if (this.valeurMax < ajout.getValeur()) {
                 this.valeurMax = ajout.getValeur();
             }
             return true;

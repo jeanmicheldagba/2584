@@ -5,9 +5,11 @@ import java.util.Scanner;
 public class Main implements Parametres {
 
     public static void main(String[] args) {
-
+        
         Grille g = new Grille();
-        boolean b = g.nouvelleCase();
+        
+        //On ajoute deux cases
+        boolean b = g.nouvelleCase() && g.nouvelleCase();
         System.out.println(g);
         Scanner sc = new Scanner(System.in);
         
