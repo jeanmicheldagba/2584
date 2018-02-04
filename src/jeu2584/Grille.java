@@ -50,14 +50,14 @@ public class Grille implements Parametres {
         return valeurMax;
     }
 
-    public boolean partiePerdue() {
+    public boolean partieBloquee() {
         if (this.grille.size() < TAILLE * TAILLE) {
             return false;
         } else {
             for (Case c : this.grille) {
                 for (int i = 1; i <= 2; i++) {
                     if (c.getVoisinDirect(i) != null) {
-                        if (c.valeurEgale(c.getVoisinDirect(i))) {
+                        if (c.fibonacciVoisin(c.getVoisinDirect(i))) {
                             return false;
                         }
                     }
