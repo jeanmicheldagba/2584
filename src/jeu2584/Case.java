@@ -98,10 +98,36 @@ public class Case implements Parametres {
         }
         return null;
     }
-
+    
     //détermine si la valeur de c est voisine de la valeur de this dans la suite de Fibonacci
     //NB : les cas 0 et 1 ne sont pas supportés
     public boolean fibonacciVoisin(Case c){
+        int[] fibo=new int[2];
+        fibo[0] = this.valeur;
+        fibo[1] = c.getValeur();
+        
+        //Si les deux cases valent 1, elles sont voisines car F(1)=F(2)=1
+        if(fibo[0] == fibo[1]){
+            if(fibo[0]==1) return true;
+            else return false;
+        }
+        else{
+            int n;
+            double phi = 1.61803398874989484820;
+            int[] index = new int[2];
+            
+            for(int i=0;i<2;i++){
+                index[i] = Math.round((float) (Math.log(fibo[i] * Math.sqrt(5) + 0.5) / Math.log(phi)));
+            }
+            
+            return Math.abs(index[0] - index[1]) == 1;
+        }         
+        
+    }
+
+    //détermine si la valeur de c est voisine de la valeur de this dans la suite de Fibonacci
+    //NB : les cas 0 et 1 ne sont pas supportés
+    public boolean fibonacciVoisinBis(Case c){
         int val_1=this.valeur;
         int val_2=c.getValeur();
         
