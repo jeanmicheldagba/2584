@@ -14,4 +14,9 @@ public class IA extends Joueur implements Parametres {
     public IA() {
         super();
     }
+
+    @Override
+    public void jouer() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

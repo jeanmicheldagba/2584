@@ -74,7 +74,8 @@ public class Grille implements Parametres {
         return valeurMax;
     }
 
-    public boolean partieBloquee() {
+    //détermine si un mouvement est possible
+    public boolean bloquee() {
         if (this.grille.size() < TAILLE * TAILLE) {
             return false;
         } else {
@@ -208,11 +209,6 @@ public class Grille implements Parametres {
         System.exit(0);
     }
 
-    public void gameOver() {
-        System.out.println("La partie est finie. Votre score est " + this.valeurMax);
-        System.exit(1);
-    }
-
     public boolean nouvelleCase() {
         if (this.grille.size() < TAILLE*TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
@@ -243,5 +239,31 @@ public class Grille implements Parametres {
         } else {
             return false;
         }
+    }
+    
+    public void nouvelleCase(int valeur) {
+
+        ArrayList<Case> casesLibres = new ArrayList<>();
+        Random ra = new Random();
+
+        // on crée toutes les cases encore libres
+        for (int x = 0; x < TAILLE; x++) {
+            for (int y = 0; y < TAILLE; y++) {
+                Case c = new Case(x, y, valeur);
+                if (!this.grille.contains(c)) { // contains utilise la méthode equals dans Case
+                    casesLibres.add(c);
+                }
+            }
+        }
+        // on en choisit une au hasard et on l'ajoute à la grille
+        Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
+        ajout.setGrille(this);
+        this.grille.add(ajout);
+
+        //actualise valeurMax
+        if (this.valeurMax < ajout.getValeur()) {
+            this.valeurMax = ajout.getValeur();
+        }
+        
     }
 }

@@ -9,9 +9,14 @@ package model;
  *
  * @author vaurien
  */
-public class Random extends Joueur implements Parametres {
+public class Dumb extends Joueur implements Parametres {
     
-    public Random() {
+    public Dumb() {
         super();
+    }
+
+    @Override
+    public void jouer() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
