@@ -7,5 +7,5 @@ public class Projet implements model.Parametres {
         Partie p = new Partie();
         p.init();
     }
-
+    
 }

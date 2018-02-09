@@ -10,6 +10,18 @@ public class Case implements Parametres {
         this.y = ord;
         this.valeur = v;
     }
+    
+    public Case(int abs, int ord, int v, Grille g){
+        this.x = abs;
+        this.y = ord;
+        this.valeur = v;
+        this.grille = g;
+    }
+    
+    @Override
+    public Object clone(){
+        return (Object) new Case(this.x, this.y, this.valeur, this.grille);
+    }
 
     public void setGrille(Grille g) {
         this.grille = g;

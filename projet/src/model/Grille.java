@@ -8,12 +8,36 @@ import java.util.Random;
 
 public class Grille implements Parametres {
 
-    private final HashSet<Case> grille;
+    private HashSet<Case> grille;
     private int valeurMax = 0;
     private boolean deplacement;
 
     public Grille() {
         this.grille = new HashSet<>();
+    }
+    
+    // Methode qui copie une grille par valeur et la renvoie sous forme d'objet
+    public Object clone(){
+        Grille g = new Grille();
+        // On parcourt la grille pour copier toutes les cases dans la nouvelle grille
+        for (Case c : this.grille){
+            g.grille.add((Case) c.clone());
+        }
+        g.valeurMax = this.valeurMax;
+        g.deplacement = this.deplacement;
+        return (Object) g;
+    }
+    
+    public void setValeurMax(int v){
+        this.valeurMax = v;
+    }
+    
+    public void setDeplacement(boolean b){
+        this.deplacement = b;
+    }
+    
+    public void setGrille(HashSet<Case> h){
+        this.grille = h;
     }
 
     @Override
@@ -43,7 +67,7 @@ public class Grille implements Parametres {
     }
 
     public HashSet<Case> getGrille() {
-        return grille;
+        return this.grille;
     }
 
     public int getValeurMax() {

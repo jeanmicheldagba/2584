@@ -12,6 +12,8 @@ public interface Parametres {
     static final String TOUCHE_B_2 = "l";
     static final String TOUCHE_G_2 = "k";
     
+    static final String TOUCHE_UNDO = "u";
+    
     static final int HAUT = 1;
     static final int DROITE = 2;
     static final int BAS = -1;
