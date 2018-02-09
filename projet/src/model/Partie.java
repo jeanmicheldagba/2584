@@ -12,7 +12,10 @@ public class Partie implements Parametres {
     
     public void init(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Bienvenue !\nLe joueur 1 est-il un humain ?");
+        System.out.println("Bienvenue !\nLe joueur 1 est-il un humain ? Tape o pour oui et n pour non.");
+        String s = sc.nextLine().toLowerCase();
+        if()
+        
     }
     
 }

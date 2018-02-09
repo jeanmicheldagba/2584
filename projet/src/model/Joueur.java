@@ -2,13 +2,13 @@ package model;
 
 import java.util.Scanner;
 
-public class Joueur implements Parametres {
+public abstract class Joueur implements Parametres {
     
     private Grille g;
     private int score;
     private int nbUndo;
     
-    public Joueur(Partie p){
+    public Joueur(){
         this.g = new Grille();
         this.g.nouvelleCase();
         this.g.nouvelleCase();
