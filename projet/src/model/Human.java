@@ -11,8 +11,11 @@ package model;
  */
 public class Human extends Joueur implements Parametres {
     
-    public Human() {
+    String pseudo;
+    
+    public Human(String pseudo) {
         super();
+        this.pseudo = pseudo;
     }
     
 }
