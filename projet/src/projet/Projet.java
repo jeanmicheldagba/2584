@@ -1,11 +1,11 @@
 package projet;
-import model.Jeu;
+import model.*;
 
 public class Projet implements model.Parametres {
 
     public static void main(String[] args) {
-        Jeu j = new Jeu();
-        j.jouer();
+        Partie p = new Partie();
+        p.init();
     }
 
 }

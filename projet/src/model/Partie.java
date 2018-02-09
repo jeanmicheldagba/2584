@@ -1,14 +1,18 @@
 package model;
 
+import java.util.Scanner;
+
 public class Partie implements Parametres {
     
-    private Jeu jeu1;
-    private Jeu jeu2;
+    private Joueur[] joueur;
     
     public Partie(){
-        this.jeu1 = new Jeu();
-        this.jeu2 = new Jeu();
-
+        this.joueur = new Joueur[2];
+    }
+    
+    public void init(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Bienvenue !\nLe joueur 1 est-il un humain ?");
     }
     
 }
