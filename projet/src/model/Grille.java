@@ -241,22 +241,12 @@ public class Grille implements Parametres {
         }
     }
     
-    public void nouvelleCase(int valeur) {
+    //ajoute une case de valeur et de coordonnées données
+    //attention : vérifier que l'emplacement est libre
+    public void nouvelleCase(int valeur, int x, int y) {
 
-        ArrayList<Case> casesLibres = new ArrayList<>();
-        Random ra = new Random();
-
-        // on crée toutes les cases encore libres
-        for (int x = 0; x < TAILLE; x++) {
-            for (int y = 0; y < TAILLE; y++) {
-                Case c = new Case(x, y, valeur);
-                if (!this.grille.contains(c)) { // contains utilise la méthode equals dans Case
-                    casesLibres.add(c);
-                }
-            }
-        }
-        // on en choisit une au hasard et on l'ajoute à la grille
-        Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
+        
+        Case ajout = new Case(x, y, valeur);
         ajout.setGrille(this);
         this.grille.add(ajout);
 

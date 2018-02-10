@@ -14,18 +14,6 @@ public abstract class Joueur implements Parametres {
     public Joueur(){
         this.g = new Grille();
         
-        // crée premières tuiles
-        Random ra = new Random();
-        if(ra.nextDouble()>0.75){
-            this.g.nouvelleCase(2);
-            this.g.nouvelleCase(1);
-        } else {
-            this.g.nouvelleCase(1);
-            if(ra.nextDouble()>0.75){
-                this.g.nouvelleCase(2);
-            }
-        }
-        
         this.score = 0;
         this.nbUndo = 5;
         this.lastG = (Grille) this.g.clone();
