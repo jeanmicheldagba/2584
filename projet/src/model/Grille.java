@@ -95,7 +95,7 @@ public class Grille implements Parametres {
 
     public boolean lanceurDeplacerCases(int direction) {
         Case[] extremites = this.getCasesExtremites(direction);
-        deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
+        this.deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
         for (int i = 0; i < TAILLE; i++) {
             this.deplacerCasesRecursif(extremites, i, direction, 0);
             /*switch (direction) {
@@ -113,7 +113,7 @@ public class Grille implements Parametres {
                     break;
             }*/
         }
-        return deplacement;
+        return this.deplacement;
     }
 
     //Incrémente c de la valeur add
@@ -124,7 +124,7 @@ public class Grille implements Parametres {
         if (this.valeurMax < c.getValeur()) {
             this.valeurMax = c.getValeur();
         }
-        deplacement = true;
+        this.deplacement = true;
     }
 
     private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur) {
@@ -149,7 +149,7 @@ public class Grille implements Parametres {
                         break;
                 }
                 this.grille.add(extremites[rangee]);
-                deplacement = true;
+                this.deplacement = true;
             }
             Case voisin = extremites[rangee].getVoisinDirect(-direction);
             if (voisin != null) {
