@@ -43,7 +43,7 @@ public class Human extends Joueur implements Parametres {
                 // On décrémente le nombre de undo disponible
                 this.nbUndo--;
                 // La grille du joueur redevient la version précédente
-                this.g = (Grille) this.lastG.clone();
+                this.g = this.lastG;
                 // this.sauvegardeG = (Grille) this.lastG.clone();
                 // On signale qu'undo a été utilisé
                 this.dejaUndo = true;

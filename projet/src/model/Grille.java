@@ -19,9 +19,12 @@ public class Grille implements Parametres {
     // Methode qui copie une grille par valeur et la renvoie sous forme d'objet
     public Object clone(){
         Grille g = new Grille();
+        Case cAdd;
         // On parcourt la grille pour copier toutes les cases dans la nouvelle grille
         for (Case c : this.grille){
-            g.grille.add((Case) c.clone());
+            cAdd = (Case) c.clone();
+            cAdd.setGrille(g);
+            g.grille.add(cAdd);
         }
         g.valeurMax = this.valeurMax;
         g.deplacement = this.deplacement;
@@ -50,19 +53,6 @@ public class Grille implements Parametres {
         for (int i = 0; i < tableau.length; i++) {
             result += Arrays.toString(tableau[i]) + "\n";
         }
-        return result;
-    }
-    
-    public String toHTML() {
-        int[][] tableau = new int[TAILLE][TAILLE];
-        for (Case c : this.grille) {
-            tableau[c.getY()][c.getX()] = c.getValeur();
-        }
-        String result = "<html>";
-        for (int i = 0; i < tableau.length; i++) {
-            result += Arrays.toString(tableau[i]) + "<br/>";
-        }
-        result += "</html>";
         return result;
     }
 
@@ -98,20 +88,6 @@ public class Grille implements Parametres {
         this.deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
         for (int i = 0; i < TAILLE; i++) {
             this.deplacerCasesRecursif(extremites, i, direction, 0);
-            /*switch (direction) {
-                case HAUT:
-                    this.deplacerCasesRecursif(extremites, i, direction, 0);
-                    break;
-                case BAS:
-                    this.deplacerCasesRecursif(extremites, i, direction, 0);
-                    break;
-                case GAUCHE:
-                    this.deplacerCasesRecursif(extremites, i, direction, 0);
-                    break;
-                default:
-                    this.deplacerCasesRecursif(extremites, i, direction, 0);
-                    break;
-            }*/
         }
         return this.deplacement;
     }
