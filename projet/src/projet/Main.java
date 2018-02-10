@@ -1,5 +1,6 @@
 package projet;
 import model.*;
+import model.Partie;
 
 public class Main implements model.Parametres {
 

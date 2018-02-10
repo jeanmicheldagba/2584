@@ -245,7 +245,6 @@ public class Grille implements Parametres {
     //attention : vérifier que l'emplacement est libre
     public void nouvelleCase(int valeur, int x, int y) {
 
-        
         Case ajout = new Case(x, y, valeur);
         ajout.setGrille(this);
         this.grille.add(ajout);

@@ -97,9 +97,11 @@ public class Partie implements Parametres {
             valeurs[0] = 1;
             if (ra.nextDouble() > 0.75) {
                 valeurs[1] = 2;
+            } else {
+                valeurs[1] = 1;
             }
         }
-
+        
         //ajoute les deux cases à la grille de chaque joueur
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
