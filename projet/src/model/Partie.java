@@ -113,7 +113,8 @@ public class Partie implements Parametres {
         Scanner sc = new Scanner(System.in);
 
         while (!this.partieBloquee()) {
-            for (int i = 0; i < 2; i++) {
+            int nbJoueurs = 1; // provisoire pour tests
+            for (int i = 0; i < nbJoueurs; i++) {
                 if (this.joueur[i] instanceof Human) {
                     this.joueur[i].jouer();
                 }
