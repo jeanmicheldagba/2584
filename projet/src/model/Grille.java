@@ -11,9 +11,12 @@ public class Grille implements Parametres {
     private HashSet<Case> grille;
     private int valeurMax = 0;
     private boolean deplacement;
+    private int resDeplacement; //stocke les points générés par la fusion des cases
 
     public Grille() {
         this.grille = new HashSet<>();
+        this.deplacement=false;
+        this.resDeplacement=0;
     }
     
     // Methode qui copie une grille par valeur et la renvoie sous forme d'objet
@@ -37,6 +40,17 @@ public class Grille implements Parametres {
     
     public void setDeplacement(boolean b){
         this.deplacement = b;
+    }
+    
+    public boolean getDeplacement(){
+        return this.deplacement;
+    }
+    
+    public void setResDeplacement(int rd){
+        this.resDeplacement=rd;
+    }
+    public int getResDeplacement(){
+        return this.resDeplacement;
     }
     
     public void setGrille(HashSet<Case> h){
@@ -94,7 +108,9 @@ public class Grille implements Parametres {
 
     //Incrémente c de la valeur add
     private void fusion(Case c, int add) {
-        c.setValeur(c.getValeur()+add);
+        int sommeCases=c.getValeur()+add;
+        c.setValeur(sommeCases);
+        this.resDeplacement=this.resDeplacement+sommeCases;
         
         //actualise valeur max
         if (this.valeurMax < c.getValeur()) {

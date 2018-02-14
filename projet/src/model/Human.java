@@ -25,8 +25,9 @@ public class Human extends Joueur implements Parametres {
         System.out.println(this.g);
         //System.out.println("Sauvegarde :");
         //System.out.println(this.sauvegardeG);
-        System.out.println("undo :");
-        System.out.println(this.lastG);
+        /*System.out.println("undo :");
+        System.out.println(this.lastG);*/
+        System.out.println("Votre score : "+this.score);
         Scanner sc = new Scanner(System.in);
 
         // On affiche les touches à utiliser et on récupere l'entrée clavier du joueur
@@ -77,6 +78,7 @@ public class Human extends Joueur implements Parametres {
             if (this.g.getValeurMax() >= OBJECTIF) {
                 this.g.victory();
             }
+            this.calculScore(); //on met à jour le score
             // On dit que la derniere action n'était pas déjà un undo
             this.dejaUndo = false;
             // la grille du undo devient la grille sauvegardée

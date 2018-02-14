@@ -20,7 +20,7 @@ public class Partie implements Parametres {
             this.joueur[1] = new Human("test2");
         }
         this.initGrilles();
-        this.jouer();
+        this.play();
     }
 
     public void initJeu() {
@@ -111,7 +111,7 @@ public class Partie implements Parametres {
         }
     }
 
-    public void jouer() {
+    public void play() {
         Scanner sc = new Scanner(System.in);
 
         while (!this.partieBloquee()) {
