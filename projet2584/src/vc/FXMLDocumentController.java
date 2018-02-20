@@ -5,6 +5,7 @@
  */
 package vc;
 
+import m.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -41,6 +42,7 @@ public class FXMLDocumentController implements Initializable {
     private final Label c = new Label("2");
     private int x = 24, y = 191;
     private int objectifx = 24, objectify = 191;
+    private Joueur[] joueur;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -65,43 +67,6 @@ public class FXMLDocumentController implements Initializable {
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
      * dans Scene Builder
      */
-    @FXML
-    private void handleDragAction(MouseEvent event) {
-        System.out.println("Glisser/déposer sur la grille avec la souris");
-        double x = event.getX();//translation en abscisse
-        double y = event.getY();//translation en ordonnée
-        if (x > y) {
-            for (int i = 0; i < grille.getChildren().size(); i++) { //pour chaque colonne
-                //for (int j = 0; j < grille.getRowConstraints().size(); j++) { //pour chaque ligne
-                System.out.println("ok1");
-                grille.getChildren().remove(i);
-
-                /*Node tuile = grille.getChildren().get(i);
-                 if (tuile != null) {
-                 int rowIndex = GridPane.getRowIndex(tuile);
-                 int rowEnd = GridPane.getRowIndex(tuile);
-                 }*/
-                // }
-            }
-        } else if (x < y) {
-            System.out.println("ok2");
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    Pane p = new Pane();
-                    p.getStyleClass().add("pane");
-                    grille.add(p, i, j);
-                    p.setVisible(true);
-                    grille.getStyleClass().add("gridpane");
-                }
-            }
-        }
-    }
-
-    @FXML
-    private void handleButtonAction(MouseEvent event) {
-        System.out.println("Clic de souris sur le bouton menu");
-    }
-
     @FXML
     public void keyPressed(KeyEvent ke) {
         System.out.println("touche appuyée");
