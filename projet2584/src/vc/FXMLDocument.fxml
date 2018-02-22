@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="690.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vc.FXMLDocumentController">
     <children>
-      <Pane fx:id="background" onKeyPressed="#mouseClicked" onMouseClicked="#mouseClicked">
+      <Pane fx:id="background" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked">
          <children>
             <TextFlow id="console" layoutY="611.0" prefHeight="79.0" prefWidth="891.0" />
             <Pane fx:id="fond" prefHeight="613.0" prefWidth="445.0">

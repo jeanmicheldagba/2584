@@ -32,8 +32,9 @@ and open the template in the editor.
 
 #console {
     -fx-background-color: black;
+    -fx-text-fill: white;
 }
 
 #background {
-    -fx-background-color: blue;
+    -fx-background-color: white;
 }
