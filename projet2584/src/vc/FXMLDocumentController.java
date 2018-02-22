@@ -67,6 +67,12 @@ public class FXMLDocumentController implements Initializable {
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
      * dans Scene Builder
      */
+    
+    @FXML
+    public void mouseClicked(){
+        System.out.println("blabla");
+    }
+    
     @FXML
     public void keyPressed(KeyEvent ke) {
         System.out.println("touche appuyée");
