@@ -151,40 +151,46 @@ public class Controller implements Initializable {
     
     public void initPartie(){
         //on passe à la configuration partie
-            play.setVisible(false);
-            type1.setDisable(true);
-            type2.setDisable(true);
-            name1.setDisable(true);
-            name2.setDisable(true);
+        play.setVisible(false);
+        type1.setDisable(true);
+        type2.setDisable(true);
+        name1.setDisable(true);
+        name2.setDisable(true);
+
+        //on affiche les undos pour les humains
+        if(type1.getSelectionModel().getSelectedItem().equals("Human")) undo1.setVisible(true);
+        if(type2.getSelectionModel().getSelectedItem().equals("Human")) undo2.setVisible(true);
+
+
+        grille1.setVisible(true);
+        grille2.setVisible(true);
+        panneau_score1.setVisible(true);
+        panneau_score2.setVisible(true);
+
+        //on clear la console
+        console.setText("");
+
+        //on crée les joueurs
+        if(type1.getSelectionModel().getSelectedItem().equals("Human")){
+            this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase());
+        } else if(type1.getSelectionModel().getSelectedItem().equals("Dumb")){
+            this.partie.getJoueur()[0] = new Dumb();
+        } else {
+            this.partie.getJoueur()[0] = new IA();
+        }
+
+        if(type2.getSelectionModel().getSelectedItem().equals("Human")){
+            this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase());
+        } else if(type2.getSelectionModel().getSelectedItem().equals("Dumb")){
+            this.partie.getJoueur()[1] = new Dumb();
+        } else {
+            this.partie.getJoueur()[1] = new IA();
+        }
+        
+        //on initialise les grilles 
+        this.partie.initGrilles();
             
-            //on affiche les undos pour les humains
-            if(type1.getSelectionModel().getSelectedItem().equals("Human")) undo1.setVisible(true);
-            if(type2.getSelectionModel().getSelectedItem().equals("Human")) undo2.setVisible(true);
             
-            grille1.setVisible(true);
-            grille2.setVisible(true);
-            panneau_score1.setVisible(true);
-            panneau_score2.setVisible(true);
-            
-            //on clear la console
-            console.setText("");
-            
-            //on crée les joueurs
-            if(type1.getSelectionModel().getSelectedItem().equals("Human")){
-                this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase());
-            } else if(type1.getSelectionModel().getSelectedItem().equals("Dumb")){
-                this.partie.getJoueur()[0] = new Dumb();
-            } else {
-                this.partie.getJoueur()[0] = new IA();
-            }
-            
-            if(type2.getSelectionModel().getSelectedItem().equals("Human")){
-                this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase());
-            } else if(type2.getSelectionModel().getSelectedItem().equals("Dumb")){
-                this.partie.getJoueur()[1] = new Dumb();
-            } else {
-                this.partie.getJoueur()[1] = new IA();
-            }
             
     }
 
