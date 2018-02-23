@@ -33,7 +33,9 @@ and open the template in the editor.
 #console {
     -fx-background-color: black;
     -fx-text-fill: white;
-    -fx-font-size: 12pt;
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+    -fx-text-decoration: blink;
 }
 
 #background {

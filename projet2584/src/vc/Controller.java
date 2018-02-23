@@ -85,7 +85,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        fond1.autosize();
+        
         this.partie = new Partie(); // crée la partie (modèle)
         this.initChoix(); // configuration paramètres
         this.grille1.autosize();
@@ -152,6 +152,35 @@ public class Controller implements Initializable {
         p.setVisible(true);
         c.setVisible(true);*/
     }
+    
+    public void blink() {
+        /**
+        * thread pour faire clignoter la console et attirer l'attention de l'utilisateur en cas de message
+        */
+       Task blink_task = new Task<Void>() {
+           @Override
+           public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
+               System.out.println("blink");
+               for(int i=0;i<6;i++) { //on effectue l'action 6 fois
+                   // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                   Platform.runLater(new Runnable() { // classe anonyme
+                       @Override
+                       public void run() {
+                           //javaFX operations should go here
+                           console.setVisible(!console.visibleProperty().getValue()); // on inverse la visibilité de la console
+                       }
+                   }
+                   );
+                   Thread.sleep(200); //on met en pause le thread pendant 200 dt
+               }
+               return null; // la méthode call doit obligatoirement retourner un objet.
+           }
+
+       };
+       Thread blink_thread = new Thread(blink_task); // on crée un contrôleur de Thread pour le blink de la console
+       blink_thread.setDaemon(true); // le Thread qui fait blink la console s'exécutera en arrière-plan une fois appellé(démon informatique)
+       blink_thread.start();
+    }
 
     /**
      * active la configuration pour que l'utilisateur entre les paramètres de la
@@ -178,6 +207,7 @@ public class Controller implements Initializable {
 
         System.out.println("Affichage instructions paramètres");
         console.setText("Please select parameters and press Play");
+        blink(); // on fait clignoter la console
     }
 
     public void initPartie() {
@@ -268,15 +298,19 @@ public class Controller implements Initializable {
         // au moins un des joueurs n'a pas de type
         if (type1.getSelectionModel().getSelectedItem() == null || type2.getSelectionModel().getSelectedItem() == null) {
             console.setText("Please select the type of both players");
+            blink(); // on fait clignoter la console
         } // les joueurs sont humains et ont le même nom
         else if (name1.getText().toLowerCase().equals(name2.getText().toLowerCase()) && type1.getSelectionModel().getSelectedItem().equals("Human") && type2.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : two players can't have the same name");
+            blink(); // on fait clignoter la console
         } // le joueur 1 est humain et n'a pas de nom
         else if (name1.getText().equals("") && type1.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : player 1 is a human and must have a name");
+            blink(); // on fait clignoter la console
         } // le joueur 2 est humain et n'a pas de nom
         else if (name2.getText().equals("") && type2.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : player 2 is a human and must have a name");
+            blink(); // on fait clignoter la console
         } // tout va bien
         else {
             initPartie();
