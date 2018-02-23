@@ -38,23 +38,42 @@ public class Controller implements Initializable {
      * Variables globales correspondant à des objets définis dans la vue (fichier .fxml)
      * Ces variables sont ajoutées à la main et portent le même nom que les fx:id dans Scene Builder
      */
-    @FXML private Label score; // value will be injected by the FXMLLoader
-    @FXML private GridPane grille1;
-    @FXML private GridPane grille2;
-    @FXML private Pane fond; // panneau recouvrant toute la fenêtre
-    @FXML private TextField name1; 
-    @FXML private TextField name2; 
-    @FXML private ChoiceBox type1; 
-    @FXML private ChoiceBox type2;
-    @FXML private Pane panneau_score1;
-    @FXML private Pane panneau_score2;
-    @FXML private Button undo1;
-    @FXML private Button undo2;
-    @FXML private Pane best1; // panneau qui affiche le best score
-    @FXML private Pane best2; // panneau qui affiche le best score
-    @FXML private Label console; // user information area
-    @FXML private Button play;
-    @FXML private Pane background;
+    @FXML
+    private Label score; // value will be injected by the FXMLLoader
+    @FXML
+    private GridPane grille1;
+    @FXML
+    private GridPane grille2;
+    @FXML
+    private Pane fond1;
+    @FXML
+    private Pane fond2;
+    @FXML
+    private TextField name1;
+    @FXML
+    private TextField name2;
+    @FXML
+    private ChoiceBox type1;
+    @FXML
+    private ChoiceBox type2;
+    @FXML
+    private Pane panneau_score1;
+    @FXML
+    private Pane panneau_score2;
+    @FXML
+    private Button undo1;
+    @FXML
+    private Button undo2;
+    @FXML
+    private Pane best1; // panneau qui affiche le best score
+    @FXML
+    private Pane best2; // panneau qui affiche le best score
+    @FXML
+    private Label console; // user information area
+    @FXML
+    private Button play;
+    @FXML
+    private Pane background;
 
     // variables globales non définies dans la vue (fichier .fxml)
     private final Pane p = new Pane(); // panneau utilisé pour dessiner une tuile "2"
@@ -62,11 +81,23 @@ public class Controller implements Initializable {
     private int x = 24, y = 191;
     private int objectifx = 24, objectify = 191;
     private Partie partie; // modèle
+    private GridPane[] grilles;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        fond1.autosize();
         this.partie = new Partie(); // crée la partie (modèle)
         this.initChoix(); // configuration paramètres
+        this.grille1.autosize();
+        
+        
+        // on ajoute les grilles au tableau
+        this.grilles = new GridPane[2];
+        this.grilles[0] = this.grille1;
+        this.grilles[1] = this.grille2;
+        for (int i = 0; i < 2; i++) {
+            grilles[i].getStyleClass().add("gridpane");
+        }
 
         //ajoute listener pour changement d'items dans type
         this.type1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -111,7 +142,6 @@ public class Controller implements Initializable {
         // utilisation de styles pour la grille et la tuile (voir styles.css)
         p.getStyleClass().add("pane"); 
         c.getStyleClass().add("tuile");
-        grille.getStyleClass().add("gridpane");
         GridPane.setHalignment(c, HPos.CENTER);
         fond.getChildren().add(p);
         p.getChildren().add(c);
@@ -124,7 +154,8 @@ public class Controller implements Initializable {
     }
 
     /**
-     * active la configuration pour que l'utilisateur entre les paramètres de la partie
+     * active la configuration pour que l'utilisateur entre les paramètres de la
+     * partie
      */
     public void initChoix() {
         //masque éléments inutiles
@@ -148,51 +179,75 @@ public class Controller implements Initializable {
         System.out.println("Affichage instructions paramètres");
         console.setText("Please select parameters and press Play");
     }
-    
-    public void initPartie(){
+
+    public void initPartie() {
+
         //on passe à la configuration partie
-            play.setVisible(false);
-            type1.setDisable(true);
-            type2.setDisable(true);
-            name1.setDisable(true);
-            name2.setDisable(true);
-            
-            //on affiche les undos pour les humains
-            if(type1.getSelectionModel().getSelectedItem().equals("Human")) undo1.setVisible(true);
-            if(type2.getSelectionModel().getSelectedItem().equals("Human")) undo2.setVisible(true);
-            
-            grille1.setVisible(true);
-            grille2.setVisible(true);
-            panneau_score1.setVisible(true);
-            panneau_score2.setVisible(true);
-            
-            //on clear la console
-            console.setText("");
-            
-            //on crée les joueurs
-            if(type1.getSelectionModel().getSelectedItem().equals("Human")){
-                this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase());
-            } else if(type1.getSelectionModel().getSelectedItem().equals("Dumb")){
-                this.partie.getJoueur()[0] = new Dumb();
-            } else {
-                this.partie.getJoueur()[0] = new IA();
+        play.setVisible(false);
+        type1.setDisable(true);
+        type2.setDisable(true);
+        name1.setDisable(true);
+        name2.setDisable(true);
+
+        //on affiche les undos pour les humains
+        if (type1.getSelectionModel().getSelectedItem().equals("Human")) {
+            undo1.setVisible(true);
+        }
+        if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
+            undo2.setVisible(true);
+        }
+
+        grille1.setVisible(true);
+        grille2.setVisible(true);
+        panneau_score1.setVisible(true);
+        panneau_score2.setVisible(true);
+
+        //on clear la console
+        console.setText("");
+
+        //on crée les joueurs
+        if (type1.getSelectionModel().getSelectedItem().equals("Human")) {
+            this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase());
+        } else if (type1.getSelectionModel().getSelectedItem().equals("Dumb")) {
+            this.partie.getJoueur()[0] = new Dumb();
+        } else {
+            this.partie.getJoueur()[0] = new IA();
+        }
+
+        if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
+            this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase());
+        } else if (type2.getSelectionModel().getSelectedItem().equals("Dumb")) {
+            this.partie.getJoueur()[1] = new Dumb();
+        } else {
+            this.partie.getJoueur()[1] = new IA();
+        }
+        
+        this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
+        this.syncGrilles(); //synchronise les grilles Vues et les grilles Modèle
+
+    }
+
+    public void syncGrilles() {
+        for (int i = 0; i < 2; i++) {
+            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()){
+                Pane pane_tuile = new Pane();
+                Label label_tuile = new Label(String.valueOf(c.getValeur()));
+                pane_tuile.getStyleClass().add("pane_tuile");
+                label_tuile.getStyleClass().add("label_tuile");
+                grilles[i].add(pane_tuile,c.getX(),c.getY());
+                pane_tuile.getChildren().add(label_tuile);
+                pane_tuile.setVisible(true);
+                label_tuile.setVisible(true);
+                
             }
-            
-            if(type2.getSelectionModel().getSelectedItem().equals("Human")){
-                this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase());
-            } else if(type2.getSelectionModel().getSelectedItem().equals("Dumb")){
-                this.partie.getJoueur()[1] = new Dumb();
-            } else {
-                this.partie.getJoueur()[1] = new IA();
-            }
-            
+            System.out.println(this.partie.getJoueur()[i].getGrille());
+        }
     }
 
     /*
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
      * dans Scene Builder
      */
-    
     /**
      * On refocus la fenêtre pour enlever le bug des entrées clavier
      */
@@ -204,28 +259,25 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Le joueur appuie sur play, on vérifie si les paramètres sont corrects.
-     * Si incorrect on explique pourquoi dans la console. Si correct on appelle la méthode initPartie
+     * Le joueur appuie sur play, on vérifie si les paramètres sont corrects. Si
+     * incorrect on explique pourquoi dans la console. Si correct on appelle la
+     * méthode initPartie
      */
     @FXML
     public void playRequest() {
         // au moins un des joueurs n'a pas de type
         if (type1.getSelectionModel().getSelectedItem() == null || type2.getSelectionModel().getSelectedItem() == null) {
             console.setText("Please select the type of both players");
-        } 
-        // les joueurs sont humains et ont le même nom
+        } // les joueurs sont humains et ont le même nom
         else if (name1.getText().toLowerCase().equals(name2.getText().toLowerCase()) && type1.getSelectionModel().getSelectedItem().equals("Human") && type2.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : two players can't have the same name");
-        } 
-        // le joueur 1 est humain et n'a pas de nom
+        } // le joueur 1 est humain et n'a pas de nom
         else if (name1.getText().equals("") && type1.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : player 1 is a human and must have a name");
-        } 
-        // le joueur 2 est humain et n'a pas de nom
+        } // le joueur 2 est humain et n'a pas de nom
         else if (name2.getText().equals("") && type2.getSelectionModel().getSelectedItem().equals("Human")) {
             console.setText("Error : player 2 is a human and must have a name");
-        } 
-        // tout va bien
+        } // tout va bien
         else {
             initPartie();
         }
@@ -233,7 +285,14 @@ public class Controller implements Initializable {
 
     @FXML
     public void keyPressed(KeyEvent ke) {
-        System.out.println("touche appuyée");
+        System.out.println("key pressed");
+
+        if (!this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
+            String touche = ke.getText();
+        } else {
+            System.out.println("start game first");
+        }
+
         /*String touche = ke.getText();
         if (touche.compareTo("q") == 0) { // utilisateur appuie sur "q" pour envoyer la tuile vers la gauche
             if (objectifx > 24) { // possible uniquement si on est pas dans la colonne la plus à gauche
@@ -275,6 +334,6 @@ public class Controller implements Initializable {
         Thread th = new Thread(task); // on crée un contrôleur de Thread
         th.setDaemon(true); // le Thread s'exécutera en arrière-plan (démon informatique)
         th.start(); // et on exécute le Thread pour mettre à jour la vue (déplacement continu de la tuile horizontalement)
-        */
+         */
     }
 }

@@ -5,24 +5,24 @@ import java.util.Random;
 
 public abstract class Joueur implements Parametres {
     
-    protected Grille g;
-    protected Grille lastG;
+    protected Grille grille;
+    protected Grille lastGrille;
     protected int score;
     protected int nbUndo;
     protected boolean dejaUndo;
     
     public Joueur(){
-        this.g = new Grille();
+        this.grille = new Grille();
         
         this.score = 0;
-        this.lastG = (Grille) this.g.clone();
+        this.lastGrille = (Grille) this.grille.clone();
         this.score=0;
         this.nbUndo = 5;
         this.dejaUndo = true;
     }
     
     public Grille getGrille(){
-        return this.g;
+        return this.grille;
     }
     
     //methode jouer
@@ -42,9 +42,9 @@ public abstract class Joueur implements Parametres {
     
     // Méthode qui permet de calculer le du score du joueur
     protected void calculScore(){
-        if(g.getDeplacement()==true){// pas forcément utile A REVOIR
-            this.score=this.score+g.getResDeplacement();
-            g.setResDeplacement(0);
+        if(grille.getDeplacement()==true){// pas forcément utile A REVOIR
+            this.score=this.score+grille.getResDeplacement();
+            grille.setResDeplacement(0);
         }
     }
     

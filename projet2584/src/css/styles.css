@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Hugo
 */
 
-.pane {
+.pane_tuile {
     -fx-background-color: #99FF33;
     -fx-border-color: black;
 }
@@ -21,7 +21,7 @@ and open the template in the editor.
      -fx-alignment: CENTER;  
 }
 
-.tuile {
+.label_tuile {
     /*-fx-text-alignment: center;
     -fx-halignment: center; */
     -fx-text-fill: #6666FF;
@@ -33,6 +33,7 @@ and open the template in the editor.
 #console {
     -fx-background-color: black;
     -fx-text-fill: white;
+    -fx-font-size: 12pt;
 }
 
 #background {

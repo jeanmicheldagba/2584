@@ -70,7 +70,7 @@ public class Case implements Parametres {
     public Case getVoisinDirect(int direction) { // retourne la case la plus proche dans la direction donnée
         if (direction == HAUT) {
             for (int i = this.y - 1; i >= 0; i--) {
-                for (Case c : grille.getGrille()) {
+                for (Case c : grille.getCases()) {
                     if (c.getX() == this.x && c.getY() == i) {
                         return c;
                     }
@@ -78,7 +78,7 @@ public class Case implements Parametres {
             }
         } else if (direction == BAS) {
             for (int i = this.y + 1; i < TAILLE; i++) {
-                for (Case c : grille.getGrille()) {
+                for (Case c : grille.getCases()) {
                     if (c.getX() == this.x && c.getY() == i) {
                         return c;
                     }
@@ -86,7 +86,7 @@ public class Case implements Parametres {
             }
         } else if (direction == GAUCHE) {
             for (int i = this.x - 1; i >= 0; i--) {
-                for (Case c : grille.getGrille()) {
+                for (Case c : grille.getCases()) {
                     if (c.getX() == i && c.getY() == this.y) {
                         return c;
                     }
@@ -94,7 +94,7 @@ public class Case implements Parametres {
             }
         } else if (direction == DROITE) {
             for (int i = this.x + 1; i < TAILLE; i++) {
-                for (Case c : grille.getGrille()) {
+                for (Case c : grille.getCases()) {
                     if (c.getX() == i && c.getY() == this.y) {
                         return c;
                     }

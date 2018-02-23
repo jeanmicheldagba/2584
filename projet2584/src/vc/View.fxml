@@ -12,7 +12,7 @@
     <children>
       <Pane fx:id="background">
          <children>
-            <Pane fx:id="fond" prefHeight="613.0" prefWidth="445.0">
+            <Pane fx:id="fond1" prefHeight="613.0" prefWidth="445.0">
                <children>
                   <GridPane fx:id="grille1" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
                     <columnConstraints>
@@ -48,7 +48,7 @@
                   <TextField fx:id="name1" layoutX="227.0" layoutY="120.0" promptText="Nom" />
                </children>
             </Pane>
-            <Pane fx:id="fond1" layoutX="445.0" prefHeight="613.0" prefWidth="445.0">
+            <Pane fx:id="fond2" layoutX="445.0" prefHeight="613.0" prefWidth="445.0">
                <children>
                   <GridPane fx:id="grille2" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
                      <columnConstraints>

@@ -23,6 +23,8 @@ public class Partie implements Parametres {
     }
 
     public void initGrilles() {
+        System.out.println("initialisation des grilles");
+        
         Random ra = new Random();
         int[] x = new int[2];
         int[] y = new int[2];
@@ -65,11 +67,9 @@ public class Partie implements Parametres {
     }
 
     public void play() {
-        Scanner sc = new Scanner(System.in);
 
         while (!this.partieBloquee()) {
-            int nbJoueurs = 1; // provisoire pour tests
-            for (int i = 0; i < nbJoueurs; i++) {
+            for (int i = 0; i < 2; i++) {
                 if (this.joueur[i] instanceof Human) {
                     this.joueur[i].jouer();
                 }

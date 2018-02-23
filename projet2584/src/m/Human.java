@@ -22,7 +22,7 @@ public class Human extends Joueur implements Parametres {
 
     public void jouer() {
         System.out.println("Grille :");
-        System.out.println(this.g);
+        System.out.println(this.grille);
         //System.out.println("Sauvegarde :");
         //System.out.println(this.sauvegardeG);
         /*System.out.println("undo :");
@@ -44,14 +44,14 @@ public class Human extends Joueur implements Parametres {
                 // On décrémente le nombre de undo disponible
                 this.nbUndo--;
                 // La grille du joueur redevient la version précédente
-                this.g = this.lastG;
+                this.grille = this.lastGrille;
                 // this.sauvegardeG = (Grille) this.lastG.clone();
                 // On signale qu'undo a été utilisé
                 this.dejaUndo = true;
                 System.out.println("Grille après undo :");
-                System.out.println(this.g);
+                System.out.println(this.grille);
                 System.out.println("Last grille après undo :");
-                System.out.println(this.lastG);
+                System.out.println(this.lastGrille);
             } else {
                 System.out.println("Undo indisponible, vous devez choisir choisir une direction");
             }
@@ -67,16 +67,16 @@ public class Human extends Joueur implements Parametres {
                 direction = BAS;
             }
             // On sauvegarde la grille actuelle
-            this.lastG = (Grille) this.g.clone();
+            this.lastGrille = (Grille) this.grille.clone();
             // On déplace les cases
-            boolean casesMov = this.g.lanceurDeplacerCases(direction);
+            boolean casesMov = this.grille.lanceurDeplacerCases(direction);
             if (casesMov) {
-                if (!this.g.nouvelleCase()) {
+                if (!this.grille.nouvelleCase()) {
                     this.gameOver();
                 }
             }
-            if (this.g.getValeurMax() >= OBJECTIF) {
-                this.g.victory();
+            if (this.grille.getValeurMax() >= OBJECTIF) {
+                this.grille.victory();
             }
             this.calculScore(); //on met à jour le score
             // On dit que la derniere action n'était pas déjà un undo
@@ -93,7 +93,7 @@ public class Human extends Joueur implements Parametres {
         // On décrémente le nombre de undo disponible
         this.nbUndo--;
         // La grille du joueur redevient la version précédente
-        this.g = (Grille) this.lastG.clone();
+        this.grille = (Grille) this.lastGrille.clone();
         // this.sauvegardeG = (Grille) this.lastG.clone();
         // On signale qu'undo a été utilisé
         this.dejaUndo = true;

@@ -8,13 +8,13 @@ import java.util.Random;
 
 public class Grille implements Parametres {
 
-    private HashSet<Case> grille;
+    private HashSet<Case> cases;
     private int valeurMax = 0;
     private boolean deplacement;
     private int resDeplacement; //stocke les points générés par la fusion des cases
 
     public Grille() {
-        this.grille = new HashSet<>();
+        this.cases = new HashSet<>();
         this.deplacement=false;
         this.resDeplacement=0;
     }
@@ -24,10 +24,10 @@ public class Grille implements Parametres {
         Grille g = new Grille();
         Case cAdd;
         // On parcourt la grille pour copier toutes les cases dans la nouvelle grille
-        for (Case c : this.grille){
+        for (Case c : this.cases){
             cAdd = (Case) c.clone();
             cAdd.setGrille(g);
-            g.grille.add(cAdd);
+            g.cases.add(cAdd);
         }
         g.valeurMax = this.valeurMax;
         g.deplacement = this.deplacement;
@@ -54,13 +54,13 @@ public class Grille implements Parametres {
     }
     
     public void setGrille(HashSet<Case> h){
-        this.grille = h;
+        this.cases = h;
     }
 
     @Override
     public String toString() {
         int[][] tableau = new int[TAILLE][TAILLE];
-        for (Case c : this.grille) {
+        for (Case c : this.cases) {
             tableau[c.getY()][c.getX()] = c.getValeur();
         }
         String result = "";
@@ -70,8 +70,8 @@ public class Grille implements Parametres {
         return result;
     }
 
-    public HashSet<Case> getGrille() {
-        return this.grille;
+    public HashSet<Case> getCases() {
+        return this.cases;
     }
 
     public int getValeurMax() {
@@ -80,10 +80,10 @@ public class Grille implements Parametres {
 
     //détermine si un mouvement est possible
     public boolean bloquee() {
-        if (this.grille.size() < TAILLE * TAILLE) {
+        if (this.cases.size() < TAILLE * TAILLE) {
             return false;
         } else {
-            for (Case c : this.grille) {
+            for (Case c : this.cases) {
                 for (int i = 1; i <= 2; i++) {
                     if (c.getVoisinDirect(i) != null) {
                         //on teste si la case voisine est voisine dans la suite de Fibonacci
@@ -125,7 +125,7 @@ public class Grille implements Parametres {
                     || (direction == BAS && extremites[rangee].getY() != TAILLE - 1 - compteur)
                     || (direction == GAUCHE && extremites[rangee].getX() != compteur)
                     || (direction == DROITE && extremites[rangee].getX() != TAILLE - 1 - compteur)) {
-                this.grille.remove(extremites[rangee]);
+                this.cases.remove(extremites[rangee]);
                 switch (direction) {
                     case HAUT:
                         extremites[rangee].setY(compteur);
@@ -140,7 +140,7 @@ public class Grille implements Parametres {
                         extremites[rangee].setX(TAILLE - 1 - compteur);
                         break;
                 }
-                this.grille.add(extremites[rangee]);
+                this.cases.add(extremites[rangee]);
                 this.deplacement = true;
             }
             Case voisin = extremites[rangee].getVoisinDirect(-direction);
@@ -149,7 +149,7 @@ public class Grille implements Parametres {
                     //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     this.fusion(extremites[rangee], voisin.getValeur());
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
-                    this.grille.remove(voisin);
+                    this.cases.remove(voisin);
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;
@@ -168,7 +168,7 @@ public class Grille implements Parametres {
      */
     public Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
-        for (Case c : this.grille) {
+        for (Case c : this.cases) {
             switch (direction) {
                 case HAUT:
                     if ((result[c.getX()] == null) || (result[c.getX()].getY() > c.getY())) { // si on n'avait pas encore de case pour cette rangée ou si on a trouvé un meilleur candidat
@@ -202,7 +202,7 @@ public class Grille implements Parametres {
     }
 
     public boolean nouvelleCase() {
-        if (this.grille.size() < TAILLE*TAILLE) {
+        if (this.cases.size() < TAILLE*TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
             Random ra = new Random();
             
@@ -213,7 +213,7 @@ public class Grille implements Parametres {
             for (int x = 0; x < TAILLE; x++) {
                 for (int y = 0; y < TAILLE; y++) {
                     Case c = new Case(x, y, valeur);
-                    if (!this.grille.contains(c)) { // contains utilise la méthode equals dans Case
+                    if (!this.cases.contains(c)) { // contains utilise la méthode equals dans Case
                         casesLibres.add(c);
                     }
                 }
@@ -221,7 +221,7 @@ public class Grille implements Parametres {
             // on en choisit une au hasard et on l'ajoute à la grille
             Case ajout = casesLibres.get(ra.nextInt(casesLibres.size()));
             ajout.setGrille(this);
-            this.grille.add(ajout);
+            this.cases.add(ajout);
             
             //actualise valeurMax
             if (this.valeurMax < ajout.getValeur()) {
@@ -239,7 +239,7 @@ public class Grille implements Parametres {
 
         Case ajout = new Case(x, y, valeur);
         ajout.setGrille(this);
-        this.grille.add(ajout);
+        this.cases.add(ajout);
 
         //actualise valeurMax
         if (this.valeurMax < ajout.getValeur()) {
