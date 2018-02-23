@@ -22,14 +22,19 @@ public class Partie implements Parametres {
         this.play();
     }
 
+    /**
+     * ajoute les deux cases à chaque grille en suivant les règles d'initialisation
+     * 
+     */
     public void initGrilles() {
         System.out.println("initialisation des grilles");
         
         Random ra = new Random();
+        //stocke les coordonnées x et y des 2 cases
         int[] x = new int[2];
         int[] y = new int[2];
 
-        //coordonnées de la première case
+        //coordonnées x et y de la première case
         x[0] = ra.nextInt(TAILLE);
         y[0] = ra.nextInt(TAILLE);
 
@@ -40,17 +45,17 @@ public class Partie implements Parametres {
         do {
             x[1] = ra.nextInt(TAILLE);
             y[1] = ra.nextInt(TAILLE);
-        } while (x[1] == x[0] && y[1] == y[0]);
+        } while (x[1] == x[0] && y[1] == y[0]); // cases à endroit différent
 
-        int[] valeurs = new int[2];
+        int[] valeurs = new int[2]; // stocke les valeurs des 2 cases
 
         //règles de valeurs des cases
-        if (ra.nextDouble() > 0.75) {
+        if (ra.nextDouble() > 0.75) { // probabilité de 0.25 d'avoir un 2
             valeurs[0] = 2;
-            valeurs[1] = 1;
-        } else {
-            valeurs[0] = 1;
-            if (ra.nextDouble() > 0.75) {
+            valeurs[1] = 1; // la deuxième case est 1 car il ne peut pas y avoir 2x2
+        } else { 
+            valeurs[0] = 1; 
+            if (ra.nextDouble() > 0.75) { // probabilité de 0.25 d'avoir un 2
                 valeurs[1] = 2;
             } else {
                 valeurs[1] = 1;
