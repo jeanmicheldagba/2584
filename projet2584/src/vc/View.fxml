@@ -43,7 +43,7 @@
                         </Pane>
                      </children>
                   </Pane>
-                  <Button fx:id="undo1" layoutX="66.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Undo" />
+                  <Button fx:id="undo1" layoutX="66.0" layoutY="152.0" mnemonicParsing="false" onMouseClicked="#undo" prefHeight="25.0" prefWidth="150.0" text="Undo" />
                   <ChoiceBox fx:id="type1" layoutX="66.0" layoutY="120.0" prefWidth="150.0" />
                   <TextField fx:id="name1" layoutX="227.0" layoutY="120.0" promptText="Nom" />
                </children>
@@ -69,7 +69,7 @@
                   </GridPane>
                   <TextField fx:id="name2" layoutX="229.0" layoutY="117.0" prefHeight="25.0" prefWidth="150.0" promptText="Nom" />
                   <ChoiceBox fx:id="type2" layoutX="68.0" layoutY="117.0" prefWidth="150.0" />
-                  <Button fx:id="undo2" layoutX="229.0" layoutY="149.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Undo" />
+                  <Button fx:id="undo2" layoutX="229.0" layoutY="149.0" mnemonicParsing="false" onMouseClicked="#undo" prefHeight="25.0" prefWidth="150.0" text="Undo" />
                   <Pane fx:id="panneau_score2" layoutX="162.0" layoutY="25.0" prefHeight="79.0" prefWidth="120.0" style="-fx-background-color: yellow;">
                      <children>
                         <Label layoutX="46.0" layoutY="2.0" text="Score" />

@@ -13,11 +13,17 @@ import java.util.Scanner;
  */
 public class Human extends Joueur implements Parametres {
 
-    String pseudo;
+    private String pseudo;    
+    private int nbUndo;
+    private boolean dejaUndo;
+    protected Grille lastGrille;
 
     public Human(String pseudo) {
         super();
         this.pseudo = pseudo;
+        this.lastGrille = (Grille) this.grille.clone();
+        this.nbUndo = 5;
+        this.dejaUndo = true;
     }
 
     public void jouer() {
@@ -87,16 +93,20 @@ public class Human extends Joueur implements Parametres {
         }
 
     }
-
-    // methode qui gère la grille quand un joueur utilise undo
-    private void undoActive() {
-        // On décrémente le nombre de undo disponible
-        this.nbUndo--;
-        // La grille du joueur redevient la version précédente
-        this.grille = (Grille) this.lastGrille.clone();
-        // this.sauvegardeG = (Grille) this.lastG.clone();
-        // On signale qu'undo a été utilisé
-        this.dejaUndo = true;
+    
+    /**
+     * 
+     */
+    public void undo() {
+        if (this.nbUndo > 0 && !this.dejaUndo) { // Si il lui reste des undo et qu'il n'a pas déjà fait un undo au tour précédent            
+            this.nbUndo--; // On décrémente le nombre de undo disponible            
+            this.grille = this.lastGrille; // La grille du joueur redevient la version précédente            
+            this.dejaUndo = true; // On signale qu'undo a été utilisé
+            System.out.println("Grille après undo :\n"+this.grille);
+            System.out.println("Last grille après undo :\n"+this.lastGrille);
+        } else {
+            System.out.println("Undo indisponible");
+        }
     }
 
 }

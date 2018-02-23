@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -171,9 +172,9 @@ public class Controller implements Initializable {
                        }
                    }
                    );
-                   Thread.sleep(200); //on met en pause le thread pendant 200 dt
+                   Thread.sleep(170); //on met en pause le thread pendant 170 dt
                }
-               return null; // la méthode call doit obligatoirement retourner un objet.
+               return null; // la méthode call doit obligatoirement retourner un objet, donc on rend null
            }
 
        };
@@ -206,8 +207,7 @@ public class Controller implements Initializable {
         type2.getItems().add("Dumb");
 
         System.out.println("Affichage instructions paramètres");
-        console.setText("Please select parameters and press Play");
-        blink(); // on fait clignoter la console
+        console.setText("Please set parameters and press Play");
     }
 
     public void initPartie() {
@@ -219,12 +219,14 @@ public class Controller implements Initializable {
         name1.setDisable(true);
         name2.setDisable(true);
 
-        //on affiche les undos pour les humains
+        //on affiche les undos pour les humains en les désactivant (avant le premier mouvement)
         if (type1.getSelectionModel().getSelectedItem().equals("Human")) {
             undo1.setVisible(true);
+            undo1.setDisable(true);
         }
         if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
             undo2.setVisible(true);
+            undo1.setDisable(true);
         }
 
         grille1.setVisible(true);
@@ -253,25 +255,36 @@ public class Controller implements Initializable {
         }
         
         this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
-        this.syncGrilles(); //synchronise les grilles Vues et les grilles Modèle
+        this.syncGrilles(2); //synchronise les grilles Vues et les grilles Modèle
 
     }
 
-    public void syncGrilles() {
-        for (int i = 0; i < 2; i++) {
-            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()){
-                Pane pane_tuile = new Pane();
-                Label label_tuile = new Label(String.valueOf(c.getValeur()));
-                pane_tuile.getStyleClass().add("pane_tuile");
-                label_tuile.getStyleClass().add("label_tuile");
-                grilles[i].add(pane_tuile,c.getX(),c.getY());
-                pane_tuile.getChildren().add(label_tuile);
+    /**
+     * synchronize the grid of the model and the view
+     * @param player the index of the player whose grid needs to be synchronized : 0, 1 or 2 (both players)
+     */
+    public void syncGrilles(int player) {
+        int i;
+        i = player == 2 ? 0 : player;
+        do {
+            System.out.println("new grid sync");
+            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()){ //pour chaque case
+                Pane pane_tuile = new Pane(); //crée conteneur
+                Label label_tuile = new Label(String.valueOf(c.getValeur())); //crée label avec valeur de la case
+                pane_tuile.getStyleClass().add("pane_tuile"); //ajoute classe pour css
+                label_tuile.getStyleClass().add("label_tuile"); //ajoute classe pour css
+                grilles[i].add(pane_tuile,c.getX(),c.getY()); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
+                pane_tuile.getChildren().add(label_tuile); //ajoute label au conteneur
+                
+                //affiche les éléments
                 pane_tuile.setVisible(true);
                 label_tuile.setVisible(true);
                 
             }
-            System.out.println(this.partie.getJoueur()[i].getGrille());
-        }
+            System.out.println(this.partie.getJoueur()[i].getGrille()); //affiche la grille du modèle dans la console pour vérifier
+            
+            i++;
+        } while (i<2 && player == 2); //fait ça deux foix si player == 2
     }
 
     /*
@@ -318,11 +331,34 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void keyPressed(KeyEvent ke) {
+    public void undo(Event mouse) {
+        //trouve le joueur qui a appuyé sur undo
+        Button butn = (Button) mouse.getSource();
+        int player = butn.getId().equals("undo1") ? 0 : 1;
+        
+        try {
+            Human joueur = (Human) this.partie.getJoueur()[player];
+            joueur.undo();
+        } catch (Exception e) {
+            System.out.println("FATAL ERROR : undo from non-human player");
+        }
+        
+        
+        //synchronise modèle et vue
+        syncGrilles(player);
+        
+        //on désactive bouton undo
+        if(player==0) this.undo1.setDisable(true);
+        else if(player == 1) this.undo2.setDisable(true);
+        
+    }
+    
+    @FXML
+    public void keyPressed(KeyEvent key) {
         System.out.println("key pressed");
 
         if (!this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
-            String touche = ke.getText();
+            String touche = key.getText();
         } else {
             System.out.println("start game first");
         }

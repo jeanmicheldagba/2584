@@ -6,19 +6,13 @@ import java.util.Random;
 public abstract class Joueur implements Parametres {
     
     protected Grille grille;
-    protected Grille lastGrille;
     protected int score;
-    protected int nbUndo;
-    protected boolean dejaUndo;
     
     public Joueur(){
         this.grille = new Grille();
         
         this.score = 0;
-        this.lastGrille = (Grille) this.grille.clone();
         this.score=0;
-        this.nbUndo = 5;
-        this.dejaUndo = true;
     }
     
     public Grille getGrille(){
