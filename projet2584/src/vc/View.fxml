@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="690.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vc.Controller">
     <children>
-      <Pane fx:id="background">
+      <Pane fx:id="background" onKeyPressed="#keyPressed">
          <children>
             <Pane fx:id="fond" prefHeight="613.0" prefWidth="445.0">
                <children>
@@ -67,6 +67,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                   </GridPane>
+                  <Button fx:id="play" layoutX="-54.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#playRequest" prefHeight="41.0" prefWidth="100.0" text="Play" />
                   <TextField fx:id="name2" layoutX="229.0" layoutY="117.0" prefHeight="25.0" prefWidth="150.0" promptText="Nom" />
                   <ChoiceBox fx:id="type2" layoutX="68.0" layoutY="117.0" prefWidth="150.0" />
                   <Button fx:id="undo2" layoutX="229.0" layoutY="149.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Undo" />
@@ -82,15 +83,13 @@
                         </Pane>
                      </children>
                   </Pane>
-                  <Button layoutX="-21.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#refocus" text="Focus" />
-                  <Button fx:id="play" layoutX="-48.0" layoutY="52.0" mnemonicParsing="false" onMouseClicked="#playRequest" prefHeight="41.0" prefWidth="100.0" text="Play" />
                </children>
             </Pane>
          </children>
       </Pane>
-      <Pane layoutY="624.0" prefHeight="79.0" prefWidth="904.0">
+      <Pane layoutX="14.0" layoutY="624.0">
          <children>
-            <Label fx:id="console" prefHeight="79.0" prefWidth="904.0" text="Console" />
+            <Label fx:id="console" layoutX="-14.0" layoutY="-9.0" prefHeight="79.0" prefWidth="890.0" text="Console" />
          </children>
       </Pane>
     </children>

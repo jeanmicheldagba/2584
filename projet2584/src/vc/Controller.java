@@ -38,23 +38,38 @@ public class Controller implements Initializable {
      * Variables globales correspondant à des objets définis dans la vue (fichier .fxml)
      * Ces variables sont ajoutées à la main et portent le même nom que les fx:id dans Scene Builder
      */
-    @FXML private Label score; // value will be injected by the FXMLLoader
-    @FXML private GridPane grille1;
-    @FXML private GridPane grille2;
-    @FXML private Pane fond; // panneau recouvrant toute la fenêtre
-    @FXML private TextField name1; 
-    @FXML private TextField name2; 
-    @FXML private ChoiceBox type1; 
-    @FXML private ChoiceBox type2;
-    @FXML private Pane panneau_score1;
-    @FXML private Pane panneau_score2;
-    @FXML private Button undo1;
-    @FXML private Button undo2;
-    @FXML private Pane best1; // panneau qui affiche le best score
-    @FXML private Pane best2; // panneau qui affiche le best score
-    @FXML private Label console; // user information area
-    @FXML private Button play;
-    @FXML private Pane background;
+    @FXML
+    private Label score; // value will be injected by the FXMLLoader
+    @FXML
+    private GridPane grille1;
+    @FXML
+    private GridPane grille2;
+    @FXML
+    private Pane fond; // panneau recouvrant toute la fenêtre
+    @FXML
+    private TextField name1; 
+    @FXML
+    private TextField name2; 
+    @FXML
+    private ChoiceBox type1; 
+    @FXML
+    private ChoiceBox type2;
+    @FXML
+    private Pane panneau_score1;
+    @FXML
+    private Pane panneau_score2;
+    @FXML
+    private Button undo1;
+    @FXML
+    private Button undo2;
+    @FXML
+    private Pane best1; // panneau qui affiche le best score
+    @FXML
+    private Pane best2; // panneau qui affiche le best score
+    @FXML
+    private Label console; // user information area
+    @FXML
+    private Button play;
 
     // variables globales non définies dans la vue (fichier .fxml)
     private final Pane p = new Pane(); // panneau utilisé pour dessiner une tuile "2"
@@ -192,20 +207,13 @@ public class Controller implements Initializable {
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
      * dans Scene Builder
      */
-    
-    /**
-     * On refocus la fenêtre pour enlever le bug des entrées clavier
-     */
     @FXML
-    public void refocus() {
-        System.out.println("Refocus de la fenêtre");
-        background.getScene().addEventFilter(KeyEvent.KEY_PRESSED,
-                event2 -> keyPressed(event2));
+    public void mouseClicked() {
+        System.out.println("test");
     }
 
     /**
-     * Le joueur appuie sur play, on vérifie si les paramètres sont corrects.
-     * Si incorrect on explique pourquoi dans la console. Si correct on appelle la méthode initPartie
+     * Le joueur appuie sur play, on vérifie si les paramètres sont corrects
      */
     @FXML
     public void playRequest() {
@@ -234,7 +242,7 @@ public class Controller implements Initializable {
     @FXML
     public void keyPressed(KeyEvent ke) {
         System.out.println("touche appuyée");
-        /*String touche = ke.getText();
+        String touche = ke.getText();
         if (touche.compareTo("q") == 0) { // utilisateur appuie sur "q" pour envoyer la tuile vers la gauche
             if (objectifx > 24) { // possible uniquement si on est pas dans la colonne la plus à gauche
                 objectifx -= (int) 397 / 4; // on définit la position que devra atteindre la tuile en abscisse (modèle). Le thread se chargera de mettre la vue à jour
@@ -275,6 +283,5 @@ public class Controller implements Initializable {
         Thread th = new Thread(task); // on crée un contrôleur de Thread
         th.setDaemon(true); // le Thread s'exécutera en arrière-plan (démon informatique)
         th.start(); // et on exécute le Thread pour mettre à jour la vue (déplacement continu de la tuile horizontalement)
-        */
     }
 }
