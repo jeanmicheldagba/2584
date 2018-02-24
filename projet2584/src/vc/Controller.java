@@ -7,6 +7,7 @@ package vc;
 
 import m.*;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,7 +34,7 @@ import javafx.scene.text.TextFlow;
  *
  * @author castagno
  */
-public class Controller implements Initializable {
+public class Controller implements Initializable, Parametres {
 
     /*
      * Variables globales correspondant à des objets définis dans la vue (fichier .fxml)
@@ -83,22 +84,27 @@ public class Controller implements Initializable {
     private int objectifx = 24, objectify = 191;
     private Partie partie; // modèle
     private GridPane[] grilles;
+    private Button[] undos;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         this.partie = new Partie(); // crée la partie (modèle)
         this.initChoix(); // configuration paramètres
         this.grille1.autosize();
-        
-        
-        // on ajoute les grilles au tableau
+
+        // on ajoute les grilles au tableau de grilles
         this.grilles = new GridPane[2];
         this.grilles[0] = this.grille1;
         this.grilles[1] = this.grille2;
+
+        //on ajoute la classe pour le css
         for (int i = 0; i < 2; i++) {
             grilles[i].getStyleClass().add("gridpane");
         }
+
+        //on ajoute les undos au tableau de boutons
+        this.undos = new Button[]{this.undo1, this.undo2};
 
         //ajoute listener pour changement d'items dans type
         this.type1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -153,34 +159,35 @@ public class Controller implements Initializable {
         p.setVisible(true);
         c.setVisible(true);*/
     }
-    
+
     public void blink() {
         /**
-        * thread pour faire clignoter la console et attirer l'attention de l'utilisateur en cas de message
-        */
-       Task blink_task = new Task<Void>() {
-           @Override
-           public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
-               System.out.println("blink");
-               for(int i=0;i<6;i++) { //on effectue l'action 6 fois
-                   // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
-                   Platform.runLater(new Runnable() { // classe anonyme
-                       @Override
-                       public void run() {
-                           //javaFX operations should go here
-                           console.setVisible(!console.visibleProperty().getValue()); // on inverse la visibilité de la console
-                       }
-                   }
-                   );
-                   Thread.sleep(170); //on met en pause le thread pendant 170 dt
-               }
-               return null; // la méthode call doit obligatoirement retourner un objet, donc on rend null
-           }
+         * thread pour faire clignoter la console et attirer l'attention de
+         * l'utilisateur en cas de message
+         */
+        Task blink_task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
+                System.out.println("blink");
+                for (int i = 0; i < 6; i++) { //on effectue l'action 6 fois
+                    // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                    Platform.runLater(new Runnable() { // classe anonyme
+                        @Override
+                        public void run() {
+                            //javaFX operations should go here
+                            console.setVisible(!console.visibleProperty().getValue()); // on inverse la visibilité de la console
+                        }
+                    }
+                    );
+                    Thread.sleep(170); //on met en pause le thread pendant 170 dt
+                }
+                return null; // la méthode call doit obligatoirement retourner un objet, donc on rend null
+            }
 
-       };
-       Thread blink_thread = new Thread(blink_task); // on crée un contrôleur de Thread pour le blink de la console
-       blink_thread.setDaemon(true); // le Thread qui fait blink la console s'exécutera en arrière-plan une fois appellé(démon informatique)
-       blink_thread.start();
+        };
+        Thread blink_thread = new Thread(blink_task); // on crée un contrôleur de Thread pour le blink de la console
+        blink_thread.setDaemon(true); // le Thread qui fait blink la console s'exécutera en arrière-plan une fois appellé(démon informatique)
+        blink_thread.start();
     }
 
     /**
@@ -253,7 +260,7 @@ public class Controller implements Initializable {
         } else {
             this.partie.getJoueur()[1] = new IA();
         }
-        
+
         this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
         this.syncGrilles(2); //synchronise les grilles Vues et les grilles Modèle
 
@@ -261,30 +268,40 @@ public class Controller implements Initializable {
 
     /**
      * synchronize the grid of the model and the view
-     * @param player the index of the player whose grid needs to be synchronized : 0, 1 or 2 (both players)
+     *
+     * @param player the index of the player whose grid needs to be synchronized
+     * : 0, 1 or 2 (both players)
      */
     public void syncGrilles(int player) {
         int i;
         i = player == 2 ? 0 : player;
         do {
             System.out.println("new grid sync");
-            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()){ //pour chaque case
+            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 Pane pane_tuile = new Pane(); //crée conteneur
                 Label label_tuile = new Label(String.valueOf(c.getValeur())); //crée label avec valeur de la case
                 pane_tuile.getStyleClass().add("pane_tuile"); //ajoute classe pour css
                 label_tuile.getStyleClass().add("label_tuile"); //ajoute classe pour css
-                grilles[i].add(pane_tuile,c.getX(),c.getY()); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
+                grilles[i].add(pane_tuile, c.getX(), c.getY()); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
                 pane_tuile.getChildren().add(label_tuile); //ajoute label au conteneur
-                
+
                 //affiche les éléments
                 pane_tuile.setVisible(true);
                 label_tuile.setVisible(true);
-                
+
             }
             System.out.println(this.partie.getJoueur()[i].getGrille()); //affiche la grille du modèle dans la console pour vérifier
-            
+
             i++;
-        } while (i<2 && player == 2); //fait ça deux foix si player == 2
+        } while (i < 2 && player == 2); //fait ça deux foix si player == 2
+    }
+    
+    /**
+     * synchronize the model score and the view
+     * @param player the index of the player whose score needs to be synchronized
+     */
+    public void syncScores(int player) {
+        System.out.println("syncScores à implémenter");
     }
 
     /*
@@ -334,34 +351,70 @@ public class Controller implements Initializable {
     public void undo(Event mouse) {
         //trouve le joueur qui a appuyé sur undo
         Button butn = (Button) mouse.getSource();
-        int player = butn.getId().equals("undo1") ? 0 : 1;
-        
+        int playerInd = butn.getId().equals("undo1") ? 0 : 1;
+        boolean undone = false;
+        Human playerObj = null;
         try {
-            Human joueur = (Human) this.partie.getJoueur()[player];
-            joueur.undo();
+            playerObj = (Human) this.partie.getJoueur()[playerInd]; //va chercher joueur      
+            undone = playerObj.undo();//appelle la méthode undo de Human
         } catch (Exception e) {
             System.out.println("FATAL ERROR : undo from non-human player");
+            System.exit(0);
         }
         
-        
+        if(undone) {
+            undos[playerInd].setText("Undo ("+String.valueOf(playerObj.getNbUndo())+")"); //actualise le nombre de undo restant
+        } else {
+            undos[playerInd].setVisible(false); //plus de undo, bouton devient invisible
+        }
+
         //synchronise modèle et vue
-        syncGrilles(player);
-        
+        syncGrilles(playerInd);
+
         //on désactive bouton undo
-        if(player==0) this.undo1.setDisable(true);
-        else if(player == 1) this.undo2.setDisable(true);
-        
+        this.undos[playerInd].setDisable(true);
+
     }
-    
+
     @FXML
     public void keyPressed(KeyEvent key) {
-        System.out.println("key pressed");
-
-        if (!this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
-            String touche = key.getText();
-        } else {
-            System.out.println("start game first");
+        
+        //on cherche qui a pressé la touche
+        int playerInd;
+        if (Arrays.asList(KEYS[0]).contains(key.getText())) { // la touche est une touche du joueur 1
+            playerInd = 0;
+            System.out.println("player 1 key pressed");
+        } else if (Arrays.asList(KEYS[1]).contains(key.getText())) { // la touche est une touche du joueur 2
+            playerInd = 1;
+            System.out.println("player 2 key pressed");
+        } else { // la touche n'est pas une touche définie
+            playerInd = -1;
+            System.out.println("undefined key pressed");
         }
+        
+        if (this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
+            System.out.println("start game first");
+        } else {
+            
+            if(playerInd != -1) { //si un des joueurs a pressé la touche
+                Joueur playerObj = this.partie.getJoueur()[playerInd];
+                if(playerObj instanceof Human) { //si le joueur est humain
+                    Human human = (Human) playerObj;                    
+                    human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle
+                }
+                    
+                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres
+            }
+            
+            //actualise score interface
+            syncScores(playerInd);
+            
+            //le joueur a bougé, il peut maintenant undo
+            this.undos[playerInd].setDisable(false);
+            
+        }
+        
+            
 
         /*String touche = ke.getText();
         if (touche.compareTo("q") == 0) { // utilisateur appuie sur "q" pour envoyer la tuile vers la gauche

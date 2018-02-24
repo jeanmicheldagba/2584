@@ -195,12 +195,6 @@ public class Grille implements Parametres {
         return result;
     }
 
-    //affiche message de victoire et quitte le jeu
-    public void victory() {
-        System.out.println("Bravo ! Vous avez atteint " + this.valeurMax);
-        System.exit(0);
-    }
-
     public boolean nouvelleCase() {
         if (this.cases.size() < TAILLE*TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();

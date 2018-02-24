@@ -14,9 +14,4 @@ public class Dumb extends Joueur implements Parametres {
     public Dumb() {
         super();
     }
-
-    @Override
-    public void jouer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

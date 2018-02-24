@@ -17,11 +17,6 @@ public class Partie implements Parametres {
         return this.joueur;
     }
 
-    public void init() {
-        this.initGrilles();
-        this.play();
-    }
-
     /**
      * ajoute les deux cases à chaque grille en suivant les règles d'initialisation
      * 
@@ -69,22 +64,6 @@ public class Partie implements Parametres {
             }
 
         }
-    }
-
-    public void play() {
-
-        while (!this.partieBloquee()) {
-            for (int i = 0; i < 2; i++) {
-                if (this.joueur[i] instanceof Human) {
-                    this.joueur[i].jouer();
-                }
-            }
-        }
-        for (int i = 0; i < 2; i++) {
-            this.joueur[i].gameOver();
-        }
-        System.exit(1);
-
     }
 
     //détermine si un des joueurs est bloqué
