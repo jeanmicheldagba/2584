@@ -11,7 +11,7 @@ package m;
  */
 public class IA extends Joueur implements Parametres {
     
-    public IA() {
-        super();
+    public IA(Partie partie, int id) {
+        super(partie, id);
     }
 }

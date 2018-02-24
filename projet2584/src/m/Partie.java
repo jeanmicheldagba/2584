@@ -7,10 +7,11 @@ import vc.Controller;
 public class Partie implements Parametres {
 
     private Joueur[] joueur;
-    private Controller controller;
+    protected Controller controller;
 
-    public Partie() {
+    public Partie(Controller controller) {
         this.joueur = new Joueur[2];
+        this.controller = controller;
     }
     
     public Joueur[] getJoueur(){

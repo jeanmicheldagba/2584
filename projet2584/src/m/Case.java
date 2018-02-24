@@ -4,16 +4,46 @@ public class Case implements Parametres {
 
     private int x, y, valeur;
     private Grille grille;
+    public double hash;//provisoire
+    
+    //pour GUI
+    private int guiX;
+    private int guiY;
+    private int objectifX;
+    private int objectifY;
 
     public Case(int abs, int ord, int v) {
         this.x = abs;
         this.y = ord;
         this.valeur = v;
+        this.hash = Math.random();
+    }
+
+    public void setGuiX(int guiX) {
+        this.guiX = guiX;
+    }
+
+    public void setGuiY(int guiY) {
+        this.guiY = guiY;
+    }
+
+    public void setObjectifX(int objectifX) {
+        this.objectifX = objectifX;
+    }
+
+    public void setObjectifY(int objectifY) {
+        this.objectifY = objectifY;
     }
     
     @Override
     public Object clone(){
-        return (Object) new Case(this.x, this.y, this.valeur);
+        Case c = new Case(this.x, this.y, this.valeur);
+        c.setHash(this.hash);//provisoire
+        return (Object) c;
+    }
+
+    private void setHash(double hash) {//provisoire
+        this.hash = hash;
     }
 
     public void setGrille(Grille g) {

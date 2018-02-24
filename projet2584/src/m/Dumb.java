@@ -11,7 +11,7 @@ package m;
  */
 public class Dumb extends Joueur implements Parametres {
     
-    public Dumb() {
-        super();
+    public Dumb(Partie partie, int id) {
+        super(partie, id);
     }
 }

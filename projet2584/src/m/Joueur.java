@@ -7,12 +7,14 @@ public abstract class Joueur implements Parametres {
     
     protected Grille grille;
     protected int score;
+    protected Partie partie;
+    protected int id; //indique si c'est le joueur 1 ou 2
     
-    public Joueur(){
-        this.grille = new Grille();
-        
+    public Joueur(Partie partie, int id){
+        this.grille = new Grille(this);        
         this.score = 0;
-        this.score=0;
+        this.partie = partie;
+        this.id = id;
     }
     
     public Grille getGrille(){
@@ -26,6 +28,10 @@ public abstract class Joueur implements Parametres {
     public int getScore(){
         return this.score;
     }*/
+    
+    public int getID(){
+        return this.id;
+    }
     
     // Méthode qui permet de calculer le du score du joueur
     protected void calculScore(){

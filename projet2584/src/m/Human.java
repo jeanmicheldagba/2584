@@ -17,8 +17,8 @@ public class Human extends Joueur implements Parametres {
     private int nbUndo;
     protected Grille lastGrille;
 
-    public Human(String pseudo) {
-        super();
+    public Human(String pseudo, Partie partie, int id) {
+        super(partie, id);
         this.pseudo = pseudo;
         this.lastGrille = (Grille) this.grille.clone();
         this.nbUndo = 5;
