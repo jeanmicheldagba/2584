@@ -48,6 +48,10 @@ public class Grille implements Parametres {
         return this.deplacement;
     }
     
+    public Joueur getJoueur(){
+        return this.joueur;
+    }
+    
     public void setResDeplacement(int rd){
         this.resDeplacement=rd;
     }
@@ -139,14 +143,12 @@ public class Grille implements Parametres {
                         c = extremites[rangee];
                         
                         this.joueur.partie.controller.getToMove().add(c);
-                        c.setObjectifY(objectif);
                         c.setY(objectif); //change coordonnées
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur;
                         c = extremites[rangee];
                         this.joueur.partie.controller.getToMove().add(c);
-                        c.setObjectifY(objectif);
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
@@ -154,18 +156,15 @@ public class Grille implements Parametres {
                         c = extremites[rangee];
                         
                         this.joueur.partie.controller.getToMove().add(c);
-                        c.setObjectifX(objectif);
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur;
                         c = extremites[rangee];
                         this.joueur.partie.controller.getToMove().add(c);
-                        c.setObjectifX(objectif);
                         c.setX(objectif); //change coordonnées
                         break;
                 }
-                System.out.println(extremites[rangee].hash);
                 this.cases.add(extremites[rangee]);
                 this.deplacement = true;
             }

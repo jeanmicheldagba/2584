@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 //import javafx.scene.paint.Color;
 //import javafx.scene.text.Font;
 
@@ -88,7 +90,7 @@ public class Controller implements Initializable, Parametres {
     private final Label c = new Label("2");
     private int x = 24, y = 191;
     private int objectifx = 24, objectify = 191;
-    */
+     */
     private Partie partie; // modèle
     private GridPane[] grilles;
     private Button[] undos;
@@ -114,7 +116,7 @@ public class Controller implements Initializable, Parametres {
 
         //on ajoute les undos au tableau de boutons
         this.undos = new Button[]{this.undo1, this.undo2};
-        
+
         //on ajoute les types au tableau de types
         this.types = new ChoiceBox[]{this.type1, this.type2};
 
@@ -157,11 +159,11 @@ public class Controller implements Initializable, Parametres {
             }
         });
     }
-    
+
     public HashSet<Case> getToMove() {
         return this.toMove;
     }
-    
+
     public void setToMove(HashSet<Case> toMove) {
         this.toMove = toMove;
     }
@@ -280,7 +282,6 @@ public class Controller implements Initializable, Parametres {
         int i;
         i = player == 2 ? 0 : player;
         do {
-            System.out.println("new grid sync");
             grilles[i].getChildren().clear();
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 Pane pane_tuile = new Pane(); //crée conteneur
@@ -295,7 +296,6 @@ public class Controller implements Initializable, Parametres {
                 label_tuile.setVisible(true);
 
             }
-            System.out.println(this.partie.getJoueur()[i].getGrille()); //affiche la grille du modèle dans la console pour vérifier
 
             i++;
         } while (i < 2 && player == 2); //fait ça deux foix si player == 2
@@ -310,66 +310,85 @@ public class Controller implements Initializable, Parametres {
     public void syncScores(int player) {
         System.out.println("syncScores à implémenter");
     }
-    
+
     /**
-     * 
+     *
      * @param player the player whose pane needs to be moved
      * @param preX previous X position
      * @param preY previous Y position
      * @param postX wanted X position
      * @param postY wanted Y position
      */
-    public void deplacerCaseGUI(int player, int preX, int preY, int postX, int postY) {
+    public void deplacerCaseGUI(int player) {
+        grilles[player].getChildren().get(0).relocate(2, 2);
 
-        Task task = new Task<Void>() { // on définit une tâche parallèle pour mettre à jour la vue
+        /*Task task = new Task<Void>() { // on définit une tâche parallèle pour mettre à jour la vue
             @Override
             public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
-                boolean finished = false;
-                while(!finished){
-                    finished = true;
-                    for(Case move : toMove){
-                        Pane paneToMov = null;
-                        ObservableList<Node> children = grilles[player].getChildren();
-                        for (Node node : children) {
-                            if(grilles[player].getRowIndex(node) == preX && grilles[player].getColumnIndex(node) == preY) {
-                                paneToMov = (Pane) node;
-                                break;
-                            }
-                        }
-                        if(paneToMov == null) {
-                            System.out.println("ERREUR : tile not found");
-                        }
-                        Bounds bounds = paneToMov.getLayoutBounds();
-                        Point2D coordinates = paneToMov.localToScene(bounds.getMinX(), bounds.getMinY());
-                        int X = (int) coordinates.getX();
-                        int Y = (int) coordinates.getY();
-                        int objectifX = X + (100*(postX-preX)); //on calcule l'objectif de X
-                        int objectifY = Y + (100*(postY-preY)); //on calcule l'objectif de Y
-                    }
-                }
-                    
-                
-                
-                
-                
-                while (X != objectifX) { // si la tuile n'est pas à la place qu'on souhaite attendre en abscisse
-                    if (X < objectifX) {
-                        X += 1; // si on va vers la droite, on modifie la position de la tuile pixel par pixel vers la droite
-                    } else {
-                        X -= 1; // si on va vers la gauche, idem en décrémentant la valeur de x
-                    }
+                while (!toMove.isEmpty()) { //tant qu'il reste des cases à déplacer                   
                     // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
                     Platform.runLater(new Runnable() { // classe anonyme
                         @Override
                         public void run() {
-                            //javaFX operations should go here
-                            paneToMov.relocate(X, Y); // on déplace la tuile d'un pixel sur la vue, on attend 5ms et on recommence jusqu'à atteindre l'objectif
-                            paneToMov.setVisible(true);
+
+                            for (Case move : toMove) { //pour chaque case à déplacer
+                                Pane paneToMov = null;
+                                ObservableList<Node> children = grilles[player].getChildren();
+                                
+                                //cherche le noeud correspondant
+                                for (Node node : children) {
+                                    //System.out.println(move.getGuiX()+" "+move.getGuiY());
+                                    //System.out.println(grilles[0].getColumnIndex(node)+" "+grilles[0].getRowIndex(node));
+                                    
+                                    if (grilles[player].getRowIndex(node) == move.getGuiY() && grilles[player].getColumnIndex(node) == move.getGuiX()) {
+                                        System.out.println("trouve");
+                                        paneToMov = (Pane) node;
+                                        break;
+                                    }
+                                }
+                                if (paneToMov == null) {
+                                    System.out.println("ERREUR : tile not found");
+                                }
+
+                                //cherche coordonnées du conteneur
+                                Bounds boundsPane = paneToMov.getLayoutBounds();
+                                Point2D coordinatesPane = paneToMov.localToScene(boundsPane.getMinX(), boundsPane.getMinY());
+                                int paneX = (int) coordinatesPane.getX();
+                                int paneY = (int) coordinatesPane.getY();
+
+                                //cherche coordonnées de la grille
+                                Bounds boundsGrid = grilles[move.getGrille().getJoueur().getID()].getLayoutBounds();
+                                Point2D coordinatesGrid = grilles[move.getGrille().getJoueur().getID()].localToScene(boundsGrid.getMinX(), boundsGrid.getMinY());
+                                int gridX = (int) coordinatesGrid.getX();
+                                int gridY = (int) coordinatesGrid.getY();
+
+                                //calcule objectif
+                                int objectifX = gridX + (100 * move.getX()); //on calcule l'objectif de X
+                                int objectifY = gridY + (100 * move.getY()); //on calcule l'objectif de Y
+
+                                if (paneX != objectifX || paneY != objectifY) {
+                                    if (paneX < objectifX) {
+                                        paneX += 1; // si on va vers la droite
+                                    } else if (paneX > objectifX) {
+                                        paneX -= 1; // si on va vers la gauche
+                                    } else if (paneY < objectifX) {
+                                        paneY += 1; // si on va vers le bas
+                                    } else {
+                                        paneY -= 1; // si on va vers le haut
+                                    }
+                                    
+                                    System.out.println("deplacement");
+                                    paneToMov.relocate(2, 2); // on déplace la tuile d'un pixel sur la vue, on attend 5ms et on recommence jusqu'à atteindre l'objectif
+
+                                } else {
+                                    toMove.remove(move);
+                                }
+                            }
                         }
                     }
                     );
                     Thread.sleep(5);
-                } // end while
+                }
                 return null; // la méthode call doit obligatoirement retourner un objet. Ici on n'a rien de particulier à retourner. Du coup, on utilise le type Void (avec un V majuscule) : c'est un type spécial en Java auquel on ne peut assigner que la valeur null
             } // end call
 
@@ -377,6 +396,7 @@ public class Controller implements Initializable, Parametres {
         Thread th = new Thread(task); // on crée un contrôleur de Thread
         th.setDaemon(true); // le Thread s'exécutera en arrière-plan (démon informatique)
         th.start(); // et on exécute le Thread pour mettre à jour la vue (déplacement continu de la tuile horizontalement)
+        */
     }
 
     /*
@@ -453,7 +473,6 @@ public class Controller implements Initializable, Parametres {
 
     @FXML
     public void keyPressed(KeyEvent key) {
-
         //on cherche qui a pressé la touche
         int playerInd;
         if (Arrays.asList(KEYS[0]).contains(key.getText())) { // la touche est une touche du joueur 1
@@ -479,20 +498,21 @@ public class Controller implements Initializable, Parametres {
                 }
 
                 this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
-            
+                
+                syncGrilles(playerInd);
+                //this.deplacerCaseGUI(playerInd);
+                
                 //actualise score interface
                 syncScores(playerInd);
 
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
+
                 
-                syncGrilles(playerInd);
             }
 
-            
-
         }
-
         
+
     }
 }

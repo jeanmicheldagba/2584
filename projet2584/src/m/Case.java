@@ -3,47 +3,26 @@ package m;
 public class Case implements Parametres {
 
     private int x, y, valeur;
+    private int guiX, guiY;
     private Grille grille;
-    public double hash;//provisoire
     
-    //pour GUI
-    private int guiX;
-    private int guiY;
-    private int objectifX;
-    private int objectifY;
 
     public Case(int abs, int ord, int v) {
         this.x = abs;
         this.y = ord;
+        this.guiX = this.x;
+        this.guiY= this.y;
         this.valeur = v;
-        this.hash = Math.random();
     }
-
-    public void setGuiX(int guiX) {
-        this.guiX = guiX;
-    }
-
-    public void setGuiY(int guiY) {
-        this.guiY = guiY;
-    }
-
-    public void setObjectifX(int objectifX) {
-        this.objectifX = objectifX;
-    }
-
-    public void setObjectifY(int objectifY) {
-        this.objectifY = objectifY;
+    
+    public Grille getGrille() {
+        return this.grille;
     }
     
     @Override
     public Object clone(){
         Case c = new Case(this.x, this.y, this.valeur);
-        c.setHash(this.hash);//provisoire
         return (Object) c;
-    }
-
-    private void setHash(double hash) {//provisoire
-        this.hash = hash;
     }
 
     public void setGrille(Grille g) {
@@ -65,6 +44,22 @@ public class Case implements Parametres {
     public void setY(int y) {
         this.y = y;
     }
+    
+    public void setGuiX(int guiX){
+        this.guiX = guiX;
+    }
+    
+    public void setGuiY(int guiY){
+        this.guiY = guiY;
+    }
+    
+    public int getGuiX() {
+        return this.guiX;
+    }
+
+    public int getGuiY() {
+        return this.guiY;
+    }    
 
     public void setValeur(int valeur) {
         this.valeur = valeur;
