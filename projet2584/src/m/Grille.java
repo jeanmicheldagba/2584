@@ -140,28 +140,34 @@ public class Grille implements Parametres {
                 switch (direction) {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
-                        c = extremites[rangee];
-                        
+                        c = extremites[rangee];                        
                         this.joueur.partie.controller.getToMove().add(c);
+                        c.setGuiX(c.getX());
+                        c.setGuiY(c.getY());
                         c.setY(objectif); //change coordonnées
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur;
                         c = extremites[rangee];
                         this.joueur.partie.controller.getToMove().add(c);
+                        c.setGuiX(c.getX());
+                        c.setGuiY(c.getY());
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
                         objectif = compteur;
-                        c = extremites[rangee];
-                        
+                        c = extremites[rangee];                        
                         this.joueur.partie.controller.getToMove().add(c);
+                        c.setGuiX(c.getX());
+                        c.setGuiY(c.getY());
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur;
                         c = extremites[rangee];
                         this.joueur.partie.controller.getToMove().add(c);
+                        c.setGuiX(c.getX());
+                        c.setGuiY(c.getY());
                         c.setX(objectif); //change coordonnées
                         break;
                 }
@@ -246,6 +252,7 @@ public class Grille implements Parametres {
             if (this.valeurMax < ajout.getValeur()) {
                 this.valeurMax = ajout.getValeur();
             }
+            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getY(), ajout.getValeur(), ajout.getGrille().getJoueur().getID());
             return true;
         } else {
             return false;
