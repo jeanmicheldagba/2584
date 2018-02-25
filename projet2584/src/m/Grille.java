@@ -104,8 +104,6 @@ public class Grille implements Parametres {
     }
 
     public boolean lanceurDeplacerCases(int direction) {
-        this.joueur.partie.controller.setToMove(new HashSet());
-        
         Case[] extremites = this.getCasesExtremites(direction);
         this.deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
         for (int i = 0; i < TAILLE; i++) {
@@ -117,6 +115,7 @@ public class Grille implements Parametres {
     //Incrémente c de la valeur add
     private void fusion(Case c, int add) {
         int sommeCases=c.getValeur()+add;
+        this.joueur.grille.joueur.partie.controller.fusionGUI(c, sommeCases);
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -129,58 +128,51 @@ public class Grille implements Parametres {
 
     private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur) {
         int objectif;
-        Case c;
+        Case c = extremites[rangee];
         
-        if (extremites[rangee] != null) {
-            if ((direction == HAUT && extremites[rangee].getY() != compteur)
-                    || (direction == BAS && extremites[rangee].getY() != TAILLE - 1 - compteur)
-                    || (direction == GAUCHE && extremites[rangee].getX() != compteur)
-                    || (direction == DROITE && extremites[rangee].getX() != TAILLE - 1 - compteur)) {
-                this.cases.remove(extremites[rangee]);
+        if (c != null) {
+            if ((direction == HAUT && c.getY() != compteur)
+                    || (direction == BAS && c.getY() != TAILLE - 1 - compteur)
+                    || (direction == GAUCHE && c.getX() != compteur)
+                    || (direction == DROITE && c.getX() != TAILLE - 1 - compteur)) {
                 switch (direction) {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
-                        c = extremites[rangee];                        
-                        this.joueur.partie.controller.getToMove().add(c);
-                        c.setGuiX(c.getX());
-                        c.setGuiY(c.getY());
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
                         c.setY(objectif); //change coordonnées
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur;
-                        c = extremites[rangee];
-                        this.joueur.partie.controller.getToMove().add(c);
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
                         c.setGuiX(c.getX());
                         c.setGuiY(c.getY());
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
                         objectif = compteur;
-                        c = extremites[rangee];                        
-                        this.joueur.partie.controller.getToMove().add(c);
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
                         c.setGuiX(c.getX());
                         c.setGuiY(c.getY());
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur;
-                        c = extremites[rangee];
-                        this.joueur.partie.controller.getToMove().add(c);
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
                         c.setGuiX(c.getX());
                         c.setGuiY(c.getY());
                         c.setX(objectif); //change coordonnées
                         break;
                 }
-                this.cases.add(extremites[rangee]);
                 this.deplacement = true;
             }
-            Case voisin = extremites[rangee].getVoisinDirect(-direction);
+            Case voisin = c.getVoisinDirect(-direction);
             if (voisin != null) {
-                if (extremites[rangee].fibonacciVoisin(voisin)) {
-                    this.fusion(extremites[rangee], voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
+                if (c.fibonacciVoisin(voisin)) {
+                    this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     this.cases.remove(voisin);
-                    this.joueur.partie.controller.getToMove().remove(voisin);
+                    System.out.println(this.joueur.partie.controller.enleverCaseGUI(voisin)+"ment enlevé");
+                    this.joueur.partie.controller.getToMove()[this.joueur.getID()].remove(voisin);
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;
