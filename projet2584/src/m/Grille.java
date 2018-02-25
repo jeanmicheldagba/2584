@@ -139,27 +139,29 @@ public class Grille implements Parametres {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
                         this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
+                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur;
                         this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
-                        c.setGuiX(c.getX());
-                        c.setGuiY(c.getY());
+                        c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
+                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
                         objectif = compteur;
                         this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
-                        c.setGuiX(c.getX());
-                        c.setGuiY(c.getY());
+                        c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
+                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur;
                         this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
-                        c.setGuiX(c.getX());
-                        c.setGuiY(c.getY());
+                        c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
+                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                 }
@@ -171,8 +173,7 @@ public class Grille implements Parametres {
                     this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     this.cases.remove(voisin);
-                    System.out.println(this.joueur.partie.controller.enleverCaseGUI(voisin)+"ment enlevé");
-                    this.joueur.partie.controller.getToMove()[this.joueur.getID()].remove(voisin);
+                    this.joueur.partie.controller.enleverCaseGUI(voisin);//enlève aussi la case de l'interface
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;

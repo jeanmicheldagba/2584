@@ -3,7 +3,7 @@ package m;
 public class Case implements Parametres {
 
     private int x, y, valeur;
-    private int guiX, guiY;
+    private int guiX, guiY; //coordonnées sur l'interface (avant transition)
     private Grille grille;
     
 

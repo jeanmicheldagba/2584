@@ -305,6 +305,13 @@ public class Controller implements Initializable, Parametres {
         System.out.println("syncScores à implémenter");
     }
 
+    /**
+     * ajoute case à l'interface
+     * @param x coordonnée
+     * @param y coordonnée
+     * @param val valeur de la case
+     * @param playerInd joueur à qui est la case
+     */
     public void nouvelleCaseGUI(int x, int y, int val, int playerInd) {
 
         Pane pane_tuile = new Pane(); //crée conteneur
@@ -320,14 +327,19 @@ public class Controller implements Initializable, Parametres {
 
     }
 
+    /**
+     * enlève la case de l'interface
+     * @param enlev case à enlever
+     * @return 
+     */
     public boolean enleverCaseGUI(Case enlev) {
         boolean done = false;
         int playerInd = enlev.getGrille().getJoueur().getID();
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
         //cherche le noeud correspondant
-        for (Node node : children) {
+        for (Node node : children) { //itère noeuds pour trouver case
             if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
-                done = children.remove(node);
+                done = children.remove(node); //enlève noeud
 
                 break;
             }
@@ -335,29 +347,32 @@ public class Controller implements Initializable, Parametres {
         return done;
     }
 
+    /**
+     * Fusionne deux cases
+     * @param c la case à laquelle on fusionne l'autre
+     * @param somme la somme des valeurs des 2 cases
+     */
     public void fusionGUI(Case c, int somme) {
         Pane paneCase;
-        int playerInd = c.getGrille().getJoueur().getID();
-        ObservableList<Node> children = this.grilles[playerInd].getChildren();
+        int playerInd = c.getGrille().getJoueur().getID(); //cherche à quel joueur est la case
+        ObservableList<Node> children = this.grilles[playerInd].getChildren(); //enfants de la grille
+        
         //cherche le noeud correspondant
-        for (Node node : children) {
-            if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) {
+        for (Node node : children) {//itère noeuds de la grille
+            if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) { //si noeud correspond à la case
                 System.out.println("fusion");
                 paneCase = (Pane) node;
-                Label labelCase = (Label) paneCase.getChildren().get(0);
-                labelCase.setText("" + somme);
+                Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
+                labelCase.setText("" + somme); //actualise le label avec la nouvelle valeur
                 break;
             }
         }
     }
 
     /**
-     *
-     * @param player the player whose pane needs to be moved
-     * @param preX previous X position
-     * @param preY previous Y position
-     * @param postX wanted X position
-     * @param postY wanted Y position
+     * move smoothly the pane to the new tile position
+     * @param playerInd the player whose pane needs to be moved
+     * 
      */
     public void transition(int playerInd) {
 
@@ -366,8 +381,8 @@ public class Controller implements Initializable, Parametres {
             ObservableList<Node> children = grilles[playerInd].getChildren();
 
             //cherche le noeud correspondant
-            for (Node node : children) {
-                if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) {
+            for (Node node : children) { //itère noeuds
+                if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) { //si noeud correspond à la case
                     paneToMov = (Pane) node;
                     break;
                 }
@@ -377,20 +392,19 @@ public class Controller implements Initializable, Parametres {
             }
 
             TranslateTransition transition = new TranslateTransition(Duration.millis(300), paneToMov);
-            transition.setByX(100 * (move.getX() - move.getGuiX()));
-            transition.setByY(100 * (move.getY() - move.getGuiY()));
-            transition.setCycleCount(1);//set to 1
-            transition.setAutoReverse(true); //dont need this
-            transition.setOnFinished(new EventHandler<ActionEvent>() {
+            transition.setByX(100 * (move.getX() - move.getGuiX())); //nb de pixels à bouger en x
+            transition.setByY(100 * (move.getY() - move.getGuiY())); //nb de pixels à bouger en y
+            transition.setCycleCount(1);//nombre de cycles
+            transition.setOnFinished(new EventHandler<ActionEvent>() { //à faire une fois fini
                 @Override
                 public void handle(ActionEvent a) {
-                    toMove[playerInd].remove(move);
-                    deplacerCaseGUI(move);
-                    move.setGuiX(move.getX());
-                    move.setGuiY(move.getY());
+                    toMove[playerInd].remove(move); //on enlève la case des cases à bouger
+                    deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
+                    move.setGuiX(move.getX()); //guiX et x sont maintenant les mêmes
+                    move.setGuiY(move.getY()); //guiX et x sont maintenant les mêmes
                 }
             });
-            transition.play();
+            transition.play(); //joue la transition
         }
     }
 
@@ -507,7 +521,7 @@ public class Controller implements Initializable, Parametres {
 
                 this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
 
-                this.transition(playerInd);
+                this.transition(playerInd); //déplace lentement la case vers sa nouvelle position
 
                 //actualise score interface
                 syncScores(playerInd);
