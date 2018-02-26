@@ -284,7 +284,7 @@ public class Controller implements Initializable, Parametres {
      */
     public void syncGrilles(int player) {
         int i;
-        i = player == 2 ? 0 : player;
+        i = (player == 2) ? 0 : player;
         do {
             grilles[i].getChildren().clear();
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
@@ -340,7 +340,7 @@ public class Controller implements Initializable, Parametres {
         for (Node node : children) { //itère noeuds pour trouver case
             if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
                 done = children.remove(node); //enlève noeud
-
+                System.out.println("remove enleverCaseGUI :" + done);
                 break;
             }
         }
@@ -398,10 +398,11 @@ public class Controller implements Initializable, Parametres {
             transition.setOnFinished(new EventHandler<ActionEvent>() { //à faire une fois fini
                 @Override
                 public void handle(ActionEvent a) {
-                    toMove[playerInd].remove(move); //on enlève la case des cases à bouger
+                     //on enlève la case des cases à bouger
+                    System.out.println("remove de transition : "+toMove[playerInd].remove(move));
                     deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
                     move.setGuiX(move.getX()); //guiX et x sont maintenant les mêmes
-                    move.setGuiY(move.getY()); //guiX et x sont maintenant les mêmes
+                    move.setGuiY(move.getY()); //guiY et y sont maintenant les mêmes
                 }
             });
             transition.play(); //joue la transition
@@ -513,6 +514,7 @@ public class Controller implements Initializable, Parametres {
 
             if (playerInd != -1) { //si un des joueurs a pressé la touche
                 this.syncGrilles(playerInd); //on remet les panes dans les bonnes cases de la grille
+                System.out.println();
                 Joueur playerObj = this.partie.getJoueur()[playerInd];
                 if (playerObj instanceof Human) { //si le joueur est humain
                     Human human = (Human) playerObj;

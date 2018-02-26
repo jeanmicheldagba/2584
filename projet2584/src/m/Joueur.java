@@ -36,7 +36,7 @@ public abstract class Joueur implements Parametres {
     // Méthode qui permet de calculer le du score du joueur
     protected void calculScore(){
         if(grille.getDeplacement()==true){// pas forcément utile A REVOIR
-            this.score=this.score+grille.getResDeplacement();
+            this.score+= grille.getResDeplacement();
             grille.setResDeplacement(0);
         }
     }

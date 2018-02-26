@@ -138,28 +138,28 @@ public class Grille implements Parametres {
                 switch (direction) {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        System.out.println(this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c));
                         c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        System.out.println(this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c));
                         c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
                         objectif = compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        System.out.println(this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c));
                         c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        System.out.println(this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c));
                         c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
