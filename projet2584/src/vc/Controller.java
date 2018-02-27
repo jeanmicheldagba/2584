@@ -7,6 +7,7 @@ package vc;
 
 import m.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -98,7 +99,7 @@ public class Controller implements Initializable, Parametres {
     private GridPane[] grilles;
     private Button[] undos;
     private ChoiceBox[] types;
-    private HashSet<Case>[] toMove;
+    private ArrayList<Case>[] toMove;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -162,13 +163,13 @@ public class Controller implements Initializable, Parametres {
             }
         });
 
-        this.toMove = new HashSet[2];
+        this.toMove = new ArrayList[2];
         for (int i = 0; i < 2; i++) {
-            this.toMove[i] = new HashSet();
+            this.toMove[i] = new ArrayList();
         }
     }
 
-    public HashSet<Case>[] getToMove() {
+    public ArrayList<Case>[] getToMove() {
         return this.toMove;
     }
 
@@ -375,7 +376,8 @@ public class Controller implements Initializable, Parametres {
      */
     public void transition(int playerInd) {
 
-        for (Case move : toMove[playerInd]) { //pour chaque case à déplacer
+        while(!toMove[playerInd].isEmpty()) { //pour chaque case à déplacer
+            Case move = toMove[playerInd].get(0);
             Pane paneToMov = null;
             ObservableList<Node> children = grilles[playerInd].getChildren();
             System.out.println("Un true si " + move + " appartient à " + toMove[playerInd]);
@@ -400,12 +402,13 @@ public class Controller implements Initializable, Parametres {
                     //on enlève la case des cases à bouger
                     System.out.println("toMove dans le handle : " + toMove[playerInd]);
                     System.out.println("move dans le handle :" + move);
-                    toMove[playerInd].remove(move);
+                    
                     deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
                     move.setGuiX(move.getX()); //guiX et x sont maintenant les mêmes
                     move.setGuiY(move.getY()); //guiY et y sont maintenant les mêmes
                 }
             });
+            toMove[playerInd].remove(0);
             transition.play(); //joue la transition
             System.out.println("toMove à la fin de la transition : " + toMove[playerInd]);
         }
