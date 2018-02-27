@@ -289,7 +289,7 @@ public class Controller implements Initializable, Parametres {
         do {
             grilles[i].getChildren().clear();
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
-                this.nouvelleCaseGUI(c.getX(), c.getGuiY(), c.getValeur(), i);
+                this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
             }
 
             i++;
