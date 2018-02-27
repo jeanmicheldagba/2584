@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
@@ -99,7 +100,7 @@ public class Controller implements Initializable, Parametres {
     private GridPane[] grilles;
     private Button[] undos;
     private ChoiceBox[] types;
-    private ArrayList<Case>[] toMove;
+    private HashSet<Case>[] toMove;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -163,13 +164,13 @@ public class Controller implements Initializable, Parametres {
             }
         });
 
-        this.toMove = new ArrayList[2];
+        this.toMove = new HashSet[2];
         for (int i = 0; i < 2; i++) {
-            this.toMove[i] = new ArrayList();
+            this.toMove[i] = new HashSet();
         }
     }
 
-    public ArrayList<Case>[] getToMove() {
+    public HashSet<Case>[] getToMove() {
         return this.toMove;
     }
 
@@ -289,9 +290,11 @@ public class Controller implements Initializable, Parametres {
         do {
             Node sauv = grilles[i].getChildren().get(0);
             grilles[i].getChildren().clear();
+            System.out.println(grilles[i].getChildren().size());
             grilles[i].getChildren().add(sauv);
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
+                System.out.println("nouvelle case : "+c.getValeur()+" en "+(c.getX()+1)+","+(4-c.getY()));
             }
 
             i++;
@@ -336,6 +339,7 @@ public class Controller implements Initializable, Parametres {
      * @return 
      */
     public boolean enleverCaseGUI(Case enlev) {
+        System.out.println("ENLEVE");
         boolean done = false;
         int playerInd = enlev.getGrille().getJoueur().getID();
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
@@ -383,6 +387,7 @@ public class Controller implements Initializable, Parametres {
         Label l;
         
         for(int i=0;i<2;i++) {
+            this.syncGrilles(i);
             s+="Cases du joueur "+(i+1)+" :\n";
             for(int j = 1; j<grilles[i].getChildren().size(); j++) {
                  node = grilles[i].getChildren().get(j);
@@ -407,9 +412,9 @@ public class Controller implements Initializable, Parametres {
      * 
      */
     public void transition(int playerInd) {
-
-        while(!toMove[playerInd].isEmpty()) { //pour chaque case à déplacer
-            Case move = toMove[playerInd].get(0);
+        
+        for(Object o : toMove[playerInd].toArray()) { //pour chaque case à déplacer
+            Case move = (Case) o;
             Pane paneToMov = null;
             ObservableList<Node> children = grilles[playerInd].getChildren();
             System.out.println("Un true si " + move + " appartient à " + toMove[playerInd]);
