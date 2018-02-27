@@ -287,7 +287,9 @@ public class Controller implements Initializable, Parametres {
         int i;
         i = (player == 2) ? 0 : player;
         do {
+            Node sauv = grilles[i].getChildren().get(0);
             grilles[i].getChildren().clear();
+            grilles[i].getChildren().add(sauv);
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
             }
@@ -339,9 +341,11 @@ public class Controller implements Initializable, Parametres {
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
         //cherche le noeud correspondant
         for (Node node : children) { //itère noeuds pour trouver case
-            if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
-                done = children.remove(node); //enlève noeud
-                break;
+            if(!node.equals(children.get(0))){
+                if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
+                    done = children.remove(node); //enlève noeud
+                    break;
+                }
             }
         }
         return done;
@@ -359,14 +363,42 @@ public class Controller implements Initializable, Parametres {
         
         //cherche le noeud correspondant
         for (Node node : children) {//itère noeuds de la grille
-            if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) { //si noeud correspond à la case
-                //System.out.println("fusion");
-                paneCase = (Pane) node;
-                Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
-                labelCase.setText("" + somme); //actualise le label avec la nouvelle valeur
-                break;
+            if(!node.equals(children.get(0))){
+                if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) { //si noeud correspond à la case
+                    //System.out.println("fusion");
+                    paneCase = (Pane) node;
+                    Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
+                    labelCase.setText("" + somme); //actualise le label avec la nouvelle valeur
+                    break;
+                }
             }
+                
         }
+    }
+    
+    public String toString() {
+        String s="";
+        Node node;
+        Pane p;
+        Label l;
+        
+        for(int i=0;i<2;i++) {
+            s+="Cases du joueur "+(i+1)+" :\n";
+            for(int j = 1; j<grilles[i].getChildren().size(); j++) {
+                 node = grilles[i].getChildren().get(j);
+                 p = (Pane) grilles[i].getChildren().get(j);
+                 l = (Label) p.getChildren().get(0);
+                 s+="valeur "+l.getText()+" en "+(grilles[i].getColumnIndex(node)+1)+","+(3-grilles[i].getRowIndex(node)+1);
+                 s+="\n";
+                 
+            }
+            
+            s+="\n";
+                
+            
+        }
+        
+        return s;
     }
 
     /**
@@ -383,9 +415,11 @@ public class Controller implements Initializable, Parametres {
             System.out.println("Un true si " + move + " appartient à " + toMove[playerInd]);
             //cherche le noeud correspondant
             for (Node node : children) { //itère noeuds
-                if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) { //si noeud correspond à la case
-                    paneToMov = (Pane) node;
-                    break;
+                if(!node.equals(children.get(0))){
+                    if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) { //si noeud correspond à la case
+                        paneToMov = (Pane) node;
+                        break;
+                    }
                 }
             }
             if (paneToMov == null) {
@@ -435,6 +469,7 @@ public class Controller implements Initializable, Parametres {
      */
     @FXML
     public void refocus() {
+        System.out.println(this);
         System.out.println("Refocus de la fenêtre");
         background.getScene().addEventFilter(KeyEvent.KEY_PRESSED,
                 event2 -> keyPressed(event2));
