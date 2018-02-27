@@ -340,7 +340,6 @@ public class Controller implements Initializable, Parametres {
         for (Node node : children) { //itère noeuds pour trouver case
             if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
                 done = children.remove(node); //enlève noeud
-                System.out.println("remove enleverCaseGUI :" + done);
                 break;
             }
         }
@@ -360,7 +359,7 @@ public class Controller implements Initializable, Parametres {
         //cherche le noeud correspondant
         for (Node node : children) {//itère noeuds de la grille
             if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) { //si noeud correspond à la case
-                System.out.println("fusion");
+                //System.out.println("fusion");
                 paneCase = (Pane) node;
                 Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
                 labelCase.setText("" + somme); //actualise le label avec la nouvelle valeur
@@ -379,7 +378,7 @@ public class Controller implements Initializable, Parametres {
         for (Case move : toMove[playerInd]) { //pour chaque case à déplacer
             Pane paneToMov = null;
             ObservableList<Node> children = grilles[playerInd].getChildren();
-
+            System.out.println("Un true si " + move + " appartient à " + toMove[playerInd]);
             //cherche le noeud correspondant
             for (Node node : children) { //itère noeuds
                 if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) { //si noeud correspond à la case
@@ -398,14 +397,17 @@ public class Controller implements Initializable, Parametres {
             transition.setOnFinished(new EventHandler<ActionEvent>() { //à faire une fois fini
                 @Override
                 public void handle(ActionEvent a) {
-                     //on enlève la case des cases à bouger
-                    System.out.println("remove de transition : "+toMove[playerInd].remove(move));
+                    //on enlève la case des cases à bouger
+                    System.out.println("toMove dans le handle : " + toMove[playerInd]);
+                    System.out.println("move dans le handle :" + move);
+                    toMove[playerInd].remove(move);
                     deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
                     move.setGuiX(move.getX()); //guiX et x sont maintenant les mêmes
                     move.setGuiY(move.getY()); //guiY et y sont maintenant les mêmes
                 }
             });
             transition.play(); //joue la transition
+            System.out.println("toMove à la fin de la transition : " + toMove[playerInd]);
         }
     }
 
@@ -524,7 +526,7 @@ public class Controller implements Initializable, Parametres {
                 this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
 
                 this.transition(playerInd); //déplace lentement la case vers sa nouvelle position
-
+                System.out.println(playerObj.getGrille());
                 //actualise score interface
                 syncScores(playerInd);
 

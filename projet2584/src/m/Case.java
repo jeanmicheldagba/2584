@@ -70,9 +70,9 @@ public class Case implements Parametres {
     }
 
     @Override
-    public boolean equals(Object obj) { // la méthode equals est utilisée lors de l'ajout d'une case à un ensemble pour vérifier qu'il n'y a pas de doublons (teste parmi tous les candidats qui ont le même hashcode)
-        if (obj instanceof Case) {
-            Case c = (Case) obj;
+    public boolean equals(Object o) { // la méthode equals est utilisée lors de l'ajout d'une case à un ensemble pour vérifier qu'il n'y a pas de doublons (teste parmi tous les candidats qui ont le même hashcode)
+        if (o instanceof Case) {
+            Case c = (Case) o;
             return (this.x == c.x && this.y == c.y);
         } else {
             return false;
@@ -81,7 +81,7 @@ public class Case implements Parametres {
 
     @Override
     public int hashCode() { // détermine le hashcode
-        return this.x * 7 + this.y * 13;
+        return (this.x+1)*10 + (this.y+1);
     }
 
     public boolean valeurEgale(Case c) {

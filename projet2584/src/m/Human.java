@@ -31,9 +31,6 @@ public class Human extends Joueur implements Parametres {
         if (this.nbUndo > 0) { // Si il lui reste des undo       
             this.nbUndo--; // On décrémente le nombre de undo disponible            
             this.grille = this.lastGrille; // La grille du joueur redevient la version précédente            
-            System.out.println("Grille après undo :\n"+this.grille);
-            System.out.println("Last grille après undo :\n"+this.lastGrille);
-            
             return true;
         } else {
             System.out.println("Undo indisponible");
