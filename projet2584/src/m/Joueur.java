@@ -50,6 +50,8 @@ public abstract class Joueur implements Parametres {
         
         // On déplace les cases
         boolean casesMov = this.grille.lanceurDeplacerCases(direction);
+        
+        //On vérifie l'état de la partie
         if (casesMov) {
             if (!this.grille.nouvelleCase()) { //la grille est pleine
                 System.out.println("partie terminée, score : "+this.score);

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -290,8 +291,8 @@ public class Controller implements Initializable, Parametres {
         do {
             Node sauv = grilles[i].getChildren().get(0);
             grilles[i].getChildren().clear();
-            System.out.println(grilles[i].getChildren().size());
             grilles[i].getChildren().add(sauv);
+            System.out.println(this.partie.getJoueur()[i].getGrille().getCases().size());
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
                 System.out.println("nouvelle case : "+c.getValeur()+" en "+(c.getX()+1)+","+(4-c.getY()));
@@ -321,7 +322,7 @@ public class Controller implements Initializable, Parametres {
     public void nouvelleCaseGUI(int x, int y, int val, int playerInd) {
 
         Pane pane_tuile = new Pane(); //crée conteneur
-        Label label_tuile = new Label(String.valueOf(val)); //crée label avec valeur de la case
+        Label label_tuile = new Label(val+""); //crée label avec valeur de la case
         pane_tuile.getStyleClass().add("pane_tuile"); //ajoute classe pour css
         label_tuile.getStyleClass().add("label_tuile"); //ajoute classe pour css
         grilles[playerInd].add(pane_tuile, x, y); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
@@ -336,49 +337,68 @@ public class Controller implements Initializable, Parametres {
     /**
      * enlève la case de l'interface
      * @param enlev case à enlever
-     * @return 
+     * @return si la case a été enlevée
      */
     public boolean enleverCaseGUI(Case enlev) {
-        System.out.println("ENLEVE");
         boolean done = false;
         int playerInd = enlev.getGrille().getJoueur().getID();
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
+        Pane paneCase;
+        
+        int trouves = 0;
+        
         //cherche le noeud correspondant
         for (Node node : children) { //itère noeuds pour trouver case
-            if(!node.equals(children.get(0))){
+            if(!node.equals(children.get(0))){ //on n'itère pas les lignes de la grille
                 if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
-                    done = children.remove(node); //enlève noeud
-                    break;
+                    trouves++;
+                    paneCase = (Pane) node;
+                    Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
+
+                    if(enlev.getValeur() == Integer.valueOf(labelCase.getText())){
+                        done = children.remove(node);//enlève noeud
+                        break;
+                    } 
+                    
+                    
                 }
             }
         }
+        //System.out.println("trouves : "+trouves);
         return done;
     }
-
+    
+    
     /**
      * Fusionne deux cases
      * @param c la case à laquelle on fusionne l'autre
      * @param somme la somme des valeurs des 2 cases
      */
-    public void fusionGUI(Case c, int somme) {
+    /*public void fusionGUI(Case c, int add) {
         Pane paneCase;
         int playerInd = c.getGrille().getJoueur().getID(); //cherche à quel joueur est la case
         ObservableList<Node> children = this.grilles[playerInd].getChildren(); //enfants de la grille
         
+        int trouves = 0; //debug
+
         //cherche le noeud correspondant
         for (Node node : children) {//itère noeuds de la grille
-            if(!node.equals(children.get(0))){
+            if(!node.equals(children.get(0))){ //on n'itère pas les lignes de la grille
                 if (grilles[playerInd].getRowIndex(node) == c.getGuiY() && grilles[playerInd].getColumnIndex(node) == c.getGuiX()) { //si noeud correspond à la case
-                    //System.out.println("fusion");
+                    trouves++;
                     paneCase = (Pane) node;
                     Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
-                    labelCase.setText("" + somme); //actualise le label avec la nouvelle valeur
-                    break;
+
+                    if(c.getValeur() == Integer.valueOf(labelCase.getText())){
+                        labelCase.setText("" + (c.getValeur()+add)); //actualise le label avec la nouvelle valeur
+                        break;
+                    }
                 }
             }
                 
         }
-    }
+        System.out.println("trouves : "+trouves);
+    }*/
     
     public String toString() {
         String s="";
@@ -387,7 +407,6 @@ public class Controller implements Initializable, Parametres {
         Label l;
         
         for(int i=0;i<2;i++) {
-            this.syncGrilles(i);
             s+="Cases du joueur "+(i+1)+" :\n";
             for(int j = 1; j<grilles[i].getChildren().size(); j++) {
                  node = grilles[i].getChildren().get(j);
@@ -413,20 +432,29 @@ public class Controller implements Initializable, Parametres {
      */
     public void transition(int playerInd) {
         
-        for(Object o : toMove[playerInd].toArray()) { //pour chaque case à déplacer
-            Case move = (Case) o;
+        for(Case move : toMove[playerInd]) { //pour chaque case à déplacer
             Pane paneToMov = null;
             ObservableList<Node> children = grilles[playerInd].getChildren();
-            System.out.println("Un true si " + move + " appartient à " + toMove[playerInd]);
+            
+            int trouves = 0; //debug
+            
             //cherche le noeud correspondant
             for (Node node : children) { //itère noeuds
-                if(!node.equals(children.get(0))){
+                if(!node.equals(children.get(0))){ //on n'itère pas les lignes de la grille
                     if (grilles[playerInd].getRowIndex(node) == move.getGuiY() && grilles[playerInd].getColumnIndex(node) == move.getGuiX()) { //si noeud correspond à la case
+                        trouves++; //debug
                         paneToMov = (Pane) node;
-                        break;
+                        Label labelCase = (Label) paneToMov.getChildren().get(0); //cherche label dans pane
+
+                        if(move.getValeur() == Integer.valueOf(labelCase.getText())){
+                            break;
+                        }
+                        
                     }
                 }
             }
+            System.out.println("trouves : "+trouves); //debug
+            
             if (paneToMov == null) {
                 System.out.println("ERREUR : tile not found");
             }
@@ -435,22 +463,42 @@ public class Controller implements Initializable, Parametres {
             transition.setByX(100 * (move.getX() - move.getGuiX())); //nb de pixels à bouger en x
             transition.setByY(100 * (move.getY() - move.getGuiY())); //nb de pixels à bouger en y
             transition.setCycleCount(1);//nombre de cycles
+            
+            
             transition.setOnFinished(new EventHandler<ActionEvent>() { //à faire une fois fini
                 @Override
                 public void handle(ActionEvent a) {
                     //on enlève la case des cases à bouger
-                    System.out.println("toMove dans le handle : " + toMove[playerInd]);
-                    System.out.println("move dans le handle :" + move);
+                    /*System.out.println("toMove dans le handle : " + toMove[playerInd]);
+                    System.out.println("move dans le handle :" + move);*/
                     
-                    deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
-                    move.setGuiX(move.getX()); //guiX et x sont maintenant les mêmes
-                    move.setGuiY(move.getY()); //guiY et y sont maintenant les mêmes
+                    
+                    //deplacerCaseGUI(move); //on affecte la pane à la nouvelle case
                 }
             });
-            toMove[playerInd].remove(0);
+            
             transition.play(); //joue la transition
             System.out.println("toMove à la fin de la transition : " + toMove[playerInd]);
         }
+    }
+    
+    /**
+     * Détermine si les transitions sont finies et enlève chaque case terminée de l'ensemble à bouger pour réduire les boucles
+     * @param playerInd
+     * @return 
+     */
+    public boolean transitionsFinished(int playerInd) {
+        boolean finished = true;
+        for(Object o : toMove[playerInd].toArray()) { //pour chaque case à déplacer
+            Case move = (Case) o;
+            if(true) {
+                this.toMove[playerInd].remove(move);
+            } else {
+                finished = false;
+            }
+            
+        }
+        return finished;
     }
 
     /**
@@ -458,12 +506,12 @@ public class Controller implements Initializable, Parametres {
      *
      * @param move la case à déplacer
      */
-    public void deplacerCaseGUI(Case move) {
+    /*public void deplacerCaseGUI(Case move) {
         enleverCaseGUI(move);
         int playerInd = move.getGrille().getJoueur().getID();
         this.nouvelleCaseGUI(move.getX(), move.getY(), move.getValeur(), playerInd);
 
-    }
+    }*/
 
     /*
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
@@ -525,7 +573,7 @@ public class Controller implements Initializable, Parametres {
         }
 
         if (undone) {
-            undos[playerInd].setText("Undo (" + String.valueOf(playerObj.getNbUndo()) + ")"); //actualise le nombre de undo restant
+            undos[playerInd].setText("Undo (" + playerObj.getNbUndo() + ")"); //actualise le nombre de undo restant
         } else {
             undos[playerInd].setVisible(false); //plus de undo, bouton devient invisible
         }
@@ -556,22 +604,47 @@ public class Controller implements Initializable, Parametres {
         if (this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
             System.out.println("start game first");
         } else {
-
             if (playerInd != -1) { //si un des joueurs a pressé la touche
-                this.syncGrilles(playerInd); //on remet les panes dans les bonnes cases de la grille
-                System.out.println();
-                Joueur playerObj = this.partie.getJoueur()[playerInd];
+                
+                this.toMove[playerInd] = new HashSet(); //on réinitialise l'ensemble des cases à bouger
+
+                Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
+                
                 if (playerObj instanceof Human) { //si le joueur est humain
                     Human human = (Human) playerObj;
-                    human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle
+                    human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle pour undo
                 }
 
-                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
+                boolean over = this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
 
                 this.transition(playerInd); //déplace lentement la case vers sa nouvelle position
-                System.out.println(playerObj.getGrille());
-                //actualise score interface
-                syncScores(playerInd);
+                
+                /*boolean stated = false;
+                while(!stated){
+                    stated = true;
+                    for(Transition transition : this.transitions[playerInd]){
+                        if(transition.getStatus() == Animation.Status.PAUSED || transition.getStatus() == Animation.Status.RUNNING){
+                            stated = false;
+                            break;
+                        } else if(transition.getStatus() == Animation.Status.STOPPED) {
+                            System.out.println("STOPPED");
+                            
+                        } else {
+                            System.out.println("CACAAAAAAAAAA");
+                            System.exit(0);
+                        }
+                    }
+                }*/
+                
+                while(!transitionsFinished(playerInd)){
+                    System.out.println("waiting");
+                }
+                
+                this.syncGrilles(playerInd);
+                
+                //syncScores(playerInd); //actualise score interface
+                
+                System.out.println(this.partie.getJoueur()[playerInd].getGrille());
 
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);

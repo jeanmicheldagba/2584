@@ -115,7 +115,7 @@ public class Grille implements Parametres {
     //Incrémente c de la valeur add
     private void fusion(Case c, int add) {
         int sommeCases=c.getValeur()+add;
-        this.joueur.grille.joueur.partie.controller.fusionGUI(c, sommeCases);
+        
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -138,28 +138,32 @@ public class Grille implements Parametres {
                 switch (direction) {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
                         c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
-                        c.setY(objectif); //change coordonnées
+                        c.setY(objectif); //change coordonnée
                         break;
                     case BAS:
-                        objectif = TAILLE - 1 - compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        objectif = TAILLE - 1 - compteur; //la coordonnée à atteindre
+                        
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
                         c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
-                        objectif = compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        objectif = compteur; //la coordonnée à atteindre
+                        
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
                         c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
-                        objectif = TAILLE - 1 - compteur;
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c);
+                        objectif = TAILLE - 1 - compteur; //la coordonnée à atteindre
+                        
+                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
                         c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
@@ -170,9 +174,10 @@ public class Grille implements Parametres {
             Case voisin = c.getVoisinDirect(-direction);
             if (voisin != null) {
                 if (c.fibonacciVoisin(voisin)) {
+                    //this.joueur.grille.joueur.partie.controller.fusionGUI(c, voisin.getValeur()); //fusionne dans GUI
                     this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
-                    this.cases.remove(voisin);
+                    System.out.println(this.cases.remove(voisin));
                     this.joueur.partie.controller.enleverCaseGUI(voisin);//enlève aussi la case de l'interface
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
