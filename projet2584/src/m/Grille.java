@@ -135,7 +135,7 @@ public class Grille implements Parametres {
             || (direction == BAS && c.getY() != TAILLE - 1 - compteur)
             || (direction == GAUCHE && c.getX() != compteur)
             || (direction == DROITE && c.getX() != TAILLE - 1 - compteur)) {
-                
+                this.cases.remove(c); // on enlève la case pour la remettre que si aucune case n'est à la même place
                 //actualise position du modèle
                 switch (direction) {
                     case HAUT:
@@ -155,8 +155,10 @@ public class Grille implements Parametres {
                         c.setX(objectif); //change coordonnées
                         break;
                 }
-                
-                this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
+                if (this.cases.add(c)){ // on ajoute la case (si aucune case n'est aux mêmes coordonnées)
+                    this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
+                }
+                    
                 this.deplacement = true;
             }
             Case voisin = c.getVoisinDirect(-direction);
