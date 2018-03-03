@@ -321,6 +321,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
         Pane paneCase;
         boolean found = false;
+        Node toRemove = null;
         
         Iterator<Node> it = children.iterator();
 
@@ -334,13 +335,14 @@ public class Controller extends Thread implements Initializable, Parametres {
 
                     if (enlev.getValeur() == Integer.valueOf(labelCase.getText())) {
                         found = true;
-                        it.remove(); //enlève noeud
+                        toRemove = node;
                     }
-
                 }
             }
         }
-        System.out.println("enleve");
+        System.out.println(children.remove(toRemove));
+        
+        
         
     }
     
