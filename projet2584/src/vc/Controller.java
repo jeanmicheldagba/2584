@@ -93,7 +93,6 @@ public class Controller extends Thread implements Initializable, Parametres {
     private GridPane[] grilles;
     private Button[] undos;
     private ChoiceBox[] types;
-    HashSet<Thread> transitions = new HashSet(); //on crée un hashset car la classe ThreadGroup nous semble peu efficace (pas de méthode join, activeCount renvoie une estimation,...)
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -456,7 +455,9 @@ public class Controller extends Thread implements Initializable, Parametres {
             
             final Pane final_pane = paneToMov;
             final_pane.setTranslateX(0);
-            final_pane.setTranslateY(0);            
+            final_pane.setTranslateY(0);        
+            
+            final Controller controller = this;
 
             Task transition_task = new Task<Void>() {
                 @Override
@@ -483,19 +484,13 @@ public class Controller extends Thread implements Initializable, Parametres {
                         Thread.sleep(2);
                         
                     }
+                    controller.deplacerCaseGUI(move);
                     return null;
                 }
 
             };
             Thread transition_thread = new Thread(transition_task); // on crée un contrôleur de Thread
-            
             transition_thread.start();
-            try {
-                transition_thread.join();
-            } catch (InterruptedException ex) {
-                System.out.println("interrupted");
-                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 
@@ -592,8 +587,6 @@ public class Controller extends Thread implements Initializable, Parametres {
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche
                 
-                this.transitions = new HashSet();
-
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
                 if (playerObj instanceof Human) { //si le joueur est humain
