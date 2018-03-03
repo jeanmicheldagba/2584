@@ -5,7 +5,7 @@ public class Case implements Parametres {
     private int x, y, valeur;
     private int guiX, guiY; //coordonnées sur l'interface (avant transition)
     private Grille grille;
-    private double objectifPixelX, objectifPixelY;
+    private double objectifTranslateX, objectifTranslateY;
     
 
     public Case(int abs, int ord, int v) {
@@ -62,20 +62,20 @@ public class Case implements Parametres {
         return this.guiY;
     } 
 
-    public double getObjectifPixelX() {
-        return objectifPixelX;
+    public double getObjectifTranslateX() {
+        return objectifTranslateX;
     }
 
-    public double getObjectifPixelY() {
-        return objectifPixelY;
+    public double getObjectifTranslateY() {
+        return objectifTranslateY;
     }
 
-    public void setObjectifPixelX(double objectifPixelX) {
-        this.objectifPixelX = objectifPixelX;
+    public void setObjectifTranslateX(double objectifTranslateX) {
+        this.objectifTranslateX = objectifTranslateX;
     }
 
-    public void setObjectifPixelY(double objectifPixelY) {
-        this.objectifPixelY = objectifPixelY;
+    public void setObjectifTranslateY(double objectifTranslateY) {
+        this.objectifTranslateY = objectifTranslateY;
     }
 
     public void setValeur(int valeur) {

@@ -3,7 +3,6 @@ package m;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Grille implements Parametres {
@@ -116,6 +115,7 @@ public class Grille implements Parametres {
     private void fusion(Case c, int add) {
         int sommeCases=c.getValeur()+add;
         
+        this.joueur.partie.controller.updateValueGUI(c, sommeCases);
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -132,53 +132,40 @@ public class Grille implements Parametres {
         
         if (c != null) {
             if ((direction == HAUT && c.getY() != compteur)
-                    || (direction == BAS && c.getY() != TAILLE - 1 - compteur)
-                    || (direction == GAUCHE && c.getX() != compteur)
-                    || (direction == DROITE && c.getX() != TAILLE - 1 - compteur)) {
+            || (direction == BAS && c.getY() != TAILLE - 1 - compteur)
+            || (direction == GAUCHE && c.getX() != compteur)
+            || (direction == DROITE && c.getX() != TAILLE - 1 - compteur)) {
+                
+                //actualise position du modèle
                 switch (direction) {
                     case HAUT:
                         objectif = compteur; //la coordonnée à atteindre
-                        
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
-                        c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
-                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnée
                         break;
                     case BAS:
                         objectif = TAILLE - 1 - compteur; //la coordonnée à atteindre
-                        
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
-                        c.setGuiX(c.getX()); //sauvegarde l'ancienne position car l'interface n'a pas changé
-                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setY(objectif); //change coordonnées
                         break;
                     case GAUCHE:
                         objectif = compteur; //la coordonnée à atteindre
-                        
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
-                        c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
-                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                     default:
                         objectif = TAILLE - 1 - compteur; //la coordonnée à atteindre
-                        
-                        this.joueur.partie.controller.getToMove()[this.joueur.getID()].add(c); //ajoute aux cases à bouger
-                        c.setGuiX(c.getX());//sauvegarde l'ancienne position car l'interface n'a pas changé
-                        c.setGuiY(c.getY());//sauvegarde l'ancienne position car l'interface n'a pas changé
                         c.setX(objectif); //change coordonnées
                         break;
                 }
+                
+                this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
                 this.deplacement = true;
             }
             Case voisin = c.getVoisinDirect(-direction);
             if (voisin != null) {
                 if (c.fibonacciVoisin(voisin)) {
-                    //this.joueur.grille.joueur.partie.controller.fusionGUI(c, voisin.getValeur()); //fusionne dans GUI
                     this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
-                    System.out.println(this.cases.remove(voisin));
-                    this.joueur.partie.controller.enleverCaseGUI(voisin);//enlève aussi la case de l'interface
+                    this.cases.remove(voisin);
+                    this.joueur.partie.controller.enleverCaseGUI(voisin);
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;
@@ -246,11 +233,13 @@ public class Grille implements Parametres {
             ajout.setGrille(this);
             this.cases.add(ajout);
             
+            //on ajoute la case à l'interface
+            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getX(), ajout.getValeur(), this.joueur.getID());
+            
             //actualise valeurMax
             if (this.valeurMax < ajout.getValeur()) {
                 this.valeurMax = ajout.getValeur();
             }
-            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getY(), ajout.getValeur(), ajout.getGrille().getJoueur().getID());
             return true;
         } else {
             return false;
