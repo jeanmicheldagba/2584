@@ -166,8 +166,10 @@ public class Grille implements Parametres {
                 if (c.fibonacciVoisin(voisin)) {
                     this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
-                    this.cases.remove(voisin);
-                    this.joueur.partie.controller.enleverCaseGUI(voisin);
+                    if(this.cases.remove(voisin)){
+                        this.joueur.partie.controller.enleverCaseGUI(voisin);
+                    }
+                    
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
                 } else {
                     extremites[rangee] = voisin;
@@ -236,7 +238,7 @@ public class Grille implements Parametres {
             this.cases.add(ajout);
             
             //on ajoute la case à l'interface
-            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getX(), ajout.getValeur(), this.joueur.getID());
+            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getY(), ajout.getValeur(), this.joueur.getID());
             
             //actualise valeurMax
             if (this.valeurMax < ajout.getValeur()) {

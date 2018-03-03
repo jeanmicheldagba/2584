@@ -8,6 +8,8 @@ package vc;
 import m.*;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -86,6 +88,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private GridPane[] grilles;
     private Button[] undos;
     private ChoiceBox[] types;
+    //private HashSet<Thread> transitions;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -306,40 +309,39 @@ public class Controller extends Thread implements Initializable, Parametres {
         //affiche les éléments
         pane_tuile.setVisible(true);
         label_tuile.setVisible(true);
-
     }
 
     /**
      * enlève la case de l'interface
      *
      * @param enlev case à enlever
-     * @return si la case a été enlevée
      */
-    public boolean enleverCaseGUI(Case enlev) {
-        boolean done = false;
+    public void enleverCaseGUI(Case enlev) {
         int playerInd = enlev.getGrille().getJoueur().getID();
         ObservableList<Node> children = this.grilles[playerInd].getChildren();
         Pane paneCase;
+        boolean found = false;
+        
+        Iterator<Node> it = children.iterator();
 
-        int trouves = 0;
-
-        //cherche le noeud correspondant
-        for (Node node : children) { //itère noeuds pour trouver case
+        //cherche le noeud correspondant        
+        while(!found && it.hasNext()){ //itère noeuds pour trouver case
+            Node node = it.next();
             if (!node.equals(children.get(0))) { //on n'itère pas les lignes de la grille
                 if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
-                    trouves++;
                     paneCase = (Pane) node;
                     Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
 
                     if (enlev.getValeur() == Integer.valueOf(labelCase.getText())) {
-                        done = children.remove(node);//enlève noeud
-                        break;
+                        found = true;
+                        it.remove(); //enlève noeud
                     }
 
                 }
             }
         }
-        return done;
+        System.out.println("enleve");
+        
     }
     
     /**
@@ -348,6 +350,7 @@ public class Controller extends Thread implements Initializable, Parametres {
      * @param move la case à déplacer
      */
     public void deplacerCaseGUI(Case move) {
+        System.out.println("deplace");
         int playerInd = move.getGrille().getJoueur().getID();
         
         enleverCaseGUI(move); //enlève la case de la grille
@@ -448,6 +451,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             move.setObjectifTranslateY(toMovY);
             
             final Pane final_pane = paneToMov;
+            System.out.println("translate : "+final_pane.getTranslateX()+" "+final_pane.getTranslateY());
             final_pane.setTranslateX(0);
             final_pane.setTranslateY(0);        
             
@@ -484,6 +488,7 @@ public class Controller extends Thread implements Initializable, Parametres {
 
             };
             Thread transition_thread = new Thread(transition_task); // on crée un contrôleur de Thread
+            //this.transitions.add(transition_thread);
             transition_thread.start();
         }
     }
@@ -580,6 +585,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.out.println("start game first");
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche
+                //this.transitions = new HashSet();
                 
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
@@ -587,8 +593,20 @@ public class Controller extends Thread implements Initializable, Parametres {
                     Human human = (Human) playerObj;
                     human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle pour undo
                 }
-
+                
                 boolean over = this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
+                
+                /*while(!this.transitions.isEmpty()){
+                    Iterator<Thread> it = this.transitions.iterator();
+                    while (it.hasNext()) {
+                        Thread transition = it.next();
+                        if(!transition.isAlive()){
+                            it.remove();
+                        }
+                    }
+                }*/
+                //this.syncGrilles(playerInd);
+                
                 System.out.println(this.partie.getJoueur()[playerInd].getGrille());
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
