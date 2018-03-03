@@ -8,19 +8,13 @@ package vc;
 import m.*;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -31,7 +25,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 //import javafx.scene.paint.Color;
 //import javafx.scene.text.Font;
 
@@ -395,6 +388,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         }
     }
     
+    @Override
     public String toString() {
         String s = "";
         Node node;
@@ -595,7 +589,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                 }
 
                 boolean over = this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
-                
+                System.out.println(this.partie.getJoueur()[playerInd].getGrille());
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
 
