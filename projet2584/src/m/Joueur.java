@@ -1,8 +1,5 @@
 package m;
 
-import java.util.Scanner;
-import java.util.Random;
-
 public abstract class Joueur implements Parametres {
     
     protected Grille grille;
@@ -21,13 +18,9 @@ public abstract class Joueur implements Parametres {
         return this.grille;
     }
     
-    /*public void setScore(int s){
-        this.score=s;
-    }
-    
     public int getScore(){
         return this.score;
-    }*/
+    }
     
     public int getID(){
         return this.id;

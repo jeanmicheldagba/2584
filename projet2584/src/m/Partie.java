@@ -1,7 +1,6 @@
 package m;
 
 import java.util.Random;
-import java.util.Scanner;
 import vc.Controller;
 
 public class Partie implements Parametres {

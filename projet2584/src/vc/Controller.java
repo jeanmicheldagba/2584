@@ -8,7 +8,6 @@ package vc;
 import m.*;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -76,6 +75,10 @@ public class Controller extends Thread implements Initializable, Parametres {
     private Button play;
     @FXML
     private Pane background;
+    @FXML
+    private Label score1;
+    @FXML
+    private Label score2;
 
     // variables globales non définies dans la vue (fichier .fxml)
     /*
@@ -88,6 +91,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private GridPane[] grilles;
     private Button[] undos;
     private ChoiceBox[] types;
+    private Label[] scores;
     //private HashSet<Thread> transitions;
 
     @Override
@@ -96,6 +100,8 @@ public class Controller extends Thread implements Initializable, Parametres {
         this.partie = new Partie(this); // crée la partie (modèle)
         this.initChoix(); // configuration paramètres
         this.grille1.autosize();
+        
+        this.scores = new Label[]{this.score1, this.score2};
 
         // on ajoute les grilles au tableau de grilles
         this.grilles = new GridPane[2];
@@ -282,11 +288,13 @@ public class Controller extends Thread implements Initializable, Parametres {
     /**
      * synchronize the model score and the view
      *
-     * @param player the index of the player whose score needs to be
+     * @param playerInd the index of the player whose score needs to be
      * synchronized
      */
-    public void syncScores(int player) {
-        System.out.println("syncScores à implémenter");
+    public void syncScores(int playerInd) {
+        if (playerInd == 0 || playerInd == 1){
+            this.scores[playerInd].setText(this.partie.getJoueur()[playerInd].getScore()+"");
+        }
     }
 
     /**
@@ -567,15 +575,46 @@ public class Controller extends Thread implements Initializable, Parametres {
         this.undos[playerInd].setDisable(true);
 
     }
-
+    
+    /**
+     * Méthode qui renvoie l'indice du joueur aléatoire dans le tableau des Joueurs de la partie
+     * @param playerInd l'indice du joueur qui a déclenché keyPressed
+     * @return l'indice du joueur aléatoire s'il existe (0 ou 1), -1 sinon.
+     */
+    private int dumbInd(int playerInd){
+        if (partie.getJoueur()[playerInd] instanceof Human){
+            if (playerInd == 0 && partie.getJoueur()[1] instanceof Dumb) return 1;
+            else if (playerInd == 1 && partie.getJoueur()[0] instanceof Dumb) return 0;
+        }
+        return -1;
+    }
+    
+    /**
+     * 
+     * @param playerInd 
+     */
+    public void dumbPlay(int playerInd){
+        int dumbInd = dumbInd(playerInd);
+        if (dumbInd != -1){
+            Dumb dumb = (Dumb) this.partie.getJoueur()[dumbInd];
+            partie.getJoueur()[dumbInd].move(dumb.dumbDirection());
+            syncGrilles(dumbInd);
+            syncScores(dumbInd);
+        }
+    }
+    
+    /**
+     * 
+     * @param key 
+     */
     @FXML
     public void keyPressed(KeyEvent key) {
         //on cherche qui a pressé la touche
         int playerInd;
-        if (Arrays.asList(KEYS[0]).contains(key.getText())) { // la touche est une touche du joueur 1
+        if (Arrays.asList(KEYS[0]).contains(key.getText()) && this.partie.getJoueur()[0] instanceof Human) { // la touche est une touche du joueur 1
             playerInd = 0;
             System.out.println("player 1 key pressed");
-        } else if (Arrays.asList(KEYS[1]).contains(key.getText())) { // la touche est une touche du joueur 2
+        } else if (Arrays.asList(KEYS[1]).contains(key.getText()) && this.partie.getJoueur()[1] instanceof Human) { // la touche est une touche du joueur 2
             playerInd = 1;
             System.out.println("player 2 key pressed");
         } else { // la touche n'est pas une touche définie
@@ -607,9 +646,14 @@ public class Controller extends Thread implements Initializable, Parametres {
                         }
                     }
                 }*/
-                //this.syncGrilles(playerInd);
                 
-                System.out.println(this.partie.getJoueur()[playerInd].getGrille());
+                // S'il y a un joueur aléatoire, il joue à chaque coup du joueur humain
+                dumbPlay(playerInd);
+                
+                
+                syncGrilles(playerInd);
+                syncScores(playerInd);
+                //System.out.println(this.partie.getJoueur()[playerInd].getGrille());
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
 

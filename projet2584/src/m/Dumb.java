@@ -5,6 +5,8 @@
  */
 package m;
 
+import java.util.Random;
+
 /**
  *
  * @author vaurien
@@ -14,4 +16,16 @@ public class Dumb extends Joueur implements Parametres {
     public Dumb(Partie partie, int id) {
         super(partie, id);
     }
+    
+    /**
+     * 
+     * @return a random direction for dumb player 
+     */
+    public int dumbDirection(){
+        int[] directions = {HAUT, BAS, GAUCHE, DROITE};
+        Random r = new Random();
+        return (directions[r.nextInt(directions.length)]);
+    }
+    
+    
 }
