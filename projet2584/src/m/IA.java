@@ -16,6 +16,7 @@ public class IA extends Joueur implements Parametres {
     private IA bot;
     private static final int DEPTH = 3; //la profondeur de l'arbre de l'IA
     private static final float prune = (float) 0.3; //the probability to ignore a child
+    private static final boolean toWin = false; //is the goal to win ?
 
     public IA(Partie partie, int id) {
         super(partie, id);
@@ -34,6 +35,7 @@ public class IA extends Joueur implements Parametres {
         String[] dirsInd = new String[1];
         int[] dirsEval = new int[4];
         float probability; //the probability of the configuration
+        int evaluated_children;
         
         //set root
         Grille root = (Grille) this.grille.clone();
@@ -46,8 +48,10 @@ public class IA extends Joueur implements Parametres {
             HashSet<Grille> children = getChildren(root, dirsInd);
             dirsEval[dir] = 0; // init the score of this direction
             if (!children.isEmpty()) {
+                evaluated_children = 0;
                 for (Grille child : children) {
                     if(Math.random()>prune){
+                        evaluated_children++;
                         if (child.getSpawn() == 1) {
                             probability = (float) 0.75;
                         } else if (child.getSpawn() == 2) {
@@ -59,6 +63,9 @@ public class IA extends Joueur implements Parametres {
                         dirsEval[dir] += probability * getDirection_recursif(child, depth - 1);
                     }
                     
+                }
+                if(evaluated_children != 0){
+                    dirsEval[dir] /= evaluated_children;
                 }
 
             }
@@ -81,24 +88,33 @@ public class IA extends Joueur implements Parametres {
      */
     public int getDirection_recursif(Grille node, int depth) {
         if (depth == 0 || node.getCases().size() >= TAILLE * TAILLE) {
-            return evaluate(node, true);
+            return evaluate(node);
         } else {
             int evaluation = 0;
+            int evaluated_children = 0;
             float probability;
             HashSet<Grille> children = getChildren(node, KEYS[0]);
             if (children.isEmpty()) {
-                return evaluate(node, true);
+                return evaluate(node);
             } else {
+                evaluated_children = 0;
                 for (Grille child : children) {
-                    if (child.getSpawn() == 1) {
-                        probability = (float) 0.75;
-                    } else if (child.getSpawn() == 2) {
-                        probability = (float) 0.25;
-                    } else {
-                        System.out.println("ERREUR spawn");
-                        probability = -1;
-                    }
-                    evaluation += probability * getDirection_recursif(child, depth - 1);
+                    if(Math.random()>prune){
+                        evaluated_children++;
+                        if (child.getSpawn() == 1) {
+                            probability = (float) 0.75;
+                        } else if (child.getSpawn() == 2) {
+                            probability = (float) 0.25;
+                        } else {
+                            System.out.println("ERREUR spawn");
+                            probability = -1;
+                        }
+                        evaluation += probability * getDirection_recursif(child, depth - 1);
+                    }                    
+                    
+                }
+                if(evaluated_children != 0){
+                    evaluation /= evaluated_children;
                 }
                 return evaluation;
             }
@@ -112,15 +128,15 @@ public class IA extends Joueur implements Parametres {
      * @param goal_is_loose is the goal loosing or winning ?
      * @return
      */
-    public int evaluate(Grille node, boolean goal_is_loose) {
+    public int evaluate(Grille node) {
         int evaluation = 0;
         if (node.getCases().size() >= TAILLE * TAILLE) {
-            evaluation += 9999; //la partie est perdue.
+            evaluation += 999999999; //la partie est perdue.
         } else {
-            evaluation += 10 * node.getCases().size();
+            evaluation += 50 * Math.exp(node.getCases().size());
         }
 
-        if (goal_is_loose) {
+        if (toWin) {
             evaluation *= -1;
         }
         return evaluation;
@@ -151,7 +167,7 @@ public class IA extends Joueur implements Parametres {
                         //ajoute le 1
                         child.nouvelleCase(c);
                         children.add(child);
-                        
+
                         //ajoute le 2
                         c = (Case) c.clone();
                         c.setValeur(2);
