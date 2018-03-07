@@ -18,6 +18,10 @@ public abstract class Joueur implements Parametres {
         return this.grille;
     }
     
+    public void setGrille(Grille grille){
+        this.grille = grille;
+    }
+    
     public int getScore(){
         return this.score;
     }
@@ -42,7 +46,7 @@ public abstract class Joueur implements Parametres {
     public boolean move(int direction) {
         
         // On déplace les cases
-        boolean casesMov = this.grille.lanceurDeplacerCases(direction);
+        boolean casesMov = this.grille.lanceurDeplacerCases(direction, false);
         
         //On vérifie l'état de la partie
         if (casesMov) {

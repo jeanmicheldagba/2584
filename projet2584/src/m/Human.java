@@ -45,9 +45,5 @@ public class Human extends Joueur implements Parametres {
     public void setLastGrille(Grille lastGrille) {
         this.lastGrille = lastGrille;
     }
-    
-    public Grille getGrille() {
-        return this.grille;
-    }
 
 }

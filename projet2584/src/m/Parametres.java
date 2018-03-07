@@ -12,6 +12,7 @@ public interface Parametres {
 
     static final int TAILLE = 4;
     static final int OBJECTIF = 2584;
+    
 
     public static int keyToDirection(String key) {
         int direction;

@@ -12,6 +12,7 @@ public class Grille implements Parametres {
     private boolean deplacement;
     private int resDeplacement; //stocke les points générés par la fusion des cases
     private Joueur joueur;
+    private int spawn; //la valeur de la case qui vient de spawn
 
     public Grille(Joueur joueur) {
         this.cases = new HashSet<>();
@@ -20,7 +21,18 @@ public class Grille implements Parametres {
         this.joueur = joueur;
     }
     
-    // Methode qui copie une grille par valeur et la renvoie sous forme d'objet
+    public void setJoueur(Joueur joueur){
+        this.joueur = joueur;
+    }
+    
+    public int getSpawn(){
+        return this.spawn;
+    }
+    
+    /**
+     * Methode qui copie une grille par valeur et la renvoie sous forme d'objet
+     * @return 
+     */
     public Object clone(){
         Grille g = new Grille(this.joueur);
         Case cAdd;
@@ -102,20 +114,20 @@ public class Grille implements Parametres {
         return true;
     }
 
-    public boolean lanceurDeplacerCases(int direction) {
+    public boolean lanceurDeplacerCases(int direction, boolean bot) {
         Case[] extremites = this.getCasesExtremites(direction);
         this.deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
         for (int i = 0; i < TAILLE; i++) {
-            this.deplacerCasesRecursif(extremites, i, direction, 0);
+            this.deplacerCasesRecursif(extremites, i, direction, 0, bot);
         }
         return this.deplacement;
     }
 
     //Incrémente c de la valeur add
-    private void fusion(Case c, int add) {
+    private void fusion(Case c, int add, boolean bot) {
         int sommeCases=c.getValeur()+add;
         
-        this.joueur.partie.controller.updateValueGUI(c, sommeCases);
+        if(!bot) this.joueur.partie.controller.updateValueGUI(c, sommeCases);
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -126,7 +138,7 @@ public class Grille implements Parametres {
         this.deplacement = true;
     }
 
-    private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur) {
+    private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur, boolean bot) {
         int objectif;
         Case c = extremites[rangee];
         
@@ -155,7 +167,7 @@ public class Grille implements Parametres {
                         c.setX(objectif); //change coordonnées
                         break;
                 }
-                if (this.cases.add(c)){ // on ajoute la case (si aucune case n'est aux mêmes coordonnées)
+                if (this.cases.add(c) && !bot){ // on ajoute la case (si aucune case n'est aux mêmes coordonnées)
                     this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
                 }
                     
@@ -164,16 +176,16 @@ public class Grille implements Parametres {
             Case voisin = c.getVoisinDirect(-direction);
             if (voisin != null) {
                 if (c.fibonacciVoisin(voisin)) {
-                    this.fusion(c, voisin.getValeur()); //fusionne les voisines dans Fibonacci (somme des 2 cases)
+                    this.fusion(c, voisin.getValeur(), bot); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
-                    if(this.cases.remove(voisin)){
+                    if(this.cases.remove(voisin) && !bot){
                         this.joueur.partie.controller.enleverCaseGUI(voisin);
                     }
                     
-                    this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
+                    this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1, bot);
                 } else {
                     extremites[rangee] = voisin;
-                    this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1);
+                    this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1, bot);
                 }
             }
         }
@@ -222,7 +234,7 @@ public class Grille implements Parametres {
             
             //la case a une probabilité de 0.75 d'avoir la valeur 1 et 0.25 d'avoir 2
             int valeur = ra.nextDouble()>0.75 ? 2 : 1;
-            
+                    
             // on crée toutes les cases encore libres
             for (int x = 0; x < TAILLE; x++) {
                 for (int y = 0; y < TAILLE; y++) {
@@ -262,6 +274,23 @@ public class Grille implements Parametres {
         if (this.valeurMax < ajout.getValeur()) {
             this.valeurMax = ajout.getValeur();
         }
+        
+    }
+    
+    /**
+     * ajoute la case passée en paramètre à la grille et actualise this.spawn
+     * @param c case à ajouter
+     */
+    public void nouvelleCase(Case ajout) {
+        ajout.setGrille(this);
+        this.cases.add(ajout);
+
+        //actualise valeurMax
+        if (this.valeurMax < ajout.getValeur()) {
+            this.valeurMax = ajout.getValeur();
+        }
+        
+        this.spawn = ajout.getValeur();
         
     }
 }

@@ -245,7 +245,9 @@ public class Controller extends Thread implements Initializable, Parametres {
         } else if (type1.getSelectionModel().getSelectedItem().equals("Dumb")) {
             this.partie.getJoueur()[0] = new Dumb(this.partie, 0);
         } else {
-            this.partie.getJoueur()[0] = new IA(this.partie, 0);
+            IA ia = new IA(this.partie, 0);
+            ia.setBot();
+            this.partie.getJoueur()[0] = ia;
         }
 
         if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
@@ -253,7 +255,9 @@ public class Controller extends Thread implements Initializable, Parametres {
         } else if (type2.getSelectionModel().getSelectedItem().equals("Dumb")) {
             this.partie.getJoueur()[1] = new Dumb(this.partie, 1);
         } else {
-            this.partie.getJoueur()[1] = new IA(this.partie, 1);
+            IA ia = new IA(this.partie, 1);
+            ia.setBot();
+            this.partie.getJoueur()[1] = ia;
         }
         
         
@@ -521,7 +525,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                             automaticMove();
                         }
                     });
-                    Thread.sleep(600);
+                    Thread.sleep(500);
                     
                 }
                 return null;
@@ -539,7 +543,8 @@ public class Controller extends Thread implements Initializable, Parametres {
         for(int i=0; i<2; i++) {
             if(this.partie.getJoueur()[i] instanceof IA){
                 IA ia = (IA) this.partie.getJoueur()[i];
-                partie.getJoueur()[i].move(ia.getDirection());
+                int dir = ia.getDirection();
+                partie.getJoueur()[i].move(dir);
             } else if(this.partie.getJoueur()[i] instanceof Dumb){
                 Dumb dumb = (Dumb) this.partie.getJoueur()[i];
                 partie.getJoueur()[i].move(dumb.getDirection());
