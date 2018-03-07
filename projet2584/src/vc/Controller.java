@@ -167,7 +167,6 @@ public class Controller extends Thread implements Initializable, Parametres {
         Task blink_task = new Task<Void>() {
             @Override
             public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
-                System.out.println("blink");
                 for (int i = 0; i < 6; i++) { //on effectue l'action 6 fois
                     // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
                     Platform.runLater(new Runnable() { // classe anonyme
@@ -256,9 +255,15 @@ public class Controller extends Thread implements Initializable, Parametres {
         } else {
             this.partie.getJoueur()[1] = new IA(this.partie, 1);
         }
+        
+        
 
         this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
         this.syncGrilles(2); //synchronise les grilles Vues et les grilles Modèle
+        
+        if(!(this.partie.getJoueur()[0] instanceof Human || this.partie.getJoueur()[1] instanceof Human)) {
+            automaticPlay();
+        }
 
     }
 
@@ -502,7 +507,49 @@ public class Controller extends Thread implements Initializable, Parametres {
             transition_thread.start();
         }
     }
-
+    
+    public void automaticPlay() {
+        Task automatic_play_task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
+                while(!partie.getOver()){
+                    // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                    Platform.runLater(new Runnable() { // classe anonyme
+                        @Override
+                        public void run() {
+                            System.out.println("move");
+                            automaticMove();
+                        }
+                    });
+                    Thread.sleep(600);
+                    
+                }
+                return null;
+            }
+        };
+        Thread automatic_play_thread = new Thread(automatic_play_task); // on crée un contrôleur de Thread
+        automatic_play_thread.start();
+    }
+    
+    /**
+     * fait bouger les dumbs du plateau
+     * @param moveOpponent vrai si la méthode doit faire bouger l'autre joueur qui n'est pas un Dumb
+     */
+    public void automaticMove(){
+        for(int i=0; i<2; i++) {
+            if(this.partie.getJoueur()[i] instanceof IA){
+                IA ia = (IA) this.partie.getJoueur()[i];
+                partie.getJoueur()[i].move(ia.getDirection());
+            } else if(this.partie.getJoueur()[i] instanceof Dumb){
+                Dumb dumb = (Dumb) this.partie.getJoueur()[i];
+                partie.getJoueur()[i].move(dumb.getDirection());
+            }
+            syncGrilles(i);
+            syncScores(i);
+        }
+        
+    }
+    
     /*
      * Méthodes listeners pour gérer les événements (portent les mêmes noms que
      * dans Scene Builder
@@ -577,33 +624,6 @@ public class Controller extends Thread implements Initializable, Parametres {
     }
     
     /**
-     * Méthode qui renvoie l'indice du joueur aléatoire dans le tableau des Joueurs de la partie
-     * @param playerInd l'indice du joueur qui a déclenché keyPressed
-     * @return l'indice du joueur aléatoire s'il existe (0 ou 1), -1 sinon.
-     */
-    private int dumbInd(int playerInd){
-        if (partie.getJoueur()[playerInd] instanceof Human){
-            if (playerInd == 0 && partie.getJoueur()[1] instanceof Dumb) return 1;
-            else if (playerInd == 1 && partie.getJoueur()[0] instanceof Dumb) return 0;
-        }
-        return -1;
-    }
-    
-    /**
-     * 
-     * @param playerInd 
-     */
-    public void dumbPlay(int playerInd){
-        int dumbInd = dumbInd(playerInd);
-        if (dumbInd != -1){
-            Dumb dumb = (Dumb) this.partie.getJoueur()[dumbInd];
-            partie.getJoueur()[dumbInd].move(dumb.dumbDirection());
-            syncGrilles(dumbInd);
-            syncScores(dumbInd);
-        }
-    }
-    
-    /**
      * 
      * @param key 
      */
@@ -647,8 +667,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                     }
                 }*/
                 
-                // S'il y a un joueur aléatoire, il joue à chaque coup du joueur humain
-                dumbPlay(playerInd);
+                automaticMove(); // on fait jouer les ordinateurs
                 
                 
                 syncGrilles(playerInd);

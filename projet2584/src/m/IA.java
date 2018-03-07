@@ -14,4 +14,8 @@ public class IA extends Joueur implements Parametres {
     public IA(Partie partie, int id) {
         super(partie, id);
     }
+
+    public int getDirection() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

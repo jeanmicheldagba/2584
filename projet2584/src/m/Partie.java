@@ -7,14 +7,20 @@ public class Partie implements Parametres {
 
     private Joueur[] joueur;
     protected Controller controller;
+    private boolean over;
 
     public Partie(Controller controller) {
         this.joueur = new Joueur[2];
         this.controller = controller;
+        this.over = false;
     }
     
     public Joueur[] getJoueur(){
         return this.joueur;
+    }
+    
+    public boolean getOver() {
+        return this.over;
     }
 
     /**

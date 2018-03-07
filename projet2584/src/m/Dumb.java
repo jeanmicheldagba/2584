@@ -21,7 +21,7 @@ public class Dumb extends Joueur implements Parametres {
      * 
      * @return a random direction for dumb player 
      */
-    public int dumbDirection(){
+    public int getDirection(){
         int[] directions = {HAUT, BAS, GAUCHE, DROITE};
         Random r = new Random();
         return (directions[r.nextInt(directions.length)]);
