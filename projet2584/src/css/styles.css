@@ -8,24 +8,34 @@ and open the template in the editor.
     Author     : Hugo
 */
 
+.score_text{
+    -fx-text-fill : rgb(248, 241, 233);
+    -fx-font-weight : bold;
+    -fx-font-size: 10.5pt;
+    
+}
+.score_panneau{
+    -fx-background-color: rgb(187, 173, 160)
+}
 .pane_tuile {
-    -fx-background-color: #99FF33;
-    -fx-border-color: black;
+    -fx-background-color: rgb(246, 94, 59);
+    -fx-border-color: transparent;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    
 }
 
 .gridpane {
-     -fx-border-color: black;
+     -fx-border-color: rgb(187, 173, 160);
      -fx-grid-lines-visible: true;
-     /*-fx-border: 2px solid;*/
      -fx-halignment: center;
      -fx-alignment: CENTER;  
+     -fx-background-color: rgb(204, 192, 179);
 }
 
 .label_tuile {
-    /*-fx-text-alignment: center;
-    -fx-halignment: center; */
-    -fx-text-fill: #6666FF;
-    /*-fx-font: "Cambria";*/
+    -fx-text-fill: rgb(248, 241, 233);
+    -fx-font-weight: bold;
     -fx-font-size: 32;
     -fx-padding: 26 40 26 40;
 }
@@ -35,9 +45,9 @@ and open the template in the editor.
     -fx-text-fill: white;
     -fx-font-size: 14pt;
     -fx-font-weight: bold;
-    -fx-text-decoration: blink;
+    -fx-padding : 20px;
 }
 
 #background {
-    -fx-background-color: white;
+    -fx-background-color: rgb(238, 228, 218);
 }
