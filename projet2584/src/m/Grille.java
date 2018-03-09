@@ -167,6 +167,7 @@ public class Grille implements Parametres {
                         c.setX(objectif); //change coordonnées
                         break;
                 }
+                
                 if (this.cases.add(c) && !bot){ // on ajoute la case (si aucune case n'est aux mêmes coordonnées)
                     this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
                 }

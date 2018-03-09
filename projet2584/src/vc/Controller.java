@@ -93,7 +93,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private Button[] undos;
     private ChoiceBox[] types;
     private Label[] scores;
-    private HashSet<Thread> transitions;
+    //private HashSet<Thread> transitions;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -278,6 +278,7 @@ public class Controller extends Thread implements Initializable, Parametres {
      * : 0, 1 or 2 (both players)
      */
     public void syncGrilles(int player) {
+        System.out.println("SYYYNC");
         int i;
         i = (player == 2) ? 0 : player;
         do {
@@ -355,9 +356,9 @@ public class Controller extends Thread implements Initializable, Parametres {
                 }
             }
         }
-        System.out.println("bla");
+        System.out.println("enleve pre");
         System.out.println(children.remove(toRemove));
-        System.out.println("blabla");
+        System.out.println("enleve post");
         
         
         
@@ -507,7 +508,7 @@ public class Controller extends Thread implements Initializable, Parametres {
 
             };
             Thread transition_thread = new Thread(transition_task); // on crée un contrôleur de Thread
-            this.transitions.add(transition_thread);
+            //this.transitions.add(transition_thread);
             transition_thread.start();
         }
     }
@@ -524,7 +525,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                             automaticMove();
                         }
                     });
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                     
                 }
                 return null;
@@ -544,12 +545,14 @@ public class Controller extends Thread implements Initializable, Parametres {
                 IA ia = (IA) this.partie.getJoueur()[i];
                 int dir = ia.getDirection();
                 partie.getJoueur()[i].move(dir);
+                syncGrilles(i);
+                syncScores(i);
             } else if(this.partie.getJoueur()[i] instanceof Dumb){
                 Dumb dumb = (Dumb) this.partie.getJoueur()[i];
                 partie.getJoueur()[i].move(dumb.getDirection());
+                syncGrilles(i);
+                syncScores(i);
             }
-            syncGrilles(i);
-            syncScores(i);
         }
         
     }
@@ -650,7 +653,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.out.println("start game first");
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche
-                this.transitions = new HashSet();
+                //this.transitions = new HashSet();
                 
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
@@ -673,12 +676,12 @@ public class Controller extends Thread implements Initializable, Parametres {
                 
                 
                 
-                //automaticMove(); // on fait jouer les ordinateurs
+                automaticMove(); // on fait jouer les ordinateurs
                 
                 
-                syncGrilles(playerInd);
+                //syncGrilles(playerInd);
                 syncScores(playerInd);
-                //System.out.println(this.partie.getJoueur()[playerInd].getGrille());
+                
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
 
