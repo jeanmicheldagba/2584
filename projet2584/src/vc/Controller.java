@@ -8,6 +8,7 @@ package vc;
 import m.*;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -92,7 +93,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private Button[] undos;
     private ChoiceBox[] types;
     private Label[] scores;
-    //private HashSet<Thread> transitions;
+    private HashSet<Thread> transitions;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -209,8 +210,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         type2.getItems().add("Human");
         type2.getItems().add("AI");
         type2.getItems().add("Dumb");
-
-        System.out.println("Affichage instructions paramètres");
+        
         console.setText("Please set parameters and press Play");
     }
 
@@ -284,10 +284,8 @@ public class Controller extends Thread implements Initializable, Parametres {
             Node sauv = grilles[i].getChildren().get(0);
             grilles[i].getChildren().clear();
             grilles[i].getChildren().add(sauv);
-            System.out.println(this.partie.getJoueur()[i].getGrille().getCases().size());
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                 this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
-                System.out.println("nouvelle case : " + c.getValeur() + " en " + (c.getX() + 1) + "," + (4 - c.getY()));
             }
 
             i++;
@@ -357,7 +355,9 @@ public class Controller extends Thread implements Initializable, Parametres {
                 }
             }
         }
+        System.out.println("bla");
         System.out.println(children.remove(toRemove));
+        System.out.println("blabla");
         
         
         
@@ -507,7 +507,7 @@ public class Controller extends Thread implements Initializable, Parametres {
 
             };
             Thread transition_thread = new Thread(transition_task); // on crée un contrôleur de Thread
-            //this.transitions.add(transition_thread);
+            this.transitions.add(transition_thread);
             transition_thread.start();
         }
     }
@@ -521,7 +521,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                     Platform.runLater(new Runnable() { // classe anonyme
                         @Override
                         public void run() {
-                            System.out.println("move");
                             automaticMove();
                         }
                     });
@@ -614,7 +613,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.exit(0);
         }
 
-        if (undone) {
+        if (playerObj.getNbUndo() > 0) {
             undos[playerInd].setText("Undo (" + playerObj.getNbUndo() + ")"); //actualise le nombre de undo restant
         } else {
             undos[playerInd].setVisible(false); //plus de undo, bouton devient invisible
@@ -651,7 +650,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.out.println("start game first");
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche
-                //this.transitions = new HashSet();
+                this.transitions = new HashSet();
                 
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
@@ -672,7 +671,9 @@ public class Controller extends Thread implements Initializable, Parametres {
                     }
                 }*/
                 
-                automaticMove(); // on fait jouer les ordinateurs
+                
+                
+                //automaticMove(); // on fait jouer les ordinateurs
                 
                 
                 syncGrilles(playerInd);
