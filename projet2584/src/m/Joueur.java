@@ -7,6 +7,11 @@ public abstract class Joueur implements Parametres {
     protected Partie partie;
     protected int id; //indique si c'est le joueur 1 ou 2
     
+    /**
+     * Constructeur de Joueur
+     * @param partie La partie à laquelle le joueur participe
+     * @param id l'indice du joueur dans la partie (1 ou 2) 
+     */
     public Joueur(Partie partie, int id){
         this.grille = new Grille(this);        
         this.score = 0;
@@ -14,23 +19,38 @@ public abstract class Joueur implements Parametres {
         this.id = id;
     }
     
+    /**
+     * getter de la grille
+     * @return la grille du Joueur
+     */
     public Grille getGrille(){
         return this.grille;
     }
-    
+    /**
+     * setter de la grille
+     * @param grille nouvelle grille du joueur
+     */
     public void setGrille(Grille grille){
         this.grille = grille;
     }
-    
+    /**
+     * getter du score du joueur
+     * @return le score du joueur
+     */
     public int getScore(){
         return this.score;
     }
-    
+    /**
+     * getteur de l'indice du joueur dans la partie
+     * @return l'indice du joueur (1 ou 2)
+     */
     public int getID(){
         return this.id;
     }
     
-    // Méthode qui permet de calculer le du score du joueur
+    /**
+     * Calcule le score du joueur
+     */
     protected void calculScore(){
         if(grille.getDeplacement()==true){// pas forcément utile A REVOIR
             this.score+= grille.getResDeplacement();
@@ -39,9 +59,9 @@ public abstract class Joueur implements Parametres {
     }
     
     /**
-     * bouge les cases
+     * Méthode qui permet de savoir si la partie est finie et qui déplace les cases si c'est possible
      * @param direction direction dans laquelle les cases doivent bouger
-     * @return game over ?
+     * @return true si la partie est terminée, false si la partie continue
      */
     public boolean move(int direction) {
         

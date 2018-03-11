@@ -93,7 +93,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private Button[] undos;
     private ChoiceBox[] types;
     private Label[] scores;
-    //private HashSet<Thread> transitions;
+    private HashSet<Thread>[] transitions;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -120,6 +120,11 @@ public class Controller extends Thread implements Initializable, Parametres {
         //on ajoute les types au tableau de types
         this.types = new ChoiceBox[]{this.type1, this.type2};
 
+        //initialise les threads de transitions pour chaque joueur
+        this.transitions = new HashSet[2];
+        for(int i=0;i<2;i++) this.transitions[i] = new HashSet();
+        
+        
         //ajoute listener pour changement d'items dans type
         this.type1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -286,6 +291,9 @@ public class Controller extends Thread implements Initializable, Parametres {
             grilles[i].getChildren().clear();
             grilles[i].getChildren().add(sauv);
             for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
+                if(c.getGuiX() == c.getX() && c.getGuiY() == c.getY()) {
+                    System.out.println("C BOOON");
+                } else System.out.println("C PA BON");
                 this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
             }
 
@@ -356,7 +364,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                 }
             }
         }
-        System.out.println("enleve pre");
+        System.out.println("enleve pre" + found);
         System.out.println(children.remove(toRemove));
         System.out.println("enleve post");
         
@@ -377,9 +385,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         
         this.nouvelleCaseGUI(move.getX(), move.getY(), move.getValeur(), playerInd); //ajoute la case aux nouvelles coordonnées
         
-        //actualise coordonnées GUI
-        move.setGuiX(move.getX());
-        move.setGuiY(move.getY());
+        
     }
 
     /**
@@ -502,15 +508,55 @@ public class Controller extends Thread implements Initializable, Parametres {
                         Thread.sleep(2);
                         
                     }
-                    controller.deplacerCaseGUI(move);
+                    //controller.deplacerCaseGUI(move);
+                    
+                    //actualise coordonnées GUI
+                    move.setGuiX(move.getX());
+                    move.setGuiY(move.getY());
+                    
                     return null;
                 }
 
             };
             Thread transition_thread = new Thread(transition_task); // on crée un contrôleur de Thread
-            //this.transitions.add(transition_thread);
+            this.transitions[playerInd].add(transition_thread);
             transition_thread.start();
         }
+    }
+    
+     /**
+     * listens if all transitions are finished
+     * @param playerInd 
+     */
+    public void transitionsFinishedListener(final int playerInd) {        
+        Task finished_task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
+                while (!transitions[playerInd].isEmpty()) {
+                    // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                    Platform.runLater(new Runnable() { // classe anonyme
+                        @Override
+                        public void run() {
+                            Iterator<Thread> it = transitions[playerInd].iterator();
+                            while (it.hasNext()) {
+                                Thread transition = it.next();
+                                if(!transition.isAlive()){
+                                    it.remove();
+                                }
+                            }
+                        }
+                    });
+                    Thread.sleep(40);
+
+                }
+                System.out.println("FINI");
+                syncGrilles(playerInd);
+                return null;
+            }
+
+        };
+        Thread finished_thread = new Thread(finished_task); // on crée un contrôleur de Thread
+        finished_thread.start();
     }
     
     public void automaticPlay() {
@@ -653,7 +699,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.out.println("start game first");
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche
-                //this.transitions = new HashSet();
+                this.transitions[playerInd].clear();
                 
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
@@ -664,27 +710,18 @@ public class Controller extends Thread implements Initializable, Parametres {
                 
                 boolean over = this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
                 
-                /*while(!this.transitions.isEmpty()){
-                    Iterator<Thread> it = this.transitions.iterator();
-                    while (it.hasNext()) {
-                        Thread transition = it.next();
-                        if(!transition.isAlive()){
-                            it.remove();
-                        }
-                    }
-                }*/
                 
                 
+                //automaticMove(); // on fait jouer les ordinateurs
                 
-                automaticMove(); // on fait jouer les ordinateurs
-                
+                transitionsFinishedListener(playerInd);
                 
                 //syncGrilles(playerInd);
                 syncScores(playerInd);
                 
                 //le joueur a bougé, il peut maintenant undo
                 this.undos[playerInd].setDisable(false);
-
+                
             }
 
         }

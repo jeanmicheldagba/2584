@@ -25,7 +25,8 @@ public class Human extends Joueur implements Parametres {
     }
     
     /**
-     * 
+     * Méthode qui permet de faire un undo
+     * @return true si undo effectué, false sinon
      */
     public boolean undo() {
         if (this.nbUndo > 0) { // Si il lui reste des undo       
@@ -37,11 +38,18 @@ public class Human extends Joueur implements Parametres {
             return false;
         }
     }
-    
+    /**
+     * Getter du nombre de undo disponibles
+     * @return le nombre de undo (entre 5 et 0)
+     */
     public int getNbUndo() {
         return this.nbUndo;
     }
     
+    /**
+     * Setter de la grille précédente
+     * @param lastGrille nouvelle grille précédant la grille actuelle
+     */
     public void setLastGrille(Grille lastGrille) {
         this.lastGrille = lastGrille;
     }

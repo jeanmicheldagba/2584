@@ -13,7 +13,7 @@ import java.util.HashSet;
  */
 public class IA extends Joueur implements Parametres {
 
-    private IA bot;
+    private IA bot; // c'est quoi ?
     private static final int DEPTH = 3; //la profondeur de l'arbre de l'IA
     private static final float prune = (float) 0.3; //the probability to ignore a child
     private static final boolean toWin = false; //is the goal to win ?

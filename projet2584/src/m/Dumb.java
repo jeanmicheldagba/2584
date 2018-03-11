@@ -13,17 +13,22 @@ import java.util.Random;
  */
 public class Dumb extends Joueur implements Parametres {
     
+    /**
+     * Constructeur joueur aléatoire
+     * @param partie Partie à laquelle le joueur participe
+     * @param id 
+     */
     public Dumb(Partie partie, int id) {
         super(partie, id);
     }
     
     /**
-     * 
-     * @return a random direction for dumb player 
+     * Méthode qui choisit une direction au hasard
+     * @return a random direction 
      */
     public int getDirection(){
         int[] directions = {HAUT, BAS, GAUCHE, DROITE};
-        Random r = new Random();
+        Random r = new Random();        
         return (directions[r.nextInt(directions.length)]);
     }
     

@@ -7,13 +7,17 @@ import java.util.Random;
 
 public class Grille implements Parametres {
 
-    private HashSet<Case> cases;
-    private int valeurMax = 0;
-    private boolean deplacement;
-    private int resDeplacement; //stocke les points générés par la fusion des cases
-    private Joueur joueur;
-    private int spawn; //la valeur de la case qui vient de spawn
+    private HashSet<Case> cases;    // ensemble des cases de la grille
+    private int valeurMax = 0;      // plus grande valeur présente dans la grille
+    private boolean deplacement;    // true si une case a bougé, false sinon (?)
+    private int resDeplacement;     // stocke les points générés par la fusion des cases
+    private Joueur joueur;          // le joueur a qui appartient la grille
+    private int spawn;              // la valeur de la case qui vient de spawn
 
+    /**
+     * Constructeur d'une Grille
+     * @param joueur le propriétaire de la Grille
+     */
     public Grille(Joueur joueur) {
         this.cases = new HashSet<>();
         this.deplacement=false;
@@ -21,10 +25,18 @@ public class Grille implements Parametres {
         this.joueur = joueur;
     }
     
+    /**
+     * Setter du proporiétaire de la grille
+     * @param joueur nouveau propirétaire de la grille
+     */
     public void setJoueur(Joueur joueur){
         this.joueur = joueur;
     }
     
+    /**
+     * Getter de la valeur de la case qui vient du spawn
+     * @return 
+     */
     public int getSpawn(){
         return this.spawn;
     }
@@ -47,33 +59,65 @@ public class Grille implements Parametres {
         return (Object) g;
     }
     
+    /**
+     * 
+     * @param v 
+     */
     public void setValeurMax(int v){
         this.valeurMax = v;
     }
-    
+    /**
+     * 
+     * @param b 
+     */
     public void setDeplacement(boolean b){
         this.deplacement = b;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public boolean getDeplacement(){
         return this.deplacement;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Joueur getJoueur(){
         return this.joueur;
     }
     
+    /**
+     * 
+     * @param rd 
+     */
     public void setResDeplacement(int rd){
         this.resDeplacement=rd;
     }
+    
+    /**
+     * 
+     * @return 
+     */
     public int getResDeplacement(){
         return this.resDeplacement;
     }
     
+    /**
+     * 
+     * @param h 
+     */
     public void setGrille(HashSet<Case> h){
         this.cases = h;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String toString() {
         int[][] tableau = new int[TAILLE][TAILLE];
@@ -87,15 +131,26 @@ public class Grille implements Parametres {
         return result;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public HashSet<Case> getCases() {
         return this.cases;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public int getValeurMax() {
         return valeurMax;
     }
 
-    //détermine si un mouvement est possible
+    /**
+     * Détermine si la grille est bloquée ou non
+     * @return true si aucun mouvement n'est possible, false sinon
+     */
     public boolean bloquee() {
         if (this.cases.size() < TAILLE * TAILLE) {
             return false;
@@ -113,7 +168,13 @@ public class Grille implements Parametres {
         }
         return true;
     }
-
+    
+    /**
+     * 
+     * @param direction
+     * @param bot
+     * @return 
+     */
     public boolean lanceurDeplacerCases(int direction, boolean bot) {
         Case[] extremites = this.getCasesExtremites(direction);
         this.deplacement = false; // pour vérifier si on a bougé au moins une case après le déplacement, avant d'en rajouter une nouvelle
@@ -122,12 +183,18 @@ public class Grille implements Parametres {
         }
         return this.deplacement;
     }
-
+    
+    /**
+     * 
+     * @param c
+     * @param add
+     * @param bot 
+     */
     //Incrémente c de la valeur add
     private void fusion(Case c, int add, boolean bot) {
         int sommeCases=c.getValeur()+add;
         
-        if(!bot) this.joueur.partie.controller.updateValueGUI(c, sommeCases);
+        // if(!bot) this.joueur.partie.controller.updateValueGUI(c, sommeCases);
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -138,6 +205,14 @@ public class Grille implements Parametres {
         this.deplacement = true;
     }
 
+    /**
+     * 
+     * @param extremites
+     * @param rangee
+     * @param direction
+     * @param compteur
+     * @param bot 
+     */
     private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur, boolean bot) {
         int objectif;
         Case c = extremites[rangee];
@@ -180,7 +255,7 @@ public class Grille implements Parametres {
                     this.fusion(c, voisin.getValeur(), bot); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     if(this.cases.remove(voisin) && !bot){
-                        this.joueur.partie.controller.enleverCaseGUI(voisin);
+                        // this.joueur.partie.controller.enleverCaseGUI(voisin);
                     }
                     
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1, bot);
@@ -191,13 +266,18 @@ public class Grille implements Parametres {
             }
         }
     }
-
+    
     /*
     * Si direction = HAUT : retourne les 4 cases qui sont le plus en haut (une pour chaque colonne)
     * Si direction = DROITE : retourne les 4 cases qui sont le plus à droite (une pour chaque ligne)
     * Si direction = BAS : retourne les 4 cases qui sont le plus en bas (une pour chaque colonne)
     * Si direction = GAUCHE : retourne les 4 cases qui sont le plus à gauche (une pour chaque ligne)
     * Attention : le tableau retourné peut contenir des null si les lignes/colonnes sont vides
+     */
+    /**
+     * 
+     * @param direction
+     * @return 
      */
     public Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
@@ -228,6 +308,10 @@ public class Grille implements Parametres {
         return result;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean nouvelleCase() {
         if (this.cases.size() < TAILLE*TAILLE) {
             ArrayList<Case> casesLibres = new ArrayList<>();
@@ -265,6 +349,12 @@ public class Grille implements Parametres {
     
     //ajoute une case de valeur et de coordonnées données
     //attention : vérifier que l'emplacement est libre
+    /**
+     * 
+     * @param valeur
+     * @param x
+     * @param y 
+     */
     public void nouvelleCase(int valeur, int x, int y) {
 
         Case ajout = new Case(x, y, valeur);
@@ -280,7 +370,7 @@ public class Grille implements Parametres {
     
     /**
      * ajoute la case passée en paramètre à la grille et actualise this.spawn
-     * @param c case à ajouter
+     * @param ajout case à ajouter
      */
     public void nouvelleCase(Case ajout) {
         ajout.setGrille(this);
