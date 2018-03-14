@@ -7,6 +7,7 @@ package vc;
 
 import m.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -282,23 +283,48 @@ public class Controller extends Thread implements Initializable, Parametres {
      * @param player the index of the player whose grid needs to be synchronized
      * : 0, 1 or 2 (both players)
      */
-    public void syncGrilles(int player) {
+    public void syncGrilles(final int player) {
         System.out.println("SYYYNC");
-        int i;
-        i = (player == 2) ? 0 : player;
-        do {
-            Node sauv = grilles[i].getChildren().get(0);
-            grilles[i].getChildren().clear();
-            grilles[i].getChildren().add(sauv);
-            for (Case c : this.partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
-                if(c.getGuiX() == c.getX() && c.getGuiY() == c.getY()) {
-                    System.out.println("C BOOON");
-                } else System.out.println("C PA BON");
-                this.nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
-            }
+        
+        
+        try {
+            Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
+                @Override
+                public Void call() throws Exception { 
+                    Platform.runLater(new Runnable() { 
+                        @Override
+                        public void run() {
+                            //javaFX operations should go here
+                            int i;
+                            i = (player == 2) ? 0 : player;
+                            do {
+                                Node sauv = grilles[i].getChildren().get(0); //sauvegarde l'élément visuel des grilles (traits) de la gridpane
+                                grilles[i].getChildren().clear();
+                                grilles[i].getChildren().add(sauv);
+                                for (Case c : partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
+                                    if(c.getGuiX() == c.getX() && c.getGuiY() == c.getY()) {
+                                        System.out.println("C BOOON");
+                                    } else System.out.println("C PA BON");
+                                    nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
+                                }
 
-            i++;
-        } while (i < 2 && player == 2); //fait ça deux foix si player == 2
+                                i++;
+                            } while (i < 2 && player == 2); //fait ça deux foix si player == 2
+                        }
+                    });
+                    Thread.sleep(170); 
+
+                    return null; 
+                }
+
+            };
+            Thread delete_node_thread = new Thread(delete_node); 
+            delete_node_thread.setDaemon(false);
+            delete_node_thread.start(); // on exécute la tâche de suppression des nodes
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /**
@@ -323,16 +349,39 @@ public class Controller extends Thread implements Initializable, Parametres {
      */
     public void nouvelleCaseGUI(int x, int y, int val, int playerInd) {
 
-        Pane pane_tuile = new Pane(); //crée conteneur
-        Label label_tuile = new Label(val + ""); //crée label avec valeur de la case
+        final Pane pane_tuile = new Pane(); //crée conteneur
+        final Label label_tuile = new Label(val + ""); //crée label avec valeur de la case
         pane_tuile.getStyleClass().add("pane_tuile"); //ajoute classe pour css
         label_tuile.getStyleClass().add("label_tuile"); //ajoute classe pour css
-        grilles[playerInd].add(pane_tuile, x, y); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
         pane_tuile.getChildren().add(label_tuile); //ajoute label au conteneur
+        
+        try {
+            Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
+                @Override
+                public Void call() throws Exception { 
+                    Platform.runLater(new Runnable() { 
+                        @Override
+                        public void run() {
+                            //javaFX operations should go here
+                            
+                            grilles[playerInd].add(pane_tuile, x, y); //ajoute conteneur dans la case de la gridpane correspondant aux coordonnées de la case modèle
+                            //affiche les éléments
+                            pane_tuile.setVisible(true);
+                            label_tuile.setVisible(true);
+                        }
+                    });
+                    Thread.sleep(170); 
 
-        //affiche les éléments
-        pane_tuile.setVisible(true);
-        label_tuile.setVisible(true);
+                    return null; 
+                }
+
+            };
+            Thread delete_node_thread = new Thread(delete_node); 
+            delete_node_thread.setDaemon(false);
+            delete_node_thread.start(); // on exécute la tâche de suppression des nodes
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -342,34 +391,60 @@ public class Controller extends Thread implements Initializable, Parametres {
      */
     public void enleverCaseGUI(Case enlev) {
         int playerInd = enlev.getGrille().getJoueur().getID();
-        ObservableList<Node> children = this.grilles[playerInd].getChildren();
+        final ObservableList<Node> children = this.grilles[playerInd].getChildren();
         Pane paneCase;
         boolean found = false;
-        Node toRemove = null;
-        
+        ArrayList<Node> toRemove = new ArrayList<>(); // on récupère la liste de tous les noeuds à supprimer
+
         Iterator<Node> it = children.iterator();
 
         //cherche le noeud correspondant        
-        while(!found && it.hasNext()){ //itère noeuds pour trouver case
+        while (!found && it.hasNext()) { //itère noeuds pour trouver case
             Node node = it.next();
             if (!node.equals(children.get(0))) { //on n'itère pas les lignes de la grille
                 if (grilles[playerInd].getRowIndex(node) == enlev.getGuiY() && grilles[playerInd].getColumnIndex(node) == enlev.getGuiX()) {
                     paneCase = (Pane) node;
-                    Label labelCase = (Label) paneCase.getChildren().get(0); //cherche label dans pane
+
+                    Label labelCase = (Label) paneCase.getChildren().get(0); 
 
                     if (enlev.getValeur() == Integer.valueOf(labelCase.getText())) {
+
                         found = true;
-                        toRemove = node;
+                        toRemove.add(node); // on ajoute le noeud à supprimer dans la liste
+
                     }
+
                 }
             }
         }
-        System.out.println("enleve pre" + found);
-        System.out.println(children.remove(toRemove));
-        System.out.println("enleve post");
-        
-        
-        
+        if(found) {
+            try {
+                Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
+                    @Override
+                    public Void call() throws Exception { 
+                        Platform.runLater(new Runnable() { 
+                            @Override
+                            public void run() {
+                                //javaFX operations should go here
+                                for (Node n : toRemove) {
+                                    children.remove(n);
+                                }
+                                System.out.println("node deleted from children");
+                            }
+                        });
+                        Thread.sleep(170); 
+
+                        return null; 
+                    }
+
+                };
+                Thread delete_node_thread = new Thread(delete_node); 
+                delete_node_thread.setDaemon(false);
+                delete_node_thread.start(); // on exécute la tâche de suppression des nodes
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     /**
@@ -524,10 +599,10 @@ public class Controller extends Thread implements Initializable, Parametres {
         }
     }
     
-     /**
-     * listens if all transitions are finished
-     * @param playerInd 
-     */
+    /**
+    * listens if all transitions are finished
+    * @param playerInd 
+    */
     public void transitionsFinishedListener(final int playerInd) {        
         Task finished_task = new Task<Void>() {
             @Override
@@ -716,7 +791,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                 
                 transitionsFinishedListener(playerInd);
                 
-                //syncGrilles(playerInd);
                 syncScores(playerInd);
                 
                 //le joueur a bougé, il peut maintenant undo
