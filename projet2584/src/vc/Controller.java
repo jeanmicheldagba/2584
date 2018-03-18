@@ -68,9 +68,9 @@ public class Controller extends Thread implements Initializable, Parametres {
     @FXML
     private Button undo2;
     @FXML
-    private Pane best1; // panneau qui affiche le best score
+    private Pane best1; // panneau qui affiche le meilleur score
     @FXML
-    private Pane best2; // panneau qui affiche le best score
+    private Pane best2; // panneau qui affiche le meilleur score
     @FXML
     private Label console; // user information area
     @FXML
@@ -638,7 +638,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         Task automatic_play_task = new Task<Void>() {
             @Override
             public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
-                while(!partie.getOver()){
+                while(!partie.getGameover()){
                     // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
                     Platform.runLater(new Runnable() { // classe anonyme
                         @Override
@@ -783,7 +783,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                     human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle pour undo
                 }
                 
-                boolean over = this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
+                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
                 
                 
                 

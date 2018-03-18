@@ -4,8 +4,9 @@ public abstract class Joueur implements Parametres {
     
     protected Grille grille;
     protected int score;
-    protected Partie partie;
+    protected Partie partie;//UTILE????
     protected int id; //indique si c'est le joueur 1 ou 2
+    protected int nbDeplacements; //nombre de déplacements effectué par un joueur
     
     /**
      * Constructeur de Joueur
@@ -15,6 +16,7 @@ public abstract class Joueur implements Parametres {
     public Joueur(Partie partie, int id){
         this.grille = new Grille(this);        
         this.score = 0;
+        this.nbDeplacements=0;
         this.partie = partie;
         this.id = id;
     }
@@ -49,39 +51,60 @@ public abstract class Joueur implements Parametres {
     }
     
     /**
-     * Calcule le score du joueur
+     * getter du nombre de déplacements du joueur
+     * @return le nombre de déplacemnts du joueur
      */
-    protected void calculScore(){
-        if(grille.getDeplacement()==true){// pas forcément utile A REVOIR
-            this.score+= grille.getResDeplacement();
-            grille.setResDeplacement(0);
-        }
+    public int getNbDeplacements(){
+        return this.nbDeplacements;
     }
     
     /**
-     * Méthode qui permet de savoir si la partie est finie et qui déplace les cases si c'est possible
+     * Calcule le score du joueur
+     */
+    protected void calculScore(){
+        //if(grille.getDeplacement()==true){//on calcule le score uniquement s'il y a eu un déplacement
+            this.score+= grille.getResDeplacement();
+            grille.setResDeplacement(0);
+        //}
+    }
+    
+    /**
+     * Méthode qui déplace les cases si c'est possible et qui permet de savoir si la partie est finie
      * @param direction direction dans laquelle les cases doivent bouger
      * @return true si la partie est terminée, false si la partie continue
      */
     public boolean move(int direction) {
         
-        // On déplace les cases
+        //On déplace les cases
         boolean casesMov = this.grille.lanceurDeplacerCases(direction, false);
         
-        //On vérifie l'état de la partie
+        //Si un déplacement a été effectué, on incrémente de +1 le nombre de déplacements
         if (casesMov) {
-            if (!this.grille.nouvelleCase()) { //la grille est pleine
-                System.out.println("partie terminée, score : "+this.score);
-                return true; //game over
-            }
-        }
-        if (this.grille.getValeurMax() >= OBJECTIF) { // le joueur a atteint l'objectif
-            System.out.println("Bravo ! Vous avez atteint " + this.grille.getValeurMax());
+            this.nbDeplacements++;
+        }    
+            
+        //On vérifie si le joueur a gagné
+        if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
+            System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
+            System.out.println("Le joueur "+this.id+" a gagné !");
+            this.partie.setGameover(true);
             return true; //game over
         }
+        
+        //On test si la grille est bloquée(=aucun déplacement possible)
+        if(this.getGrille().bloquee()){
+            System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
+            System.out.println("Le joueur "+this.id+" a perdu !");
+            this.partie.setGameover(true);
+            return true; //game over
+            }
+        /*if (!this.grille.nouvelleCase()) { //la grille est pleine
+            System.out.println("Partie terminée, score : "+this.score);
+            return true; //game over
+        }*/ //PB : grille peut être pleine tout en ayant déplacement possible
+        
         this.calculScore(); //on met à jour le score
-
-        return false; //game not over
+        return false; //game not over : on continue à jouer
     }
     
 }

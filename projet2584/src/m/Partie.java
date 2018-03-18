@@ -5,22 +5,26 @@ import vc.Controller;
 
 public class Partie implements Parametres {
 
-    private Joueur[] joueur;
+    private Joueur[] joueurs;
     protected Controller controller;
-    private boolean over;
+    private boolean gameover; //variable qui détermine la fin de la partie : true=partie finie
 
     public Partie(Controller controller) {
-        this.joueur = new Joueur[2];
+        this.joueurs = new Joueur[2];
         this.controller = controller;
-        this.over = false;
+        this.gameover = false;
     }
     
     public Joueur[] getJoueur(){
-        return this.joueur;
+        return this.joueurs;
     }
     
-    public boolean getOver() {
-        return this.over;
+    public boolean getGameover() {
+        return this.gameover;
+    }
+    
+    public void setGameover(boolean go){
+        this.gameover=go;
     }
 
     /**
@@ -66,12 +70,12 @@ public class Partie implements Parametres {
         //ajoute les deux cases à la grille de chaque joueur
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                this.joueur[i].getGrille().nouvelleCase(valeurs[j], x[j], y[j]);
+                this.joueurs[i].getGrille().nouvelleCase(valeurs[j], x[j], y[j]);
             }
 
         }
     }
-
+    /* ON GERE CE CAS DANS LA METHODE move DE LA CLASSE Joueur
     //détermine si un des joueurs est bloqué
     public boolean partieBloquee() {
         boolean bloque = false;
@@ -83,5 +87,5 @@ public class Partie implements Parametres {
         }
         return bloque;
     }
-
+    */
 }
