@@ -8,11 +8,13 @@ public class Partie implements Parametres {
     private Joueur[] joueurs;
     protected Controller controller;
     private boolean gameover; //variable qui détermine la fin de la partie : true=partie finie
+    private ConnexionBDD connexionbdd;
 
     public Partie(Controller controller) {
         this.joueurs = new Joueur[2];
         this.controller = controller;
         this.gameover = false;
+        this.connexionbdd= new ConnexionBDD(HOST,PORT,DBNAME,USERNAME,PASSWORD);
     }
     
     public Joueur[] getJoueur(){
@@ -88,4 +90,35 @@ public class Partie implements Parametres {
         return bloque;
     }
     */
+    
+    /**
+     * met à jour la base de données avec les informations de la partie quand celle-ci se finit = historique des parties
+     */
+    public void majBDD(){
+        String name1=new String(); //noms des 2 joueurs dans la base de données
+        String name2=new String();
+        if(joueurs[0] instanceof Human){//si le joueur est humain son nom correspond à son pseudo
+            name1=((Human)joueurs[0]).getPseudo();
+        }
+        else if(joueurs[0] instanceof Dumb){//si le joueur est le programme jouant au hasard (Dumb) son nom est "Aléatoire"
+            name1="Aléatoire";
+        }
+        else if(joueurs[0] instanceof IA){//si le joueur est le programme jouant intelligemment (IA) son nom est "Intelligence Artificielle" 
+            name1="Intelligence Artificielle";
+        }
+        //mêmes instructions pour le 2ème joueur
+        if(joueurs[1] instanceof Human){
+            name2=((Human)joueurs[1]).getPseudo();
+        }
+        else if(joueurs[1] instanceof Dumb){
+            name2="Aléatoire";
+        }
+        else if(joueurs[1] instanceof IA){
+            name2="Intelligence Artificielle";
+        }
+        //Requête SQL qui permet d'insérer les informations de la partie dans la base de données
+        String query="INSERT INTO historiqueparties VALUES('"+name1+"','"+name2+"',"+joueurs[0].getScore()+","+joueurs[1].getScore()+","+joueurs[0].grille.getValeurMax()+","+joueurs[1].grille.getValeurMax()+","+joueurs[0].getNbDeplacements()+","+joueurs[1].getNbDeplacements()+")";
+        connexionbdd.insertTuples(query);
+    }
+    
 }

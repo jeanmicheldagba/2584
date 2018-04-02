@@ -87,16 +87,18 @@ public abstract class Joueur implements Parametres {
         if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
             System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
             System.out.println("Le joueur "+this.id+" a gagné !");
+            this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
             this.partie.setGameover(true);
-            return true; //game over
+            return true; //la partie est finie
         }
         
         //On test si la grille est bloquée(=aucun déplacement possible)
         if(this.getGrille().bloquee()){
             System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
             System.out.println("Le joueur "+this.id+" a perdu !");
+            this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
             this.partie.setGameover(true);
-            return true; //game over
+            return true; //la partie est finie
             }
         /*if (!this.grille.nouvelleCase()) { //la grille est pleine
             System.out.println("Partie terminée, score : "+this.score);
@@ -104,7 +106,7 @@ public abstract class Joueur implements Parametres {
         }*/ //PB : grille peut être pleine tout en ayant déplacement possible
         
         this.calculScore(); //on met à jour le score
-        return false; //game not over : on continue à jouer
+        return false; //on continue à jouer
     }
     
 }

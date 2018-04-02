@@ -266,8 +266,6 @@ public class Controller extends Thread implements Initializable, Parametres {
             this.partie.getJoueur()[1] = ia;
         }
         
-        
-
         this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
         this.syncGrilles(2); //synchronise les grilles Vues et les grilles Modèle
         
@@ -304,7 +302,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                                 for (Case c : partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
                                     if(c.getGuiX() == c.getX() && c.getGuiY() == c.getY()) {
                                         System.out.println("C BOOON");
-                                    } else System.out.println("C PA BON");
+                                    } else System.out.println("C PAS BON");
                                     nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
                                 }
 

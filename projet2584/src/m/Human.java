@@ -24,6 +24,10 @@ public class Human extends Joueur implements Parametres {
         this.nbUndo = 5;
     }
     
+    public String getPseudo(){
+        return this.pseudo;
+    }
+    
     /**
      * Méthode qui permet de faire un undo
      * @return true si undo effectué, false sinon
