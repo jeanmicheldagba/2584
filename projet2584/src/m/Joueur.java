@@ -93,17 +93,13 @@ public abstract class Joueur implements Parametres {
         }
         
         //On test si la grille est bloquée(=aucun déplacement possible)
-        if(this.getGrille().bloquee()){
+        if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
             System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
             System.out.println("Le joueur "+this.id+" a perdu !");
             this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
             this.partie.setGameover(true);
             return true; //la partie est finie
-            }
-        /*if (!this.grille.nouvelleCase()) { //la grille est pleine
-            System.out.println("Partie terminée, score : "+this.score);
-            return true; //game over
-        }*/ //PB : grille peut être pleine tout en ayant déplacement possible
+        }
         
         this.calculScore(); //on met à jour le score
         return false; //on continue à jouer

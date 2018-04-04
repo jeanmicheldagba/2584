@@ -95,6 +95,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     private ChoiceBox[] types;
     private Label[] scores;
     private HashSet<Thread>[] transitions;
+    private HashSet<Transformation>[] transformations;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -124,6 +125,10 @@ public class Controller extends Thread implements Initializable, Parametres {
         //initialise les threads de transitions pour chaque joueur
         this.transitions = new HashSet[2];
         for(int i=0;i<2;i++) this.transitions[i] = new HashSet();
+        
+        //initialise les transformations pour chaque joueur
+        this.transformations = new HashSet[2];
+        for(int i=0;i<2;i++) this.transformations[i] = new HashSet();
         
         
         //ajoute listener pour changement d'items dans type
@@ -219,6 +224,10 @@ public class Controller extends Thread implements Initializable, Parametres {
         
         console.setText("Please set parameters and press Play");
     }
+    
+    public HashSet<Transformation>[] getTransformations() {        
+        return this.transformations;
+    }
 
     public void initPartie() {
 
@@ -300,10 +309,8 @@ public class Controller extends Thread implements Initializable, Parametres {
                                 grilles[i].getChildren().clear();
                                 grilles[i].getChildren().add(sauv);
                                 for (Case c : partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
-                                    if(c.getGuiX() == c.getX() && c.getGuiY() == c.getY()) {
-                                        System.out.println("C BOOON");
-                                    } else System.out.println("C PAS BON");
-                                    nouvelleCaseGUI(c.getX(), c.getY(), c.getValeur(), i);
+                                    if(c.getGuiX() != c.getX() || c.getGuiY() != c.getY()) System.out.println("C PAS BON");
+                                    nouvelleCaseGUI(c, i);
                                 }
 
                                 i++;
@@ -328,12 +335,26 @@ public class Controller extends Thread implements Initializable, Parametres {
     /**
      * synchronize the model score and the view
      *
-     * @param playerInd the index of the player whose score needs to be
-     * synchronized
+     * @param playerInd the index of the player whose score needs to be synchronized
      */
     public void syncScores(int playerInd) {
         if (playerInd == 0 || playerInd == 1){
             this.scores[playerInd].setText(this.partie.getJoueur()[playerInd].getScore()+"");
+        }
+    }
+    
+    /**
+     * applique les transformations du joueur donné
+     * 
+     * @param playerInd
+     */
+    public void applyTransformations(int playerInd) {
+        for(Transformation trans : transformations[playerInd]) {
+            if(trans.getType().equals("new_tile")){
+                nouvelleCaseGUI(trans.getTo_transform(), playerInd);
+            } else if(trans.getType().equals("update_value")) {
+                updateValueGUI(trans.getTo_transform(), trans.getNew_value());
+            }
         }
     }
 
@@ -345,8 +366,11 @@ public class Controller extends Thread implements Initializable, Parametres {
      * @param val valeur de la case
      * @param playerInd joueur à qui est la case
      */
-    public void nouvelleCaseGUI(int x, int y, int val, int playerInd) {
-
+    public void nouvelleCaseGUI(Case new_case, int playerInd) {
+        int val = new_case.getValeur();
+        int x = new_case.getX();
+        int y = new_case.getY();
+        
         final Pane pane_tuile = new Pane(); //crée conteneur
         final Label label_tuile = new Label(val + ""); //crée label avec valeur de la case
         pane_tuile.getStyleClass().add("pane_tuile"); //ajoute classe pour css
@@ -416,6 +440,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             }
         }
         if(found) {
+            System.out.println("remove");
             try {
                 Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
                     @Override
@@ -427,7 +452,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                                 for (Node n : toRemove) {
                                     children.remove(n);
                                 }
-                                System.out.println("node deleted from children");
                             }
                         });
                         Thread.sleep(170); 
@@ -451,12 +475,11 @@ public class Controller extends Thread implements Initializable, Parametres {
      * @param move la case à déplacer
      */
     public void deplacerCaseGUI(Case move) {
-        System.out.println("deplace");
         int playerInd = move.getGrille().getJoueur().getID();
         
         enleverCaseGUI(move); //enlève la case de la grille
         
-        this.nouvelleCaseGUI(move.getX(), move.getY(), move.getValeur(), playerInd); //ajoute la case aux nouvelles coordonnées
+        this.nouvelleCaseGUI(move, playerInd); //ajoute la case aux nouvelles coordonnées
         
         
     }
@@ -521,7 +544,7 @@ public class Controller extends Thread implements Initializable, Parametres {
      * @param move la case à bouger. final pour pouvoir l'utiliser dans une task
      *
      */
-    public void transition(final Case move) {      
+    public void transition(final Case move, final boolean remove) {      
         int playerInd = move.getGrille().getJoueur().getID();
         Pane paneToMov = null;
         ObservableList<Node> children = grilles[playerInd].getChildren();
@@ -566,14 +589,14 @@ public class Controller extends Thread implements Initializable, Parametres {
                             public void run() {
                                 if(final_pane.getTranslateX() != move.getObjectifTranslateX()) {
                                     if(final_pane.getTranslateX() > move.getObjectifTranslateX()) {
-                                        final_pane.setTranslateX(final_pane.getTranslateX() - 1);
-                                    } else final_pane.setTranslateX(final_pane.getTranslateX() + 1);
+                                        final_pane.setTranslateX(final_pane.getTranslateX() - 5);
+                                    } else final_pane.setTranslateX(final_pane.getTranslateX() + 5);
                                     
                                 }
                                 if(final_pane.getTranslateY() != move.getObjectifTranslateY()) {
                                     if(final_pane.getTranslateY() > move.getObjectifTranslateY()) {
-                                        final_pane.setTranslateY(final_pane.getTranslateY() - 1);
-                                    } else final_pane.setTranslateY(final_pane.getTranslateY() + 1);
+                                        final_pane.setTranslateY(final_pane.getTranslateY() - 5);
+                                    } else final_pane.setTranslateY(final_pane.getTranslateY() + 5);
                                     
                                 }
                             }
@@ -581,12 +604,20 @@ public class Controller extends Thread implements Initializable, Parametres {
                         Thread.sleep(2);
                         
                     }
-                    //controller.deplacerCaseGUI(move);
                     
-                    //actualise coordonnées GUI
-                    move.setGuiX(move.getX());
-                    move.setGuiY(move.getY());
+                    if(remove) {
+                        System.out.println("on");
+                        enleverCaseGUI(move);
+                        System.out.println("off");
+                    }
                     
+                    else{
+                        controller.deplacerCaseGUI(move);
+                        
+                        //actualise coordonnées GUI
+                        move.setGuiX(move.getX());
+                        move.setGuiY(move.getY());
+                    }
                     return null;
                 }
 
@@ -622,8 +653,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                     Thread.sleep(40);
 
                 }
-                System.out.println("FINI");
-                syncGrilles(playerInd);
+                applyTransformations(playerInd);
                 return null;
             }
 
@@ -771,9 +801,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         if (this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
             System.out.println("start game first");
         } else {
-            if (playerInd != -1) { //si un des joueurs a pressé la touche
-                this.transitions[playerInd].clear();
-                
+            if (playerInd != -1) { //si un des joueurs a pressé la touche                
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
                 if (playerObj instanceof Human) { //si le joueur est humain
@@ -781,12 +809,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                     human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle pour undo
                 }
                 
-                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)
-                
-                
-                
-                //automaticMove(); // on fait jouer les ordinateurs
-                
+                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)                
                 transitionsFinishedListener(playerInd);
                 
                 syncScores(playerInd);

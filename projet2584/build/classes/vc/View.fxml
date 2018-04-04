@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="690.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vc.Controller">
+    <children>
+      <Pane fx:id="background" onKeyPressed="#keyPressed">
+         <children>
+            <Pane fx:id="fond1" prefHeight="613.0" prefWidth="445.0">
+               <children>
+                  <GridPane fx:id="grille1" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </GridPane>
+                  <Pane fx:id="panneau_score1" layoutX="159.0" layoutY="28.0" prefHeight="79.0" prefWidth="120.0" style="-fx-background-color: rgb(187, 173, 160);;" styleClass="score_panneau">
+                     <children>
+                        <Label layoutX="46.0" layoutY="2.0" styleClass="score_text" text="Score" />
+                        <Label fx:id="score1" alignment="CENTER" contentDisplay="CENTER" layoutX="42.0" layoutY="19.0" prefHeight="21.0" prefWidth="37.0" styleClass="score_text" text="0" textAlignment="CENTER" />
+                        <Pane fx:id="best1" layoutX="42.0" layoutY="40.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutY="16.0" prefHeight="21.0" prefWidth="37.0" styleClass="score_text" text="0" textAlignment="CENTER" />
+                              <Label layoutX="7.0" styleClass="score_text" text="Best" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </Pane>
+                  <Button fx:id="undo1" layoutX="66.0" layoutY="152.0" mnemonicParsing="false" onMouseClicked="#undo" prefHeight="25.0" prefWidth="150.0" text="Undo" />
+                  <ChoiceBox fx:id="type1" layoutX="66.0" layoutY="120.0" prefWidth="150.0" />
+                  <TextField fx:id="name1" layoutX="227.0" layoutY="120.0" promptText="Nom" />
+               </children>
+            </Pane>
+            <Pane fx:id="fond2" layoutX="445.0" prefHeight="613.0" prefWidth="445.0">
+               <children>
+                  <GridPane fx:id="grille2" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <TextField fx:id="name2" layoutX="229.0" layoutY="117.0" prefHeight="25.0" prefWidth="150.0" promptText="Nom" />
+                  <ChoiceBox fx:id="type2" layoutX="68.0" layoutY="117.0" prefWidth="150.0" />
+                  <Button fx:id="undo2" layoutX="229.0" layoutY="149.0" mnemonicParsing="false" onMouseClicked="#undo" prefHeight="25.0" prefWidth="150.0" text="Undo" />
+                  <Pane fx:id="panneau_score2" layoutX="162.0" layoutY="25.0" prefHeight="79.0" prefWidth="120.0" style="-fx-background-color: rgb(187, 173, 160);;" styleClass="score_panneau">
+                     <children>
+                        <Label layoutX="46.0" layoutY="2.0" styleClass="score_text" text="Score" />
+                        <Label fx:id="score2" alignment="CENTER" contentDisplay="CENTER" layoutX="42.0" layoutY="19.0" prefHeight="21.0" prefWidth="37.0" styleClass="score_text" text="0" textAlignment="CENTER" />
+                        <Pane fx:id="best2" layoutX="42.0" layoutY="40.0">
+                           <children>
+                              <Label layoutX="7.0" styleClass="score_text" text="Best" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutY="16.0" prefHeight="21.0" prefWidth="37.0" styleClass="score_text" text="0" textAlignment="CENTER" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </Pane>
+                  <Button layoutX="-21.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#refocus" text="Focus" />
+                  <Button fx:id="play" layoutX="-48.0" layoutY="52.0" mnemonicParsing="false" onMouseClicked="#playRequest" prefHeight="41.0" prefWidth="100.0" text="Play" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Pane layoutY="624.0" prefHeight="79.0" prefWidth="904.0">
+         <children>
+            <Label fx:id="console" prefHeight="79.0" prefWidth="904.0" text="Console" />
+         </children>
+      </Pane>
+    </children>
+</AnchorPane>
