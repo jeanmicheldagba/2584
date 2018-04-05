@@ -95,7 +95,6 @@ public class Controller extends Thread implements Initializable, Parametres {
     private ChoiceBox[] types;
     private Label[] scores;
     private HashSet<Thread>[] transitions;
-    private HashSet<Transformation>[] transformations;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -125,10 +124,6 @@ public class Controller extends Thread implements Initializable, Parametres {
         //initialise les threads de transitions pour chaque joueur
         this.transitions = new HashSet[2];
         for(int i=0;i<2;i++) this.transitions[i] = new HashSet();
-        
-        //initialise les transformations pour chaque joueur
-        this.transformations = new HashSet[2];
-        for(int i=0;i<2;i++) this.transformations[i] = new HashSet();
         
         
         //ajoute listener pour changement d'items dans type
@@ -223,10 +218,6 @@ public class Controller extends Thread implements Initializable, Parametres {
         type2.getItems().add("Dumb");
         
         console.setText("Please set parameters and press Play");
-    }
-    
-    public HashSet<Transformation>[] getTransformations() {        
-        return this.transformations;
     }
 
     public void initPartie() {
@@ -340,21 +331,6 @@ public class Controller extends Thread implements Initializable, Parametres {
     public void syncScores(int playerInd) {
         if (playerInd == 0 || playerInd == 1){
             this.scores[playerInd].setText(this.partie.getJoueur()[playerInd].getScore()+"");
-        }
-    }
-    
-    /**
-     * applique les transformations du joueur donné
-     * 
-     * @param playerInd
-     */
-    public void applyTransformations(int playerInd) {
-        for(Transformation trans : transformations[playerInd]) {
-            if(trans.getType().equals("new_tile")){
-                nouvelleCaseGUI(trans.getTo_transform(), playerInd);
-            } else if(trans.getType().equals("update_value")) {
-                updateValueGUI(trans.getTo_transform(), trans.getNew_value());
-            }
         }
     }
 
@@ -653,7 +629,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                     Thread.sleep(40);
 
                 }
-                applyTransformations(playerInd);
                 return null;
             }
 
@@ -674,7 +649,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                             automaticMove();
                         }
                     });
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                     
                 }
                 return null;
@@ -694,12 +669,10 @@ public class Controller extends Thread implements Initializable, Parametres {
                 IA ia = (IA) this.partie.getJoueur()[i];
                 int dir = ia.getDirection();
                 partie.getJoueur()[i].move(dir);
-                syncGrilles(i);
                 syncScores(i);
             } else if(this.partie.getJoueur()[i] instanceof Dumb){
                 Dumb dumb = (Dumb) this.partie.getJoueur()[i];
                 partie.getJoueur()[i].move(dumb.getDirection());
-                syncGrilles(i);
                 syncScores(i);
             }
         }
@@ -803,10 +776,12 @@ public class Controller extends Thread implements Initializable, Parametres {
         } else {
             if (playerInd != -1) { //si un des joueurs a pressé la touche                
                 Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
-
+                
+                Grille sauv = null;
+                
                 if (playerObj instanceof Human) { //si le joueur est humain
                     Human human = (Human) playerObj;
-                    human.setLastGrille((Grille) human.getGrille().clone()); // On sauvegarde la grille actuelle pour undo
+                    sauv = (Grille) human.getGrille().clone(); // On sauvegarde la grille actuelle pour undo
                 }
                 
                 this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)                
@@ -814,8 +789,14 @@ public class Controller extends Thread implements Initializable, Parametres {
                 
                 syncScores(playerInd);
                 
-                //le joueur a bougé, il peut maintenant undo
-                this.undos[playerInd].setDisable(false);
+                if (playerObj instanceof Human && this.partie.getJoueur()[playerInd].getMoved()) {
+                    //le joueur a bougé, il peut maintenant undo
+                    this.undos[playerInd].setDisable(false);
+                    Human human = (Human) playerObj;
+                    human.setLastGrille(sauv);
+                    
+                    automaticMove();
+                }
                 
             }
 

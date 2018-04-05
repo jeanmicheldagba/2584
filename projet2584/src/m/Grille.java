@@ -338,7 +338,7 @@ public class Grille implements Parametres {
             this.cases.add(ajout);
             
             //on ajoute la case à l'interface
-            this.joueur.partie.controller.getTransformations()[this.joueur.id].add(new Transformation(ajout, "new_tile"));
+            this.joueur.partie.controller.nouvelleCaseGUI(ajout, this.joueur.id);
             
             //actualise valeurMax
             if (this.valeurMax < ajout.getValeur()) {

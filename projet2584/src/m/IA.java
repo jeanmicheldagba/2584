@@ -6,6 +6,8 @@
 package m;
 
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,6 +17,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA {
 
     private IA bot; // l'IA sur laquelle on va faire les simulations
     private int[] dirsEval;
+    private HashSet<Thread> threads;
 
     public int[] getDirsEval() {
         return this.dirsEval;
@@ -37,6 +40,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA {
      * @return the best direction
      */
     public int getDirection() {
+        this.threads = new HashSet();
         this.dirsEval = new int[4];
 
         IA_Simulation sim;
@@ -45,15 +49,28 @@ public class IA extends Joueur implements Parametres, Parametres_IA {
         for (int dir = 0; dir < KEYS[0].length; dir++) {
             sim = new IA_Simulation(dir, this);
             sim_thread = new Thread(sim);
+            this.threads.add(sim_thread);
             sim_thread.start();
         }
+        
+        System.out.println("wait");
+        for(Thread th : threads) {
+            try {
+                th.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 
+        }
+        System.out.println("waited");
+        
         int largest = 0;
         for (int i = 1; i < dirsEval.length; i++) {
             if (dirsEval[i] > dirsEval[largest]) {
                 largest = i;
             }
         }
+        
         int[] directions = {HAUT, GAUCHE, BAS, DROITE};
         return directions[largest];
 

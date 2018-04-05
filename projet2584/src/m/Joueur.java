@@ -4,9 +4,10 @@ public abstract class Joueur implements Parametres {
     
     protected Grille grille;
     protected int score;
-    protected Partie partie;//UTILE????
+    protected Partie partie;
     protected int id; //indique si c'est le joueur 1 ou 2
     protected int nbDeplacements; //nombre de déplacements effectué par un joueur
+    protected boolean moved;
     
     /**
      * Constructeur de Joueur
@@ -19,6 +20,7 @@ public abstract class Joueur implements Parametres {
         this.nbDeplacements=0;
         this.partie = partie;
         this.id = id;
+        this.moved = false;
     }
     
     /**
@@ -76,33 +78,40 @@ public abstract class Joueur implements Parametres {
     public boolean move(int direction) {
         
         //On déplace les cases
-        boolean casesMov = this.grille.lanceurDeplacerCases(direction, false);
+        this.moved = this.grille.lanceurDeplacerCases(direction, false);
         
         //Si un déplacement a été effectué, on incrémente de +1 le nombre de déplacements
-        if (casesMov) {
-            this.nbDeplacements++;
-        }    
+        if (this.moved) {
             
-        //On vérifie si le joueur a gagné
-        if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
-            System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
-            System.out.println("Le joueur "+this.id+" a gagné !");
-            this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
-            this.partie.setGameover(true);
-            return true; //la partie est finie
-        }
-        
-        //On test si la grille est bloquée(=aucun déplacement possible)
-        if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
-            System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
-            System.out.println("Le joueur "+this.id+" a perdu !");
-            this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
-            this.partie.setGameover(true);
-            return true; //la partie est finie
-        }
-        
-        this.calculScore(); //on met à jour le score
+            this.nbDeplacements++;
+            //On vérifie si le joueur a gagné
+            if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
+                System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
+                System.out.println("Le joueur "+this.id+" a gagné !");
+                this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.setGameover(true);
+                return true; //la partie est finie
+            }
+
+            //On test si la grille est bloquée(=aucun déplacement possible)
+            if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
+                System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
+                System.out.println("Le joueur "+this.id+" a perdu !");
+                this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.setGameover(true);
+                return true; //la partie est finie
+            }
+
+            this.calculScore(); //on met à jour le score
+            
+        }    
+           
         return false; //on continue à jouer
+            
+    }
+
+    public boolean getMoved() {
+        return this.moved;
     }
     
 }
