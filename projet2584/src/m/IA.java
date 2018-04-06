@@ -18,7 +18,6 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
 
     private IA bot; // l'IA sur laquelle on va faire les simulations
     private int[] dirsEval;
-    private HashSet<Thread> threads;
 
     public int[] getDirsEval() {
         return this.dirsEval;
@@ -41,29 +40,46 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
      * @return the best direction
      */
     public int getDirection() {
-        this.threads = new HashSet();
         this.dirsEval = new int[4];
 
-        IA_Simulation sim;
-        Thread sim_thread;
-
-        for (int dir = 0; dir < KEYS[0].length; dir++) {
-            sim = new IA_Simulation(dir, this);
-            sim_thread = new Thread(sim);
-            this.threads.add(sim_thread);
-            sim_thread.start();
+        IA_Simulation sim0 = new IA_Simulation(0, this);
+        IA_Simulation sim1 = new IA_Simulation(1, this);
+        IA_Simulation sim2 = new IA_Simulation(2, this);
+        IA_Simulation sim3 = new IA_Simulation(3, this);
+        Thread sim_thread0 = new Thread(sim0);
+        Thread sim_thread1 = new Thread(sim1);
+        Thread sim_thread2 = new Thread(sim2);
+        Thread sim_thread3 = new Thread(sim3);
+        sim_thread0.start();
+        sim_thread1.start();
+        sim_thread2.start();
+        sim_thread3.start();
+        
+        try {
+            sim_thread0.join();
+        } catch (InterruptedException ex) {
+            System.out.println("exception");
         }
         
-        System.out.println("wait");
-        for(Thread th : threads) {
-            try {
-                th.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-
+        try {
+            sim_thread1.join();
+        } catch (InterruptedException ex) {
+            System.out.println("exception");
         }
-        System.out.println("waited");
+        
+        try {
+            sim_thread2.join();
+        } catch (InterruptedException ex) {
+            System.out.println("exception");
+        }
+        
+        try {
+            sim_thread3.join();
+        } catch (InterruptedException ex) {
+            System.out.println("exception");
+        }
+        
+        System.out.println("joined");
         
         int largest = 0;
         for (int i = 1; i < dirsEval.length; i++) {

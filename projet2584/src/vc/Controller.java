@@ -674,7 +674,8 @@ public class Controller extends Thread implements Initializable, Parametres {
                             automaticMove();
                         }
                     });
-                    Thread.sleep(5000);
+                    syncGrilles(2);
+                    Thread.sleep(500);
                     
                 }
                 return null;

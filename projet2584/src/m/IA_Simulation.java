@@ -64,7 +64,7 @@ public class IA_Simulation implements Runnable, Parametres, Parametres_IA {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("bla");
+        System.out.println("thread_fini");
     }
     
 }
