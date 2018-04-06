@@ -1,12 +1,13 @@
 package m;
 
+import java.io.Serializable;
 import java.util.Random;
 import vc.Controller;
 
-public class Partie implements Parametres {
+public class Partie implements Parametres, Serializable{
 
     private Joueur[] joueurs;
-    protected Controller controller;
+    protected transient Controller controller;
     private boolean gameover; //variable qui détermine la fin de la partie : true=partie finie
     private ConnexionBDD connexionbdd;
 
@@ -119,6 +120,10 @@ public class Partie implements Parametres {
         //Requête SQL qui permet d'insérer les informations de la partie dans la base de données
         String query="INSERT INTO historiqueparties VALUES(null,'"+name1+"','"+name2+"',"+joueurs[0].getScore()+","+joueurs[1].getScore()+","+joueurs[0].grille.getValeurMax()+","+joueurs[1].grille.getValeurMax()+","+joueurs[0].getNbDeplacements()+","+joueurs[1].getNbDeplacements()+")"; //1ère colonne à null car auto incrémentation dans la bdd
         connexionbdd.insertTuples(query);
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
     
 }

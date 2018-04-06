@@ -1,12 +1,13 @@
 package m;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import vc.Transformation;
 
-public class Grille implements Parametres {
+public class Grille implements Parametres, Serializable {
 
     private HashSet<Case> cases;    // ensemble des cases de la grille
     private int valeurMax = 0;      // plus grande valeur présente dans la grille

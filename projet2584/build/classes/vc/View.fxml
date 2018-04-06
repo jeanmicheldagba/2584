@@ -8,11 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="690.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vc.Controller">
+<AnchorPane id="AnchorPane" prefHeight="732.0" prefWidth="918.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vc.Controller">
     <children>
       <Pane fx:id="background" onKeyPressed="#keyPressed">
          <children>
-            <Pane fx:id="fond1" prefHeight="613.0" prefWidth="445.0">
+            <Pane fx:id="fond1" layoutX="14.0" layoutY="41.0" prefHeight="613.0" prefWidth="445.0">
                <children>
                   <GridPane fx:id="grille1" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
                     <columnConstraints>
@@ -48,7 +48,7 @@
                   <TextField fx:id="name1" layoutX="227.0" layoutY="120.0" promptText="Nom" />
                </children>
             </Pane>
-            <Pane fx:id="fond2" layoutX="445.0" prefHeight="613.0" prefWidth="445.0">
+            <Pane fx:id="fond2" layoutX="459.0" layoutY="41.0" prefHeight="613.0" prefWidth="445.0">
                <children>
                   <GridPane fx:id="grille2" gridLinesVisible="true" layoutX="24.0" layoutY="191.0" prefHeight="397.0" prefWidth="397.0">
                      <columnConstraints>
@@ -86,12 +86,18 @@
                   <Button fx:id="play" layoutX="-48.0" layoutY="52.0" mnemonicParsing="false" onMouseClicked="#playRequest" prefHeight="41.0" prefWidth="100.0" text="Play" />
                </children>
             </Pane>
+            <MenuBar prefHeight="21.0" prefWidth="918.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#serialize" text="Close" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
          </children>
       </Pane>
-      <Pane layoutY="624.0" prefHeight="79.0" prefWidth="904.0">
-         <children>
-            <Label fx:id="console" prefHeight="79.0" prefWidth="904.0" text="Console" />
-         </children>
-      </Pane>
+      <Pane layoutY="681.0" prefHeight="79.0" prefWidth="904.0" />
+      <Label fx:id="console" layoutY="681.0" prefHeight="86.0" prefWidth="918.0" text="Console" />
     </children>
 </AnchorPane>

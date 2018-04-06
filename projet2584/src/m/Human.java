@@ -5,13 +5,14 @@
  */
 package m;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
  *
  * @author vaurien
  */
-public class Human extends Joueur implements Parametres {
+public class Human extends Joueur implements Parametres, Serializable {
 
     private String pseudo;    
     private int nbUndo;

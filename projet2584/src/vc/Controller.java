@@ -5,6 +5,11 @@
  */
 package vc;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import m.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,9 +103,15 @@ public class Controller extends Thread implements Initializable, Parametres {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        this.partie = new Partie(this); // crée la partie (modèle)
-        this.initChoix(); // configuration paramètres
+        
+        boolean retrieve = retrieve();
+        
+        if(!retrieve) {
+        
+            this.partie = new Partie(this); // crée la partie (modèle)
+            this.initChoix(); // configuration paramètres
+        }
+        
         this.grille1.autosize();
         
         this.scores = new Label[]{this.score1, this.score2};
@@ -164,6 +175,10 @@ public class Controller extends Thread implements Initializable, Parametres {
                 }
             }
         });
+        
+        if(retrieve) {
+            initPartie(retrieve);
+        }
     }
 
     public void blink() {
@@ -220,7 +235,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         console.setText("Please set parameters and press Play");
     }
 
-    public void initPartie() {
+    public void initPartie(boolean retrieve) {
 
         //on passe à la configuration partie
         play.setVisible(false);
@@ -229,9 +244,20 @@ public class Controller extends Thread implements Initializable, Parametres {
         name1.setDisable(true);
         name2.setDisable(true);
 
+        boolean undo;
         //on affiche les undos pour les humains en les désactivant (avant le premier mouvement)
         for (int i = 0; i < 2; i++) {
-            if (types[i].getSelectionModel().getSelectedItem().equals("Human")) {
+            undo = false;
+        
+            if (retrieve) {
+                if(this.partie.getJoueur()[i] instanceof Human) {
+                    undo = true;
+                }
+            } else if (types[i].getSelectionModel().getSelectedItem().equals("Human")) {
+                undo = true;
+            }
+            
+            if(undo) {
                 undos[i].setVisible(true);
                 undos[i].setDisable(true);
             }
@@ -244,30 +270,34 @@ public class Controller extends Thread implements Initializable, Parametres {
 
         //on clear la console
         console.setText("");
+        
+        if(!retrieve) {
+            //on crée les joueurs
+            if (type1.getSelectionModel().getSelectedItem().equals("Human")) {
+                this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase(), this.partie, 0);
+            } else if (type1.getSelectionModel().getSelectedItem().equals("Dumb")) {
+                this.partie.getJoueur()[0] = new Dumb(this.partie, 0);
+            } else {
+                IA ia = new IA(this.partie, 0);
+                ia.setBot();
+                this.partie.getJoueur()[0] = ia;
+            }
 
-        //on crée les joueurs
-        if (type1.getSelectionModel().getSelectedItem().equals("Human")) {
-            this.partie.getJoueur()[0] = new Human(name1.getText().toLowerCase(), this.partie, 0);
-        } else if (type1.getSelectionModel().getSelectedItem().equals("Dumb")) {
-            this.partie.getJoueur()[0] = new Dumb(this.partie, 0);
-        } else {
-            IA ia = new IA(this.partie, 0);
-            ia.setBot();
-            this.partie.getJoueur()[0] = ia;
-        }
-
-        if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
-            this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase(), this.partie, 1);
-        } else if (type2.getSelectionModel().getSelectedItem().equals("Dumb")) {
-            this.partie.getJoueur()[1] = new Dumb(this.partie, 1);
-        } else {
-            IA ia = new IA(this.partie, 1);
-            ia.setBot();
-            this.partie.getJoueur()[1] = ia;
+            if (type2.getSelectionModel().getSelectedItem().equals("Human")) {
+                this.partie.getJoueur()[1] = new Human(name2.getText().toLowerCase(), this.partie, 1);
+            } else if (type2.getSelectionModel().getSelectedItem().equals("Dumb")) {
+                this.partie.getJoueur()[1] = new Dumb(this.partie, 1);
+            } else {
+                IA ia = new IA(this.partie, 1);
+                ia.setBot();
+                this.partie.getJoueur()[1] = ia;
+            }
+            
+            
+            this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
         }
         
-        this.partie.initGrilles(); //initialise les grilles en ajoutant les premières cases
-        this.syncGrilles(2); //synchronise les grilles Vues et les grilles Modèle
+        syncGrilles(2);
         
         if(!(this.partie.getJoueur()[0] instanceof Human || this.partie.getJoueur()[1] instanceof Human)) {
             automaticPlay();
@@ -282,8 +312,7 @@ public class Controller extends Thread implements Initializable, Parametres {
      * : 0, 1 or 2 (both players)
      */
     public void syncGrilles(final int player) {
-        System.out.println("SYYYNC");
-        
+       
         
         try {
             Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
@@ -416,7 +445,6 @@ public class Controller extends Thread implements Initializable, Parametres {
             }
         }
         if(found) {
-            System.out.println("remove");
             try {
                 Task delete_node = new Task<Void>() { // on définit la tâche confiée au processus principal de parcourir la liste des noeuds à supprimer et de les supprimer
                     @Override
@@ -549,7 +577,6 @@ public class Controller extends Thread implements Initializable, Parametres {
             move.setObjectifTranslateY(toMovY);
             
             final Pane final_pane = paneToMov;
-            System.out.println("translate : "+final_pane.getTranslateX()+" "+final_pane.getTranslateY());
             final_pane.setTranslateX(0);
             final_pane.setTranslateY(0);        
             
@@ -582,9 +609,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                     }
                     
                     if(remove) {
-                        System.out.println("on");
                         enleverCaseGUI(move);
-                        System.out.println("off");
                     }
                     
                     else{
@@ -719,7 +744,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             blink(); // on fait clignoter la console
         } // tout va bien
         else {
-            initPartie();
+            initPartie(false);
         }
     }
 
@@ -762,10 +787,8 @@ public class Controller extends Thread implements Initializable, Parametres {
         int playerInd;
         if (Arrays.asList(KEYS[0]).contains(key.getText()) && this.partie.getJoueur()[0] instanceof Human) { // la touche est une touche du joueur 1
             playerInd = 0;
-            System.out.println("player 1 key pressed");
         } else if (Arrays.asList(KEYS[1]).contains(key.getText()) && this.partie.getJoueur()[1] instanceof Human) { // la touche est une touche du joueur 2
             playerInd = 1;
-            System.out.println("player 2 key pressed");
         } else { // la touche n'est pas une touche définie
             playerInd = -1;
             System.out.println("undefined key pressed");
@@ -774,33 +797,97 @@ public class Controller extends Thread implements Initializable, Parametres {
         if (this.play.visibleProperty().getValue()) { // on vérifie que la partie est commencée
             System.out.println("start game first");
         } else {
-            if (playerInd != -1) { //si un des joueurs a pressé la touche                
-                Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
-                
-                Grille sauv = null;
-                
-                if (playerObj instanceof Human) { //si le joueur est humain
-                    Human human = (Human) playerObj;
-                    sauv = (Grille) human.getGrille().clone(); // On sauvegarde la grille actuelle pour undo
-                }
-                
-                this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)                
-                transitionsFinishedListener(playerInd);
-                
-                syncScores(playerInd);
-                
-                if (playerObj instanceof Human && this.partie.getJoueur()[playerInd].getMoved()) {
-                    //le joueur a bougé, il peut maintenant undo
-                    this.undos[playerInd].setDisable(false);
-                    Human human = (Human) playerObj;
-                    human.setLastGrille(sauv);
+            if (playerInd != -1){ //si un des joueurs a pressé la touche  
+                if(!this.partie.getJoueur()[playerInd].getEnd()) { //si la partie n'est pas finie          
+                    Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
+
+                    Grille sauv = null;
+
+                    if (playerObj instanceof Human) { //si le joueur est humain
+                        Human human = (Human) playerObj;
+                        sauv = (Grille) human.getGrille().clone(); // On sauvegarde la grille actuelle pour undo
+                    }
+
+                    this.partie.getJoueur()[playerInd].move(Parametres.keyToDirection(key.getText())); // on appelle la méthode pour bouger avec la direction (en utilisant la fonction de conversion de Parametres)                
+                    transitionsFinishedListener(playerInd);
+
+                    syncScores(playerInd);
+
+                    if (playerObj instanceof Human && this.partie.getJoueur()[playerInd].getMoved()) {
+                        //le joueur a bougé, il peut maintenant undo
+                        this.undos[playerInd].setDisable(false);
+                        Human human = (Human) playerObj;
+                        human.setLastGrille(sauv);
+
+                        automaticMove();
+                    }
+                } else {
                     
-                    automaticMove();
                 }
-                
             }
 
         }
 
+    }
+    
+    public void serialize() {
+        System.out.println("serialize");
+        
+        ObjectOutputStream oos = null;
+        try {
+            final FileOutputStream fichier = new FileOutputStream("partie.ser");
+            oos = new ObjectOutputStream(fichier);
+            oos.writeObject(this.partie);
+            oos.flush();
+        } catch (final java.io.IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (oos != null) {
+                    oos.flush();
+                    oos.close();
+                }
+            } catch (final IOException ex) {
+                ex.printStackTrace();
+            
+            }
+        }
+        
+        System.exit(0);
+    
+    }
+    
+    public boolean retrieve() {
+        
+        boolean success = true;
+        
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        try {
+            final FileInputStream fichierIn = new FileInputStream("partie.ser");
+            ois = new ObjectInputStream(fichierIn);
+            partie = (Partie) ois.readObject();
+            partie.setController(this);
+        } catch (final java.io.IOException e) {
+            //e.printStackTrace();
+            success = false;
+        } catch (final ClassNotFoundException e) {
+            //e.printStackTrace();
+            success = false;
+        } catch (final Exception e) {
+            success = false;
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+        
+        System.out.println("retrieve : "+success);
+        return success;
     }
 }

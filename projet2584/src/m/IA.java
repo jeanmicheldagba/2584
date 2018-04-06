@@ -5,6 +5,7 @@
  */
 package m;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author vaurien
  */
-public class IA extends Joueur implements Parametres, Parametres_IA {
+public class IA extends Joueur implements Parametres, Parametres_IA, Serializable {
 
     private IA bot; // l'IA sur laquelle on va faire les simulations
     private int[] dirsEval;

@@ -5,13 +5,14 @@
  */
 package m;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  *
  * @author vaurien
  */
-public class Dumb extends Joueur implements Parametres {
+public class Dumb extends Joueur implements Parametres, Serializable {
     
     /**
      * Constructeur joueur aléatoire

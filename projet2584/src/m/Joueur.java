@@ -1,6 +1,8 @@
 package m;
 
-public abstract class Joueur implements Parametres {
+import java.io.Serializable;
+
+public abstract class Joueur implements Parametres, Serializable {
     
     protected Grille grille;
     protected int score;
@@ -8,6 +10,7 @@ public abstract class Joueur implements Parametres {
     protected int id; //indique si c'est le joueur 1 ou 2
     protected int nbDeplacements; //nombre de déplacements effectué par un joueur
     protected boolean moved;
+    protected boolean end;
     
     /**
      * Constructeur de Joueur
@@ -21,6 +24,7 @@ public abstract class Joueur implements Parametres {
         this.partie = partie;
         this.id = id;
         this.moved = false;
+        this.end = false;
     }
     
     /**
@@ -77,6 +81,8 @@ public abstract class Joueur implements Parametres {
      */
     public boolean move(int direction) {
         
+        boolean end = false;
+        
         //On déplace les cases
         this.moved = this.grille.lanceurDeplacerCases(direction, false);
         
@@ -90,28 +96,33 @@ public abstract class Joueur implements Parametres {
                 System.out.println("Le joueur "+this.id+" a gagné !");
                 this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
-                return true; //la partie est finie
+                end = true; //la partie est finie
             }
 
             //On test si la grille est bloquée(=aucun déplacement possible)
-            if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
+            else if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
                 System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
                 System.out.println("Le joueur "+this.id+" a perdu !");
                 this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
-                return true; //la partie est finie
+                end = true; //la partie est finie
             }
 
             this.calculScore(); //on met à jour le score
             
         }    
-           
-        return false; //on continue à jouer
+        
+        this.end = end;
+        return end; 
             
     }
 
     public boolean getMoved() {
         return this.moved;
+    }
+    
+    public boolean getEnd() {
+        return this.end;
     }
     
 }

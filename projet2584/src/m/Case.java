@@ -1,6 +1,8 @@
 package m;
 
-public class Case implements Parametres {
+import java.io.Serializable;
+
+public class Case implements Parametres, Serializable {
 
     private int x, y, valeur;
     private int guiX, guiY; //coordonnées sur l'interface (avant transition)

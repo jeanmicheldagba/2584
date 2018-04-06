@@ -5,6 +5,7 @@
  */
 package m;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * @author apollo7
  * Classe utilisée pour établir une connexion avec la base de données, interroger la base et insérer de nouveaux tuples dans la base
  */
-public class ConnexionBDD {
+public class ConnexionBDD implements Serializable {
 
     private String host, port, dbname, username, password;
     private Connection con = null;
