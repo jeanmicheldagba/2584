@@ -117,7 +117,7 @@ public class Partie implements Parametres {
             name2="Intelligence Artificielle";
         }
         //Requête SQL qui permet d'insérer les informations de la partie dans la base de données
-        String query="INSERT INTO historiqueparties VALUES('"+name1+"','"+name2+"',"+joueurs[0].getScore()+","+joueurs[1].getScore()+","+joueurs[0].grille.getValeurMax()+","+joueurs[1].grille.getValeurMax()+","+joueurs[0].getNbDeplacements()+","+joueurs[1].getNbDeplacements()+")";
+        String query="INSERT INTO historiqueparties VALUES(null,'"+name1+"','"+name2+"',"+joueurs[0].getScore()+","+joueurs[1].getScore()+","+joueurs[0].grille.getValeurMax()+","+joueurs[1].grille.getValeurMax()+","+joueurs[0].getNbDeplacements()+","+joueurs[1].getNbDeplacements()+")"; //1ère colonne à null car auto incrémentation dans la bdd
         connexionbdd.insertTuples(query);
     }
     
