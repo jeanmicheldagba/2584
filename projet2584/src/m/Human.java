@@ -6,7 +6,6 @@
 package m;
 
 import java.io.Serializable;
-import java.util.Scanner;
 
 /**
  *
@@ -14,10 +13,16 @@ import java.util.Scanner;
  */
 public class Human extends Joueur implements Parametres, Serializable {
 
-    private String pseudo;    
-    private int nbUndo;
-    protected Grille lastGrille;
+    private String pseudo;          // nom du joueur
+    private int nbUndo;             // Nombre de Undo restant
+    protected Grille lastGrille;    // Sauvegarde de la grille précédente en cas de undo
 
+    /**
+     * Constructeur d'un joueur humain
+     * @param pseudo son nom
+     * @param partie la partie à laquelle il joue
+     * @param id le numéro du joueur dans la partie (1 ou 2)
+     */
     public Human(String pseudo, Partie partie, int id) {
         super(partie, id);
         this.pseudo = pseudo;
@@ -25,6 +30,10 @@ public class Human extends Joueur implements Parametres, Serializable {
         this.nbUndo = 5;
     }
     
+    /**
+     * Getter du pseudo du joueur
+     * @return le pseudo du joueur en string
+     */
     public String getPseudo(){
         return this.pseudo;
     }
