@@ -691,7 +691,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                         });
                         syncGrilles(2);
                     
-                    Thread.sleep(1000);
+                    Thread.sleep(600);
                     
                 }
                 // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
@@ -938,7 +938,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         ArrayList<String> tuples;
         String display = "";
         try{
-            tuples = this.partie.getConnexionBDD().getTuples("SELECT * FROM `historiqueparties`");
+            tuples = this.partie.getConnexionBDD().getTuples("SELECT * FROM historiqueparties WHERE Id > (SELECT MAX(Id) - 10 FROM historiqueparties)");
             for(String s : tuples) {
                 display+=s+"\n";
             }
