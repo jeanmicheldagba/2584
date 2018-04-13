@@ -38,29 +38,30 @@ public class IA_Simulation implements Runnable, Parametres, Parametres_IA {
             int evaluated_children;
 
             HashSet<Grille> children = this.ia.getChildren(root, dirsInd);
+            System.out.println(children.isEmpty());
             this.ia.getDirsEval()[direction] = 0; // init the score of this direction
             if (!children.isEmpty()) {
                 evaluated_children = 0;
                 for (Grille child : children) {
-                    if(Math.random()>PRUNE){
-                        evaluated_children++;
-                        if (child.getSpawn() == 1) {
-                            probability = (float) 0.75;
-                        } else if (child.getSpawn() == 2) {
-                            probability = (float) 0.25;
-                        } else {
-                            System.out.println("ERREUR spawn");
-                            probability = -1;
-                        }
-                        this.ia.getDirsEval()[direction] += probability * this.ia.getDirection_recursif(child, depth - 1);
+                    
+                    evaluated_children++;
+                    if (child.getSpawn() == 1) {
+                        probability = (float) 0.75;
+                    } else if (child.getSpawn() == 2) {
+                        probability = (float) 0.25;
+                    } else {
+                        System.out.println("ERREUR spawn");
+                        probability = -1;
                     }
+                    this.ia.getDirsEval()[direction] += probability * this.ia.getDirection_recursif(child, depth - 1);
+
 
                 }
                 if(evaluated_children != 0){
                     this.ia.getDirsEval()[direction] /= evaluated_children;
                 }
 
-            }
+            } else this.ia.getDirsEval()[direction] = -999999;
         } catch (Exception e) {
             e.printStackTrace();
         }
