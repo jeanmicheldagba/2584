@@ -112,18 +112,18 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
             } else {
                 evaluated_children = 0;
                 for (Grille child : children) {
-                    if (Math.random() > PRUNE) {
-                        evaluated_children++;
-                        if (child.getSpawn() == 1) {
-                            probability = (float) 0.75;
-                        } else if (child.getSpawn() == 2) {
-                            probability = (float) 0.25;
-                        } else {
-                            System.out.println("ERREUR spawn");
-                            probability = -1;
-                        }
-                        evaluation += probability * getDirection_recursif(child, depth - 1);
+
+                    evaluated_children++;
+                    if (child.getSpawn() == 1) {
+                        probability = (float) 0.75;
+                    } else if (child.getSpawn() == 2) {
+                        probability = (float) 0.25;
+                    } else {
+                        System.out.println("ERREUR spawn");
+                        probability = -1;
                     }
+                    evaluation += probability * getDirection_recursif(child, depth - 1);
+
 
                 }
                 if (evaluated_children != 0) {
@@ -146,11 +146,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
         if (node.getCases().size() >= TAILLE * TAILLE) {
             evaluation += 999999999; //la partie est perdue.
         } else {
-            evaluation += 50 * Math.exp(node.getCases().size());
-        }
-
-        if (TOWIN) {
-            evaluation *= -1;
+            evaluation += 5* node.getCases().size();
         }
         return evaluation;
     }
@@ -168,24 +164,25 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
 
         for (int dir = 0; dir < keys.length; dir++) { //itère les 4 directions
             child_reference = (Grille) node.clone();
-            botMove(Parametres.keyToDirection(keys[dir]), child_reference); //bouge les cases du child dans la direction
+            if(botMove(Parametres.keyToDirection(keys[dir]), child_reference)) { //bouge les cases du child dans la direction
 
-            // on crée toutes les cases encore libres
-            for (int x = 0; x < TAILLE; x++) {
-                for (int y = 0; y < TAILLE; y++) {
-                    child = (Grille) child_reference.clone();
-                    Case c = new Case(x, y, 1);
-                    if (!child.getCases().contains(c)) { // contains utilise la méthode equals dans Case
-                        //ajoute le 1
-                        child.nouvelleCase(c);
-                        children.add(child);
-
-                        //ajoute le 2
-                        c = (Case) c.clone();
-                        c.setValeur(2);
+                // on crée toutes les cases encore libres
+                for (int x = 0; x < TAILLE; x++) {
+                    for (int y = 0; y < TAILLE; y++) {
                         child = (Grille) child_reference.clone();
-                        child.nouvelleCase(c);
-                        children.add(child);
+                        Case c = new Case(x, y, 1);
+                        if (!child.getCases().contains(c)) { // contains utilise la méthode equals dans Case
+                            //ajoute le 1
+                            child.nouvelleCase(c);
+                            children.add(child);
+
+                            //ajoute le 2
+                            c = (Case) c.clone();
+                            c.setValeur(2);
+                            child = (Grille) child_reference.clone();
+                            child.nouvelleCase(c);
+                            children.add(child);
+                        }
                     }
                 }
             }
@@ -201,9 +198,9 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
      * @param direction direction dans laquelle les cases doivent bouger
      * @param node
      */
-    public void botMove(int direction, Grille node) {
+    public boolean botMove(int direction, Grille node) {
         // On déplace les cases
-        boolean casesMov = node.lanceurDeplacerCases(direction, true);
+        return node.lanceurDeplacerCases(direction, true);
     }
 
 }

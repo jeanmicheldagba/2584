@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
-import vc.Transformation;
 
 public class Grille implements Parametres, Serializable {
 
     private HashSet<Case> cases;    // ensemble des cases de la grille
     private int valeurMax = 0;      // plus grande valeur présente dans la grille
-    private boolean deplacement;    // true si une case a bougé, false sinon (?)
+    private boolean deplacement;    // true si une case a bougé, false sinon
     private int resDeplacement;     // stocke les points générés par la fusion des cases
     private Joueur joueur;          // le joueur a qui appartient la grille
     private int spawn;              // la valeur de la case qui vient de spawn

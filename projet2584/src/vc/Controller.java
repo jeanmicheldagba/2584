@@ -329,7 +329,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                                 grilles[i].getChildren().clear();
                                 grilles[i].getChildren().add(sauv);
                                 for (Case c : partie.getJoueur()[i].getGrille().getCases()) { //pour chaque case
-                                    if(c.getGuiX() != c.getX() || c.getGuiY() != c.getY()) System.out.println("C PAS BON");
                                     nouvelleCaseGUI(c, i);
                                 }
 
@@ -337,7 +336,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                             } while (i < 2 && player == 2); //fait ça deux foix si player == 2
                         }
                     });
-                    Thread.sleep(170); 
 
                     return null; 
                 }
@@ -397,7 +395,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                             label_tuile.setVisible(true);
                         }
                     });
-                    Thread.sleep(170); 
 
                     return null; 
                 }
@@ -458,7 +455,6 @@ public class Controller extends Thread implements Initializable, Parametres {
                                 }
                             }
                         });
-                        Thread.sleep(170); 
 
                         return null; 
                     }
@@ -675,7 +671,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                         }
                     });
                     syncGrilles(2);
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                     
                 }
                 return null;

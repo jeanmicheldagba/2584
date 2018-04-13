@@ -10,7 +10,5 @@ package m;
  * @author jmdag
  */
 public interface Parametres_IA {
-    public static final int DEPTH = 2; //la profondeur de l'arbre de l'IA
-    public static final float PRUNE = (float) 0; //the probability to ignore a child
-    public static final boolean TOWIN = true; //is the goal to win ?
+    public static final int DEPTH = 6; //la profondeur de l'arbre de l'IA
 }
