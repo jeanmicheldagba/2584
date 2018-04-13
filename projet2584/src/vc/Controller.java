@@ -26,6 +26,8 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -234,7 +236,8 @@ public class Controller extends Thread implements Initializable, Parametres {
         type2.getItems().add("AI");
         type2.getItems().add("Dumb");
         
-        console.setText("Please set parameters and press Play");
+        console.setText("Please set parameters and press play");
+        
     }
 
     public void initPartie(boolean retrieve) {
@@ -904,5 +907,26 @@ public class Controller extends Thread implements Initializable, Parametres {
         
         System.out.println("retrieve : "+success);
         return success;
+    }
+    
+    public void showBDD() {
+        ArrayList<String> tuples;
+        String display = "";
+        try{
+            tuples = this.partie.getConnexionBDD().getTuples(this.partie.getConnexionBDD().getPort());
+            for(String s : tuples) {
+                display+=s+"\n";
+            }
+        } catch(Exception e) {
+            display = "No game stored";
+        }
+        
+            
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Stored games");
+        alert.setHeaderText("Stored games");
+        alert.setContentText(display);
+
+        alert.showAndWait();
     }
 }

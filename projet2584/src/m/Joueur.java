@@ -96,7 +96,7 @@ public abstract class Joueur implements Parametres, Serializable {
             if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
                 System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
                 System.out.println("Le joueur "+(this.id+1)+" a gagné !");
-                //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
             }
 
@@ -106,7 +106,7 @@ public abstract class Joueur implements Parametres, Serializable {
                 
                 System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
                 System.out.println("Le joueur "+(this.id+1)+" a perdu !");
-                //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
             }
             this.calculScore(); //on met à jour le score

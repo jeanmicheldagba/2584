@@ -129,4 +129,8 @@ public class ConnexionBDD implements Serializable {
             this.closeConnexion();
         }
     }
+    
+    public String getPort() {
+        return this.port;
+    }
 }

@@ -122,24 +122,28 @@ public class Partie implements Parametres, Serializable{
             name1=((Human)joueurs[0]).getPseudo();
         }
         else if(joueurs[0] instanceof Dumb){//si le joueur est le programme jouant au hasard (Dumb) son nom est "Aléatoire"
-            name1="Aléatoire";
+            name1="Dumb";
         }
         else if(joueurs[0] instanceof IA){//si le joueur est le programme jouant intelligemment (IA) son nom est "Intelligence Artificielle" 
-            name1="Intelligence Artificielle";
+            name1="AI";
         }
         //mêmes instructions pour le 2ème joueur
         if(joueurs[1] instanceof Human){
             name2=((Human)joueurs[1]).getPseudo();
         }
         else if(joueurs[1] instanceof Dumb){
-            name2="Aléatoire";
+            name2="Dumb";
         }
         else if(joueurs[1] instanceof IA){
-            name2="Intelligence Artificielle";
+            name2="AI";
         }
         //Requête SQL qui permet d'insérer les informations de la partie dans la base de données
         String query="INSERT INTO historiqueparties VALUES(null,'"+name1+"','"+name2+"',"+joueurs[0].getScore()+","+joueurs[1].getScore()+","+joueurs[0].grille.getValeurMax()+","+joueurs[1].grille.getValeurMax()+","+joueurs[0].getNbDeplacements()+","+joueurs[1].getNbDeplacements()+")"; //1ère colonne à null car auto incrémentation dans la bdd
         connexionbdd.insertTuples(query);
+    }
+    
+    public ConnexionBDD getConnexionBDD() {
+        return this.connexionbdd;
     }
 
     /**
