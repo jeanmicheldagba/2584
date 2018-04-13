@@ -795,7 +795,7 @@ public class Controller extends Thread implements Initializable, Parametres {
             System.out.println("start game first");
         } else {
             if (playerInd != -1){ //si un des joueurs a pressé la touche  
-                if(!this.partie.getJoueur()[playerInd].getEnd()) { //si la partie n'est pas finie          
+                if(!this.partie.getGameover()) { //si la partie n'est pas finie          
                     Joueur playerObj = this.partie.getJoueur()[playerInd]; // on cherche le joueur
 
                     Grille sauv = null;
