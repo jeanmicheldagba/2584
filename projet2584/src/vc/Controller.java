@@ -677,7 +677,7 @@ public class Controller extends Thread implements Initializable, Parametres {
                         console.setText("Please set parameters and press Play");
                         blink();
                     }*/
-                    Thread.sleep(1000);
+                    Thread.sleep(400);
                     
                 }
                 return null;

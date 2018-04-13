@@ -156,7 +156,7 @@ public class Grille implements Parametres, Serializable {
         if (this.cases.size() < TAILLE * TAILLE) {
             return false;
         } else {
-            for (Case c : this.cases) {
+            /*for (Case c : this.cases) {
                 for (int i = 1; i <= 2; i++) {
                     if (c.getVoisinDirect(i) != null) {
                         //on teste si la case voisine est voisine dans la suite de Fibonacci
@@ -165,9 +165,12 @@ public class Grille implements Parametres, Serializable {
                         }
                     }
                 }
-            }
+            }*/
+            IA ia = new IA(null, 1);
+            ia.setBot();
+            return ia.getChildren(this, KEYS[0]).isEmpty();
         }
-        return true;
+        //return true;
     }
     
     /**

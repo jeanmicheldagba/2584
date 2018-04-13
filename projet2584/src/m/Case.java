@@ -247,7 +247,7 @@ public class Case implements Parametres, Serializable {
      * @param c la case dont on veut tester la valeur
      * @return true si les cases sont voisines dans la suite de Fibonacci, false sinon
      */
-    public boolean fibonacciVoisin(Case c){
+    /*public boolean fibonacciVoisin(Case c){
         int[] fibo=new int[2];
         fibo[0] = this.valeur;
         fibo[1] = c.getValeur();
@@ -276,7 +276,7 @@ public class Case implements Parametres, Serializable {
      * @param c
      * @return 
      */
-    /*public boolean fibonacciVoisinBis(Case c){
+    public boolean fibonacciVoisin(Case c){
         int val_1=this.valeur;
         int val_2=c.getValeur();
         
@@ -312,7 +312,7 @@ public class Case implements Parametres, Serializable {
         return val_1==fib || val_2==fib;
         
         
-    }*/
+    }
 
     /**
      * Permet d'afficher textuellement la case

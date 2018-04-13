@@ -86,6 +86,7 @@ public abstract class Joueur implements Parametres, Serializable {
         
         //Si un déplacement a été effectué, on incrémente de 1 le nombre de déplacements
         if (this.moved) {
+            System.out.println("bloquee : "+this.grille.bloquee());
             
             this.nbDeplacements++;
             //On vérifie si le joueur a gagné
@@ -97,7 +98,9 @@ public abstract class Joueur implements Parametres, Serializable {
             }
 
             //On test si la grille est bloquée(=aucun déplacement possible)
-            else if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
+            
+            else if(this.grille.bloquee() || !this.grille.nouvelleCase()){
+                
                 System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
                 System.out.println("Le joueur "+this.id+" a perdu !");
                 //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
@@ -106,7 +109,7 @@ public abstract class Joueur implements Parametres, Serializable {
 
             this.calculScore(); //on met à jour le score
             
-        }    
+        } else System.out.println("didn't move");
         
             
     }
