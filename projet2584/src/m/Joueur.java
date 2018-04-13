@@ -1,12 +1,19 @@
 package m;
 
-public abstract class Joueur implements Parametres {
+import java.io.Serializable;
+
+/**
+ * 
+ * @author jmdag
+ */
+public abstract class Joueur implements Parametres, Serializable {
     
-    protected Grille grille;
-    protected int score;
-    protected Partie partie;//UTILE????
-    protected int id; //indique si c'est le joueur 1 ou 2
-    protected int nbDeplacements; //nombre de déplacements effectué par un joueur
+    protected Grille grille;        // la grille du joueur 
+    protected int score;            // le score 
+    protected Partie partie;        // la partie à laquelle il participe
+    protected int id;               // indique si c'est le joueur 1 ou 2
+    protected int nbDeplacements;   // nombre de déplacements effectué par un joueur
+    protected boolean moved;        // boolean qui permet de savoir si le joueur a bougé
     
     /**
      * Constructeur de Joueur
@@ -19,6 +26,7 @@ public abstract class Joueur implements Parametres {
         this.nbDeplacements=0;
         this.partie = partie;
         this.id = id;
+        this.moved = false;
     }
     
     /**
@@ -28,6 +36,7 @@ public abstract class Joueur implements Parametres {
     public Grille getGrille(){
         return this.grille;
     }
+    
     /**
      * setter de la grille
      * @param grille nouvelle grille du joueur
@@ -35,6 +44,7 @@ public abstract class Joueur implements Parametres {
     public void setGrille(Grille grille){
         this.grille = grille;
     }
+    
     /**
      * getter du score du joueur
      * @return le score du joueur
@@ -42,6 +52,7 @@ public abstract class Joueur implements Parametres {
     public int getScore(){
         return this.score;
     }
+    
     /**
      * getteur de l'indice du joueur dans la partie
      * @return l'indice du joueur (1 ou 2)
@@ -59,52 +70,52 @@ public abstract class Joueur implements Parametres {
     }
     
     /**
-     * Calcule le score du joueur
+     * Calcule le score du joueur quand il s'est déplacé
      */
     protected void calculScore(){
-        //if(grille.getDeplacement()==true){//on calcule le score uniquement s'il y a eu un déplacement
             this.score+= grille.getResDeplacement();
             grille.setResDeplacement(0);
-        //}
     }
     
     /**
      * Méthode qui déplace les cases si c'est possible et qui permet de savoir si la partie est finie
      * @param direction direction dans laquelle les cases doivent bouger
-     * @return true si la partie est terminée, false si la partie continue
      */
-    public boolean move(int direction) {
+    public void move(int direction) {
+        
         
         //On déplace les cases
-        boolean casesMov = this.grille.lanceurDeplacerCases(direction, false);
+        this.moved = this.grille.lanceurDeplacerCases(direction, false);
         
-        //Si un déplacement a été effectué, on incrémente de +1 le nombre de déplacements
-        if (casesMov) {
-            this.nbDeplacements++;
-        }    
+        //Si un déplacement a été effectué, on incrémente de 1 le nombre de déplacements
+        if (this.moved) {
             
-        //On vérifie si le joueur a gagné
-        if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
-            System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
-            System.out.println("Le joueur "+this.id+" a gagné !");
-            this.partie.setGameover(true);
-            return true; //game over
-        }
-        
-        //On test si la grille est bloquée(=aucun déplacement possible)
-        if(this.getGrille().bloquee()){
-            System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
-            System.out.println("Le joueur "+this.id+" a perdu !");
-            this.partie.setGameover(true);
-            return true; //game over
+            this.nbDeplacements++;
+            //On vérifie si le joueur a gagné
+            if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
+                System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
+                System.out.println("Le joueur "+this.id+" a gagné !");
+                //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.setGameover(true);
             }
-        /*if (!this.grille.nouvelleCase()) { //la grille est pleine
-            System.out.println("Partie terminée, score : "+this.score);
-            return true; //game over
-        }*/ //PB : grille peut être pleine tout en ayant déplacement possible
-        
-        this.calculScore(); //on met à jour le score
-        return false; //game not over : on continue à jouer
+
+            //On test si la grille est bloquée(=aucun déplacement possible)
+            else if(this.getGrille().bloquee() || !this.grille.nouvelleCase()){
+                System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
+                System.out.println("Le joueur "+this.id+" a perdu !");
+                //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
+                this.partie.setGameover(true);
+            }
+            this.calculScore(); //on met à jour le score
+        }       
+    }
+
+    /**
+     * Getter de moved
+     * @return true si le joueur a réussi à effectuer un déplacement, false sinon
+     */
+    public boolean getMoved() {
+        return this.moved;
     }
     
 }

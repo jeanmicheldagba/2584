@@ -5,6 +5,7 @@
  */
 package m;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,13 +17,22 @@ import java.util.ArrayList;
 /**
  *
  * @author apollo7
- * Classe utilisée pour établir une connexion avec la base de données, interroger la base et insérer de nouveaux tuples dans la base
+ * Classe utilisée pour établir une connexion avec la base de données
+ * Hérite de la classe Serializable
  */
-public class ConnexionBDD {
+public class ConnexionBDD implements Serializable {
 
     private String host, port, dbname, username, password;
     private Connection con = null;
 
+    /**
+     * Constructeur de la classe connexionBDD
+     * @param h
+     * @param po
+     * @param dbn nom de la base de données
+     * @param u nom d'utilisateur
+     * @param p mot de passe
+     */
     public ConnexionBDD(String h, String po, String dbn, String u, String p) {
         this.host = h;
         this.port = po;
@@ -31,7 +41,7 @@ public class ConnexionBDD {
         this.password = p;
     }
 
-    /*
+    /**
      * Ouvre la connexion avec la base de données
      */
     private void openConnexion() {
@@ -52,7 +62,7 @@ public class ConnexionBDD {
         }
     }
 
-    /*
+    /**
      * Ferme la connexion avec la base de données
      */
     private void closeConnexion() {
@@ -64,12 +74,13 @@ public class ConnexionBDD {
         }
     }
 
-    /*
-     * Interroge la base de données avec la requête passée en paramètre
-     * et retourne les résultats sous forme d'une liste de String.
-     * Il faut utiliser la méthode executeQuery dans la classe Statement (voir cours 12).
-     * Indice : comme on ne sait pas à l'avance combien d'attributs (colonnes) on a dans nos tuples,
-     * on peut utiliser la classe ResultSetMetaData (voir méthodes getMetaData() de la classe ResultSet et getColumnCount() de la classe ResultSetMetaData)
+    /**
+     * Permet d'interroger la base de données
+     * @param query la requête a exécuter
+     * @return la réponse de la bdd à la requête
+     * @see ResultSet#getMetaData() 
+     * @see ResultSetMetaData#getColumnCount()
+     * @see Statement#executeQuery(java.lang.String)
      */
     public ArrayList<String> getTuples(String query) {
         ArrayList<String> res = null;
@@ -99,9 +110,10 @@ public class ConnexionBDD {
         return res;
     }
     
-    /*
-     * Insère un ou plusieurs tuples dans la base à partir de la requête passée en paramètre
-     * Pour cela, il faut utiliser la méthode executeUpdate dans la classe Statement
+    /**
+     * Insère un ou plusieurs tuples dans la bdd
+     * @param updateQuery requête
+     * @see Statement#executeUpdate(java.lang.String) 
      */
     public void insertTuples(String updateQuery) {
         try {

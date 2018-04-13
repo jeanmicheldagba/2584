@@ -1,5 +1,10 @@
 package m;
 
+/**
+ * @author vaurien
+ * @author jmdag
+ * interface qui définit les paramètres du jeu
+ */
 public interface Parametres {
 
     //définit les 4 touches des deux joueurs : String[2][4]
@@ -13,7 +18,19 @@ public interface Parametres {
     static final int TAILLE = 4;
     static final int OBJECTIF = 2584;
     
+    //paramètres de connexion à la base de données
+    static final String HOST = "localhost"; //"mysql1.alwaysdata.com";
+    static final String PORT = "3306";
+    static final String DBNAME = "bdd_2584";
+    static final String USERNAME = "java";
+    static final String PASSWORD = "java";
+    
 
+    /**
+     * Méthode qui prend permet de savoir la direction choisie par un joueur
+     * @param key la touche appuyée
+     * @return une direction sous forme d'entier
+     */
     public static int keyToDirection(String key) {
         int direction;
         if(key.equals(KEYS[0][0]) || key.equals(KEYS[1][0])) direction = HAUT;

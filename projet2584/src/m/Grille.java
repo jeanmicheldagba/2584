@@ -1,15 +1,16 @@
 package m;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
-public class Grille implements Parametres {
+public class Grille implements Parametres, Serializable {
 
     private HashSet<Case> cases;    // ensemble des cases de la grille
     private int valeurMax = 0;      // plus grande valeur présente dans la grille
-    private boolean deplacement;    // true si une case a bougé, false sinon (?)
+    private boolean deplacement;    // true si une case a bougé, false sinon
     private int resDeplacement;     // stocke les points générés par la fusion des cases
     private Joueur joueur;          // le joueur a qui appartient la grille
     private int spawn;              // la valeur de la case qui vient de spawn
@@ -194,7 +195,7 @@ public class Grille implements Parametres {
     private void fusion(Case c, int add, boolean bot) {
         int sommeCases=c.getValeur()+add;
         
-        // if(!bot) this.joueur.partie.controller.updateValueGUI(c, sommeCases);
+        if(!bot) this.joueur.partie.controller.updateValueGUI(c, sommeCases);
         c.setValeur(sommeCases);
         this.resDeplacement=this.resDeplacement+sommeCases;
         
@@ -244,7 +245,7 @@ public class Grille implements Parametres {
                 }
                 
                 if (this.cases.add(c) && !bot){ // on ajoute la case (si aucune case n'est aux mêmes coordonnées)
-                    this.joueur.partie.controller.transition(c); //fait bouger c sur l'interface
+                    this.joueur.partie.controller.transition(c, false); //fait bouger c sur l'interface
                 }
                     
                 this.deplacement = true;
@@ -255,7 +256,9 @@ public class Grille implements Parametres {
                     this.fusion(c, voisin.getValeur(), bot); //fusionne les voisines dans Fibonacci (somme des 2 cases)
                     extremites[rangee] = voisin.getVoisinDirect(-direction);
                     if(this.cases.remove(voisin) && !bot){
-                        // this.joueur.partie.controller.enleverCaseGUI(voisin);
+                        voisin.setX(c.getX());
+                        voisin.setY(c.getY());
+                        this.joueur.partie.controller.transition(voisin, true); //fait bouger c sur l'interface
                     }
                     
                     this.deplacerCasesRecursif(extremites, rangee, direction, compteur + 1, bot);
@@ -335,7 +338,7 @@ public class Grille implements Parametres {
             this.cases.add(ajout);
             
             //on ajoute la case à l'interface
-            this.joueur.partie.controller.nouvelleCaseGUI(ajout.getX(), ajout.getY(), ajout.getValeur(), this.joueur.getID());
+            this.joueur.partie.controller.nouvelleCaseGUI(ajout, this.joueur.id);
             
             //actualise valeurMax
             if (this.valeurMax < ajout.getValeur()) {
