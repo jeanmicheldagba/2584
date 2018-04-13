@@ -158,6 +158,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
      * @return children of the node
      */
     public HashSet<Grille> getChildren(Grille node, String[] keys) {
+        if(this.id == 9) System.out.println("TEST");
         HashSet<Grille> children = new HashSet();
         Grille child_reference;
         Grille child;
@@ -165,6 +166,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
         for (int dir = 0; dir < keys.length; dir++) { //itère les 4 directions
             child_reference = (Grille) node.clone();
             if(botMove(Parametres.keyToDirection(keys[dir]), child_reference)) { //bouge les cases du child dans la direction
+                if(this.id == 9) System.out.println("MOVEEEE");
 
                 // on crée toutes les cases encore libres
                 for (int x = 0; x < TAILLE; x++) {

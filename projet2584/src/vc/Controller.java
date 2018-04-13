@@ -665,21 +665,26 @@ public class Controller extends Thread implements Initializable, Parametres {
             @Override
             public Void call() throws Exception { // implémentation de la méthode protected abstract V call() dans la classe Task
                 while(!partie.getGameover()){
-                    // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
-                    Platform.runLater(new Runnable() { // classe anonyme
-                        @Override
-                        public void run() {
-                            automaticMove();
-                        }
-                    });
-                    syncGrilles(2);
-                    /*if(partie.getGameover()) {
-                        console.setText("Please set parameters and press Play");
-                        blink();
-                    }*/
-                    Thread.sleep(400);
+                    
+                        // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                        Platform.runLater(new Runnable() { // classe anonyme
+                            @Override
+                            public void run() {
+                                automaticMove();
+                            }
+                        });
+                        syncGrilles(2);
+                    
+                    Thread.sleep(500);
                     
                 }
+                // Platform.runLater est nécessaire en JavaFX car la GUI ne peut être modifiée que par le Thread courant, contrairement à Swing où on peut utiliser un autre Thread pour ça
+                Platform.runLater(new Runnable() { // classe anonyme
+                    @Override
+                    public void run() {
+                        console.setText("Game Over");
+                    }
+                });
                 return null;
             }
         };

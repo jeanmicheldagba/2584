@@ -95,17 +95,17 @@ public abstract class Joueur implements Parametres, Serializable {
             //On vérifie si le joueur a gagné
             if(this.grille.getValeurMax() >= OBJECTIF){ // le joueur a atteint l'objectif
                 System.out.println("You Win! : Vous avez atteint " + this.grille.getValeurMax()+"\n Score : "+this.score);
-                System.out.println("Le joueur "+this.id+" a gagné !");
+                System.out.println("Le joueur "+(this.id+1)+" a gagné !");
                 //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
             }
 
             //On test si la grille est bloquée(=aucun déplacement possible)
             
-            else if(this.grille.bloquee() || !this.grille.nouvelleCase()){
+            else if(!this.grille.nouvelleCase() || this.grille.bloquee()){
                 
                 System.out.println("Game Over : Aucun déplacement possible \n Score : "+this.score);
-                System.out.println("Le joueur "+this.id+" a perdu !");
+                System.out.println("Le joueur "+(this.id+1)+" a perdu !");
                 //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
             }
