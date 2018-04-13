@@ -3,19 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Grille.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/vc/Controller.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/IA.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/vc/View.fxml</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/IA_Simulation.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/ConnexionBDD.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Parametres.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Partie.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Joueur.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Human.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Dumb.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/vc/Main.java</file>
-            <file>file:/C:/Users/apollo7/Documents/NetBeansProjects/2584/projet2584/src/m/Case.java</file>
+            <file>file:/W:/Bibliotheques/Documents/Github/2584/projet2584/src/vc/Controller.java</file>
+            <file>file:/W:/Bibliotheques/Documents/Github/2584/projet2584/src/m/IA_Simulation.java</file>
+            <file>file:/W:/Bibliotheques/Documents/Github/2584/projet2584/src/m/Parametres.java</file>
         </group>
     </open-files>
 </project-private>
