@@ -15,7 +15,7 @@ import m.Parametres;
 
 
 /**
- *
+ * Main du jeu
  * @author Hugo
  */
 public class Main extends Application implements Parametres {

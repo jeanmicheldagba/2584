@@ -6,6 +6,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ * Classe définissant une grille
+ * @author jmdag
+ * @author vaurien
+ */
 public class Grille implements Parametres, Serializable {
 
     private HashSet<Case> cases;    // ensemble des cases de la grille

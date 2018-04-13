@@ -9,10 +9,12 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * @author jmd
- * @author vaurien
  * Classe qui définit un joueur aléatoire
  * Hérite de la classe abstraite Joueur
+ * @author jmd
+ * @author vaurien
+ * 
+ * 
  */
 public class Dumb extends Joueur implements Parametres, Serializable {
     

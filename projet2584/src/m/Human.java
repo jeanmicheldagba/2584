@@ -8,6 +8,7 @@ package m;
 import java.io.Serializable;
 
 /**
+ * Classe définissant un joueur humain
  * @author jmdag
  * @author apollo7
  * @author vaurien

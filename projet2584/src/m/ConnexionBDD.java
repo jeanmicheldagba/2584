@@ -15,11 +15,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- *
- * @author apollo7
- * @author vaurien
  * Classe utilisée pour établir une connexion avec la base de données
  * Hérite de la classe Serializable
+ * @author apollo7
+ * @author vaurien
+ * 
+ * 
  */
 public class ConnexionBDD implements Serializable {
 

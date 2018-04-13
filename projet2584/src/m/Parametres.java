@@ -1,10 +1,11 @@
 package m;
 
 /**
+ * Interface qui définit les paramètres du jeu
  * @author vaurien
  * @author jmdag
  * @author apollo7
- * interface qui définit les paramètres du jeu
+ * 
  */
 public interface Parametres {
 

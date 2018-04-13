@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 /**
- *
+ * Classe définissant un joueur IA
  * @author vaurien
  */
 public class IA extends Joueur implements Parametres, Serializable {

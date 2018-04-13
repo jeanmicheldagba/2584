@@ -3,6 +3,7 @@ package m;
 import java.io.Serializable;
 
 /**
+ * Classe abstraite définissant un joueur
  * @author apollo7
  * @author vaurien
  * @author jmdag

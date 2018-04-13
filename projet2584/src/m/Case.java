@@ -3,6 +3,7 @@ package m;
 import java.io.Serializable;
 
 /**
+ * Classe défissant un object case
  * @author apollo7
  * @author jmdag
  * @author vaurien

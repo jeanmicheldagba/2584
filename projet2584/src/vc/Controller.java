@@ -35,11 +35,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-//import javafx.scene.paint.Color;
-//import javafx.scene.text.Font;
+
 
 /**
- *
+ * Classe Controller qui permet de mettre en relation la vue et les méthodes du jeu
+ * @author jmdag
+ * @author apollo7
  * @author vaurien
  */
 public class Controller extends Thread implements Initializable, Parametres {

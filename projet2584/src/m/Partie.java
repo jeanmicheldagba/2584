@@ -5,6 +5,7 @@ import java.util.Random;
 import vc.Controller;
 
 /**
+ * Classe définissant une partie
  * @author vaurien
  * @author jmdag
  * @author apollo7
