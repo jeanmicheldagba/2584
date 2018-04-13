@@ -18,7 +18,7 @@ public interface Parametres {
     static final int GAUCHE = -2;
 
     static final int TAILLE = 4;
-    static final int OBJECTIF = 21;
+    static final int OBJECTIF = 2584;
     
     //paramètres de connexion à la base de données
     static final String HOST = "localhost"; //"mysql1.alwaysdata.com";
@@ -27,7 +27,7 @@ public interface Parametres {
     static final String USERNAME = "java";
     static final String PASSWORD = "java";
     
-    public static final int DEPTH = 4; //la profondeur de l'arbre de l'IA
+    public static final int DEPTH = 3; //la profondeur de l'arbre de l'IA
 
     /**
      * Méthode qui prend permet de savoir la direction choisie par un joueur
