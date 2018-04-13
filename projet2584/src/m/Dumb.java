@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- *
+ * @author jmd
  * @author vaurien
  */
 public class Dumb extends Joueur implements Parametres, Serializable {
@@ -17,7 +17,7 @@ public class Dumb extends Joueur implements Parametres, Serializable {
     /**
      * Constructeur joueur aléatoire
      * @param partie Partie à laquelle le joueur participe
-     * @param id 
+     * @param id le numéro du joueur dans la partie (1 ou 2)
      */
     public Dumb(Partie partie, int id) {
         super(partie, id);
@@ -25,7 +25,7 @@ public class Dumb extends Joueur implements Parametres, Serializable {
     
     /**
      * Méthode qui choisit une direction au hasard
-     * @return a random direction 
+     * @return un entier correspondant à une direction 
      */
     public int getDirection(){
         int[] directions = {HAUT, BAS, GAUCHE, DROITE};

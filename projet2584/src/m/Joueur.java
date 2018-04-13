@@ -2,14 +2,18 @@ package m;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author jmdag
+ */
 public abstract class Joueur implements Parametres, Serializable {
     
-    protected Grille grille;
-    protected int score;
-    protected Partie partie;
-    protected int id; //indique si c'est le joueur 1 ou 2
-    protected int nbDeplacements; //nombre de déplacements effectué par un joueur
-    protected boolean moved;
+    protected Grille grille;        // la grille du joueur 
+    protected int score;            // le score 
+    protected Partie partie;        // la partie à laquelle il participe
+    protected int id;               // indique si c'est le joueur 1 ou 2
+    protected int nbDeplacements;   // nombre de déplacements effectué par un joueur
+    protected boolean moved;        // boolean qui permet de savoir si le joueur a bougé
     
     /**
      * Constructeur de Joueur
@@ -63,19 +67,16 @@ public abstract class Joueur implements Parametres, Serializable {
     }
     
     /**
-     * Calcule le score du joueur
+     * Calcule le score du joueur quand il s'est déplacé
      */
     protected void calculScore(){
-        //if(grille.getDeplacement()==true){//on calcule le score uniquement s'il y a eu un déplacement
             this.score+= grille.getResDeplacement();
             grille.setResDeplacement(0);
-        //}
     }
     
     /**
      * Méthode qui déplace les cases si c'est possible et qui permet de savoir si la partie est finie
      * @param direction direction dans laquelle les cases doivent bouger
-     * @return true si la partie est terminée, false si la partie continue
      */
     public void move(int direction) {
         
@@ -83,7 +84,7 @@ public abstract class Joueur implements Parametres, Serializable {
         //On déplace les cases
         this.moved = this.grille.lanceurDeplacerCases(direction, false);
         
-        //Si un déplacement a été effectué, on incrémente de +1 le nombre de déplacements
+        //Si un déplacement a été effectué, on incrémente de 1 le nombre de déplacements
         if (this.moved) {
             
             this.nbDeplacements++;
@@ -110,6 +111,10 @@ public abstract class Joueur implements Parametres, Serializable {
             
     }
 
+    /**
+     * Getter de moved
+     * @return true si le joueur a réussi à effectuer un déplacement, false sinon
+     */
     public boolean getMoved() {
         return this.moved;
     }
