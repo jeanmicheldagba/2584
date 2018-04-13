@@ -61,63 +61,64 @@ public class Grille implements Parametres, Serializable {
     }
     
     /**
-     * 
-     * @param v 
+     * Setter de la valeur max de la grille
+     * @param v nouvelle plus grande valeur de la grille
      */
     public void setValeurMax(int v){
         this.valeurMax = v;
     }
     /**
-     * 
-     * @param b 
+     * Setter de deplacement qui permet de mettre à jour si le joueur a bougé
+     * @param b nouvelle valeur de deplacement
      */
     public void setDeplacement(boolean b){
         this.deplacement = b;
     }
     
     /**
-     * 
-     * @return 
+     * Getter de deplacement
+     * Permet de savoir si un joueur a réussi un déplacement
+     * @return la valeur de déplacement
      */
     public boolean getDeplacement(){
         return this.deplacement;
     }
     
     /**
-     * 
-     * @return 
+     * Getter du joueur a qui appartient la grille
+     * @return le joueur propirétaire de la grille
      */
     public Joueur getJoueur(){
         return this.joueur;
     }
     
     /**
-     * 
-     * @param rd 
+     * Setter du nombre de déplacement effectués au cours d'un tour dans la grille
+     * @param rd le nouveau nombre de déplacmeent
      */
     public void setResDeplacement(int rd){
         this.resDeplacement=rd;
     }
     
     /**
-     * 
-     * @return 
+     * Getter du nombre de déplacement dans la grille
+     * @return le nombre de déplacements
      */
     public int getResDeplacement(){
         return this.resDeplacement;
     }
     
     /**
-     * 
-     * @param h 
+     * Setter des cases de la grille
+     * @param h le nouvel ensemble des cases de la grille 
      */
     public void setGrille(HashSet<Case> h){
         this.cases = h;
     }
 
     /**
-     * 
-     * @return 
+     * ToString de la grille
+     * @return la grille de manière textuelle
      */
     @Override
     public String toString() {
@@ -133,16 +134,16 @@ public class Grille implements Parametres, Serializable {
     }
 
     /**
-     * 
-     * @return 
+     * Getter de la l'ensemble des cases de la grille
+     * @return un ensemble de cases
      */
     public HashSet<Case> getCases() {
         return this.cases;
     }
 
     /**
-     * 
-     * @return 
+     * Getter de la valeur max
+     * @return le plus grand nombre présent dans la case
      */
     public int getValeurMax() {
         return valeurMax;
@@ -171,10 +172,11 @@ public class Grille implements Parametres, Serializable {
     }
     
     /**
-     * 
-     * @param direction
-     * @param bot
-     * @return 
+     * Méthode qui fait le déplacement
+     * @param direction la direction dans laquelle on doit déplacer les cases
+     * @param bot true si c'est une test, false sinon
+     * @return true si on a fait au moins un déplacement, false sinon
+     * @see Grille#deplacerCasesRecursif(m.Case[], int, int, int, boolean) 
      */
     public boolean lanceurDeplacerCases(int direction, boolean bot) {
         Case[] extremites = this.getCasesExtremites(direction);
@@ -186,12 +188,12 @@ public class Grille implements Parametres, Serializable {
     }
     
     /**
-     * 
-     * @param c
-     * @param add
-     * @param bot 
+     * Permet de fusionner des cases et de mettre a jour la GUI
+     * @param c la case résultant de la fusion
+     * @param add la valeur a ajouter à la valeur de la case
+     * @param bot true si c'est une test, false sinon
+     * @see vc.Controller#updateValueGUI(m.Case, int) 
      */
-    //Incrémente c de la valeur add
     private void fusion(Case c, int add, boolean bot) {
         int sommeCases=c.getValeur()+add;
         
@@ -207,12 +209,12 @@ public class Grille implements Parametres, Serializable {
     }
 
     /**
-     * 
-     * @param extremites
-     * @param rangee
-     * @param direction
-     * @param compteur
-     * @param bot 
+     * Permet de déplacer récursivement les cases de la grille
+     * @param extremites tableau des cases situé à l'extrimité de la direction choisie
+     * @param rangee indique la rangée sur laquelle on travaille
+     * @param direction la direction du deplacement
+     * @param compteur indique la coordonnée a atteindre
+     * @param bot true si c'est un test, false sinon
      */
     private void deplacerCasesRecursif(Case[] extremites, int rangee, int direction, int compteur, boolean bot) {
         int objectif;
@@ -270,17 +272,15 @@ public class Grille implements Parametres, Serializable {
         }
     }
     
-    /*
-    * Si direction = HAUT : retourne les 4 cases qui sont le plus en haut (une pour chaque colonne)
-    * Si direction = DROITE : retourne les 4 cases qui sont le plus à droite (une pour chaque ligne)
-    * Si direction = BAS : retourne les 4 cases qui sont le plus en bas (une pour chaque colonne)
-    * Si direction = GAUCHE : retourne les 4 cases qui sont le plus à gauche (une pour chaque ligne)
-    * Attention : le tableau retourné peut contenir des null si les lignes/colonnes sont vides
-     */
     /**
-     * 
-     * @param direction
-     * @return 
+     * Méthode pour obtenir les cases à l'extrimitée en fonction d'une direction
+     * @param direction la direction dans laquelle on veut les cases situées à l'extremite.
+     * Si direction = HAUT : retourne les 4 cases qui sont le plus en haut (une pour chaque colonne)
+     * Si direction = DROITE : retourne les 4 cases qui sont le plus à droite (une pour chaque ligne)
+     * Si direction = BAS : retourne les 4 cases qui sont le plus en bas (une pour chaque colonne)
+     * Si direction = GAUCHE : retourne les 4 cases qui sont le plus à gauche (une pour chaque ligne)
+     * @return le tableau des cases à l'extrémité
+     * Attention : le tableau retourné peut contenir des null si les lignes/colonnes sont vides
      */
     public Case[] getCasesExtremites(int direction) {
         Case[] result = new Case[TAILLE];
@@ -312,8 +312,8 @@ public class Grille implements Parametres, Serializable {
     }
 
     /**
-     * 
-     * @return 
+     * Création d'une nouvelle case dans la grille après un déplacement
+     * @return true si une nouvelle case a bien été ajouté à la grille
      */
     public boolean nouvelleCase() {
         if (this.cases.size() < TAILLE*TAILLE) {
@@ -350,13 +350,12 @@ public class Grille implements Parametres, Serializable {
         }
     }
     
-    //ajoute une case de valeur et de coordonnées données
-    //attention : vérifier que l'emplacement est libre
     /**
-     * 
-     * @param valeur
-     * @param x
-     * @param y 
+     * ajoute une case de valeur et de coordonnées données
+     * @param valeur la valeur de la nouvelle case
+     * @param x l'abscisse de la nouvelle case
+     * @param y l'ordonnée de la nouvelle case
+     * Attention : vérifier que l'emplacement est libre
      */
     public void nouvelleCase(int valeur, int x, int y) {
 

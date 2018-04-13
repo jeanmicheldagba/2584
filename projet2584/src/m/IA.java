@@ -7,37 +7,51 @@ package m;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author vaurien
  */
-public class IA extends Joueur implements Parametres, Parametres_IA, Serializable {
+public class IA extends Joueur implements Parametres, Serializable {
 
     private IA bot; // l'IA sur laquelle on va faire les simulations
-    private int[] dirsEval;
+    private int[] dirsEval; //
 
+    /**
+     * Getter de dirsEval
+     * @return un tableau d'entiers représentant des directions
+     */
     public int[] getDirsEval() {
         return this.dirsEval;
     }
 
+    /**
+     * Constructeur de l'IA
+     * @param partie la partie dans laquelle l'IA joue
+     * @param id son numéro de joueur dans la partie
+     */
     public IA(Partie partie, int id) {
         super(partie, id);
     }
 
+    /**
+     * Setter de bot qui permet de faire des simulations
+     */
     public void setBot() {
         this.bot = new IA(this.partie, -1);
     }
 
+    /**
+     * Getter du bot de l'IA
+     * @return le bot de l'IA
+     */
     public IA getBot() {
         return this.bot;
     }
 
     /**
-     *
-     * @return the best direction
+     * Méthode qui choisit une direction optimale 
+     * @return la meilleure direction (c'est-à-dire celle qui augmente le plus les chances de perdre)
      */
     public int getDirection() {
         this.dirsEval = new int[4];
@@ -136,10 +150,8 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
 
     /**
      * evaluate the given node according to the goal
-     *
      * @param node the node to evaluate
-     * @param goal_is_loose is the goal loosing or winning ?
-     * @return
+     * @return une valeur indiquant si c'est une bonne situation
      */
     public int evaluate(Grille node) {
         int evaluation = 0;
@@ -153,8 +165,7 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
 
     /**
      * generate all children of the node
-     *
-     * @param node
+     * @param node la grille dont on veut voir tous les enfants possibles
      * @return children of the node
      */
     public HashSet<Grille> getChildren(Grille node, String[] keys) {
@@ -195,10 +206,9 @@ public class IA extends Joueur implements Parametres, Parametres_IA, Serializabl
     }
 
     /**
-     * bouge les cases
-     *
+     * bouge les cases dans la grille du joueur IA
      * @param direction direction dans laquelle les cases doivent bouger
-     * @param node
+     * @param node la grille dans laquelle on déplace les cases
      */
     public boolean botMove(int direction, Grille node) {
         // On déplace les cases

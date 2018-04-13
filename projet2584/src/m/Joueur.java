@@ -89,7 +89,6 @@ public abstract class Joueur implements Parametres, Serializable {
         
         //Si un déplacement a été effectué, on incrémente de 1 le nombre de déplacements
         if (this.moved) {
-            System.out.println("bloquee : "+this.grille.bloquee());
             
             this.nbDeplacements++;
             //On vérifie si le joueur a gagné

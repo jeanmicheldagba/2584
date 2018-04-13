@@ -98,19 +98,6 @@ public class Partie implements Parametres, Serializable{
 
         }
     }
-    /* ON GERE CE CAS DANS LA METHODE move DE LA CLASSE Joueur
-    //détermine si un des joueurs est bloqué
-    public boolean partieBloquee() {
-        boolean bloque = false;
-        for (int i = 0; i < 2; i++) {
-            if (this.joueur[i].getGrille().bloquee()) {
-                bloque = true;
-                System.out.println("Le joueur " + (i + 1) + " a perdu !");
-            }
-        }
-        return bloque;
-    }
-    */
     
     /**
      * met à jour la base de données avec les informations de la partie quand celle-ci se finit = historique des parties

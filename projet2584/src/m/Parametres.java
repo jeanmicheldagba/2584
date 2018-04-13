@@ -16,7 +16,7 @@ public interface Parametres {
     static final int GAUCHE = -2;
 
     static final int TAILLE = 4;
-    static final int OBJECTIF = 2584;
+    static final int OBJECTIF = 21;
     
     //paramètres de connexion à la base de données
     static final String HOST = "localhost"; //"mysql1.alwaysdata.com";

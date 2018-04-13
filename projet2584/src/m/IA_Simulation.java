@@ -8,19 +8,27 @@ package m;
 import java.util.HashSet;
 
 /**
- *
- * @author jmdag
+ * Classe permemttant de faire des simulations de l'IA
+ * @author vaurien
  */
-public class IA_Simulation implements Runnable, Parametres, Parametres_IA {
+public class IA_Simulation implements Runnable, Parametres {
 
     private int direction;
     private IA ia;
     
+    /**
+     * Constructeur de IA_Simulation
+     * @param dir une direction 
+     * @param ia l'ia à simuler
+     */
     public IA_Simulation(int dir, IA ia) {
         this.direction = dir;
         this.ia = ia;
     }
     
+    /**
+     * simulation 
+     */
     @Override
     public void run() {
         try {
