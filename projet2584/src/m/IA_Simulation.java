@@ -63,7 +63,9 @@ public class IA_Simulation implements Runnable, Parametres, Parametres_IA {
 
             } else this.ia.getDirsEval()[direction] = -999999;
         } catch (Exception e) {
+            System.out.println("erreur ia simu");
             e.printStackTrace();
+            
         }
         System.out.println("thread_fini");
     }

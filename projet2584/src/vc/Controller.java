@@ -81,6 +81,8 @@ public class Controller extends Thread implements Initializable, Parametres {
     @FXML
     private Button play;
     @FXML
+    private Button start;
+    @FXML
     private Pane background;
     @FXML
     private Label score1;
@@ -103,7 +105,7 @@ public class Controller extends Thread implements Initializable, Parametres {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        start.setVisible(false);
         boolean retrieve = retrieve();
         
         if(!retrieve) {
@@ -300,7 +302,7 @@ public class Controller extends Thread implements Initializable, Parametres {
         syncGrilles(2);
         
         if(!(this.partie.getJoueur()[0] instanceof Human || this.partie.getJoueur()[1] instanceof Human)) {
-            automaticPlay();
+            start.setVisible(true);
         }
 
     }
@@ -671,6 +673,10 @@ public class Controller extends Thread implements Initializable, Parametres {
                         }
                     });
                     syncGrilles(2);
+                    /*if(partie.getGameover()) {
+                        console.setText("Please set parameters and press Play");
+                        blink();
+                    }*/
                     Thread.sleep(1000);
                     
                 }
@@ -714,6 +720,12 @@ public class Controller extends Thread implements Initializable, Parametres {
         System.out.println("Refocus de la fenêtre");
         background.getScene().addEventFilter(KeyEvent.KEY_PRESSED,
                 event2 -> keyPressed(event2));
+    }
+    
+    @FXML
+    public void start() {
+        start.setVisible(false);
+        automaticPlay();
     }
 
     /**
@@ -819,7 +831,8 @@ public class Controller extends Thread implements Initializable, Parametres {
                         automaticMove();
                     }
                 } else {
-                    
+                    console.setText("Game Over");
+                    blink();
                 }
             }
 
