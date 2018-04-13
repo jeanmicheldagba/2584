@@ -29,9 +29,9 @@ public class ConnexionBDD implements Serializable {
      * Constructeur de la classe connexionBDD
      * @param h
      * @param po
-     * @param dbn
-     * @param u
-     * @param p 
+     * @param dbn nom de la base de données
+     * @param u nom d'utilisateur
+     * @param p mot de passe
      */
     public ConnexionBDD(String h, String po, String dbn, String u, String p) {
         this.host = h;
@@ -74,17 +74,13 @@ public class ConnexionBDD implements Serializable {
         }
     }
 
-    /*
-     * Interroge la base de données avec la requête passée en paramètre
-     * et retourne les résultats sous forme d'une liste de String.
-     * Il faut utiliser la méthode executeQuery dans la classe Statement (voir cours 12).
-     * Indice : comme on ne sait pas à l'avance combien d'attributs (colonnes) on a dans nos tuples,
-     * on peut utiliser la classe ResultSetMetaData (voir méthodes getMetaData() de la classe ResultSet et getColumnCount() de la classe ResultSetMetaData)
-     */
     /**
-     * 
-     * @param query
-     * @return 
+     * Permet d'interroger la base de données
+     * @param query la requête a exécuter
+     * @return la réponse de la bdd à la requête
+     * @see ResultSet#getMetaData() 
+     * @see ResultSetMetaData#getColumnCount()
+     * @see Statement#executeQuery(java.lang.String)
      */
     public ArrayList<String> getTuples(String query) {
         ArrayList<String> res = null;
@@ -115,9 +111,9 @@ public class ConnexionBDD implements Serializable {
     }
     
     /**
-     * Insère un ou plusieurs tuples dans la base à partir de la requête passée en paramètre
-     * Pour cela, il faut utiliser la méthode executeUpdate dans la classe Statement
-     * @param updateQuery 
+     * Insère un ou plusieurs tuples dans la bdd
+     * @param updateQuery requête
+     * @see Statement#executeUpdate(java.lang.String) 
      */
     public void insertTuples(String updateQuery) {
         try {

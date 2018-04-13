@@ -36,6 +36,7 @@ public abstract class Joueur implements Parametres, Serializable {
     public Grille getGrille(){
         return this.grille;
     }
+    
     /**
      * setter de la grille
      * @param grille nouvelle grille du joueur
@@ -43,6 +44,7 @@ public abstract class Joueur implements Parametres, Serializable {
     public void setGrille(Grille grille){
         this.grille = grille;
     }
+    
     /**
      * getter du score du joueur
      * @return le score du joueur
@@ -50,6 +52,7 @@ public abstract class Joueur implements Parametres, Serializable {
     public int getScore(){
         return this.score;
     }
+    
     /**
      * getteur de l'indice du joueur dans la partie
      * @return l'indice du joueur (1 ou 2)
@@ -106,12 +109,8 @@ public abstract class Joueur implements Parametres, Serializable {
                 //this.partie.majBDD();//fin de la partie : on entre les informations dans la base de données
                 this.partie.setGameover(true);
             }
-
             this.calculScore(); //on met à jour le score
-            
         } else System.out.println("didn't move");
-        
-            
     }
 
     /**
