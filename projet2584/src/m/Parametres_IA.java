@@ -10,5 +10,5 @@ package m;
  * @author jmdag
  */
 public interface Parametres_IA {
-    public static final int DEPTH = 4; //la profondeur de l'arbre de l'IA
+    public static final int DEPTH = 1; //la profondeur de l'arbre de l'IA
 }
