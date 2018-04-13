@@ -108,10 +108,10 @@ public class IA extends Joueur implements Parametres, Serializable {
     }
 
     /**
-     *
-     * @param node
-     * @param depth
-     * @return
+     * Développement récursif des chemins possibles pour obtenir la meilleure action
+     * @param node un noeud de l'arbre des possibilités
+     * @param depth la profondeur de l'arbre
+     * @return la meilleure direction
      */
     public int getDirection_recursif(Grille node, int depth) {
         if (depth == 0 || node.getCases().size() >= TAILLE * TAILLE) {

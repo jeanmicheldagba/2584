@@ -8,7 +8,8 @@ package m;
 import java.io.Serializable;
 
 /**
- *
+ * @author jmdag
+ * @author apollo7
  * @author vaurien
  */
 public class Human extends Joueur implements Parametres, Serializable {

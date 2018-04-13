@@ -40,7 +40,7 @@ import javafx.scene.layout.Pane;
 
 /**
  *
- * @author castagno
+ * @author vaurien
  */
 public class Controller extends Thread implements Initializable, Parametres {
 
@@ -105,6 +105,11 @@ public class Controller extends Thread implements Initializable, Parametres {
     private Label[] scores;
     private HashSet<Thread>[] transitions;
 
+    /**
+     * 
+     * @param url
+     * @param rb 
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         start.setVisible(false);
@@ -185,6 +190,9 @@ public class Controller extends Thread implements Initializable, Parametres {
         }
     }
 
+    /**
+     * 
+     */
     public void blink() {
         /**
          * thread pour faire clignoter la console et attirer l'attention de
@@ -240,6 +248,10 @@ public class Controller extends Thread implements Initializable, Parametres {
         
     }
 
+    /**
+     * 
+     * @param retrieve 
+     */
     public void initPartie(boolean retrieve) {
 
         //on passe à la configuration partie
@@ -367,12 +379,9 @@ public class Controller extends Thread implements Initializable, Parametres {
     }
 
     /**
-     * ajoute case à l'interface
-     *
-     * @param x coordonnée
-     * @param y coordonnée
-     * @param val valeur de la case
-     * @param playerInd joueur à qui est la case
+     * ajoute une case à l'interface
+     * @param new_case nouvelle case de l'interface
+     * @param playerInd le joueur a qui appartient la case
      */
     public void nouvelleCaseGUI(Case new_case, int playerInd) {
         int val = new_case.getValeur();
@@ -663,6 +672,9 @@ public class Controller extends Thread implements Initializable, Parametres {
         finished_thread.start();
     }
     
+    /**
+     * jeu automatique quand il n'y a pas de joueurs humain
+     */
     public void automaticPlay() {
         Task automatic_play_task = new Task<Void>() {
             @Override
@@ -696,8 +708,7 @@ public class Controller extends Thread implements Initializable, Parametres {
     }
     
     /**
-     * fait bouger les dumbs du plateau
-     * @param moveOpponent vrai si la méthode doit faire bouger l'autre joueur qui n'est pas un Dumb
+     * fait bouger les joueurs non-humain du plateau
      */
     public void automaticMove(){
         for(int i=0; i<2; i++) {
@@ -715,10 +726,6 @@ public class Controller extends Thread implements Initializable, Parametres {
         
     }
     
-    /*
-     * Méthodes listeners pour gérer les événements (portent les mêmes noms que
-     * dans Scene Builder
-     */
     /**
      * On refocus la fenêtre pour enlever le bug des entrées clavier
      */
@@ -730,6 +737,9 @@ public class Controller extends Thread implements Initializable, Parametres {
                 event2 -> keyPressed(event2));
     }
     
+    /**
+     * lancement du jeu automatique
+     */
     @FXML
     public void start() {
         start.setVisible(false);
@@ -765,6 +775,10 @@ public class Controller extends Thread implements Initializable, Parametres {
         }
     }
 
+    /**
+     * Undo GUI
+     * @param mouse quand un joueur clique sur undo
+     */
     @FXML
     public void undo(Event mouse) {
         //trouve le joueur qui a appuyé sur undo
@@ -795,8 +809,8 @@ public class Controller extends Thread implements Initializable, Parametres {
     }
     
     /**
-     * 
-     * @param key 
+     * Déplacement des cases à chaque appuie d'une touche
+     * @param key la touche pressée
      */
     @FXML
     public void keyPressed(KeyEvent key) {
@@ -848,6 +862,9 @@ public class Controller extends Thread implements Initializable, Parametres {
 
     }
     
+    /**
+     * Permet la sérialisation d'une partie
+     */
     public void serialize() {
         System.out.println("serialize");
         
@@ -875,6 +892,10 @@ public class Controller extends Thread implements Initializable, Parametres {
     
     }
     
+    /**
+     * 
+     * @return 
+     */
     public boolean retrieve() {
         
         boolean success = true;
@@ -909,6 +930,9 @@ public class Controller extends Thread implements Initializable, Parametres {
         return success;
     }
     
+    /**
+     * Montre les 10 dernières parties
+     */
     public void showBDD() {
         ArrayList<String> tuples;
         String display = "";

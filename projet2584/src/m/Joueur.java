@@ -3,7 +3,8 @@ package m;
 import java.io.Serializable;
 
 /**
- * 
+ * @author apollo7
+ * @author vaurien
  * @author jmdag
  */
 public abstract class Joueur implements Parametres, Serializable {

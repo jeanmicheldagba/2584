@@ -5,16 +5,12 @@
  */
 package vc;
 
-import java.util.Random;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import m.Grille;
-import m.Case;
-import m.IA;
 import m.Parametres;
 
 

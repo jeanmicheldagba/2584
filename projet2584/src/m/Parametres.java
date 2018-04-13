@@ -3,6 +3,7 @@ package m;
 /**
  * @author vaurien
  * @author jmdag
+ * @author apollo7
  * interface qui définit les paramètres du jeu
  */
 public interface Parametres {

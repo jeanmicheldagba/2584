@@ -2,6 +2,11 @@ package m;
 
 import java.io.Serializable;
 
+/**
+ * @author apollo7
+ * @author jmdag
+ * @author vaurien
+ */
 public class Case implements Parametres, Serializable {
 
     private int x, y, valeur;
@@ -241,36 +246,6 @@ public class Case implements Parametres, Serializable {
         return null;
     }
     
-    /**
-     * Détermine si deux cases sont voisines dans la suite de Fibonacci
-     * Non définie pour les valeurs 0 et 1.
-     * @param c la case dont on veut tester la valeur
-     * @return true si les cases sont voisines dans la suite de Fibonacci, false sinon
-     */
-    /*public boolean fibonacciVoisin(Case c){
-        int[] fibo=new int[2];
-        fibo[0] = this.valeur;
-        fibo[1] = c.getValeur();
-        
-        //Si les deux cases valent 1, elles sont voisines car F(1)=F(2)=1
-        if(fibo[0] == fibo[1]){
-            if(fibo[0]==1) return true;
-            else return false;
-        }
-        else{
-            int n;
-            double phi = 1.61803398874989484820;
-            int[] index = new int[2];
-            
-            for(int i=0;i<2;i++){
-                index[i] = Math.round((float) (Math.log(fibo[i] * Math.sqrt(5) + 0.5) / Math.log(phi)));
-            }
-            
-            return Math.abs(index[0] - index[1]) == 1;
-        }         
-        
-    }
-
     /**
      * Détermine si la valeur de c est voisine de la valeur de this dans la suite de Fibonacci
      * @param c

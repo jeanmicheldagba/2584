@@ -10,6 +10,7 @@ import java.util.HashSet;
 /**
  * Classe permemttant de faire des simulations de l'IA
  * @author vaurien
+ * @author jmdag
  */
 public class IA_Simulation implements Runnable, Parametres {
 

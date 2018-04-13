@@ -17,6 +17,7 @@ import java.util.ArrayList;
 /**
  *
  * @author apollo7
+ * @author vaurien
  * Classe utilisée pour établir une connexion avec la base de données
  * Hérite de la classe Serializable
  */
@@ -27,8 +28,8 @@ public class ConnexionBDD implements Serializable {
 
     /**
      * Constructeur de la classe connexionBDD
-     * @param h
-     * @param po
+     * @param h host de la bdd
+     * @param po port de la bdd
      * @param dbn nom de la base de données
      * @param u nom d'utilisateur
      * @param p mot de passe
@@ -130,6 +131,10 @@ public class ConnexionBDD implements Serializable {
         }
     }
     
+    /**
+     * Getter 
+     * @return 
+     */
     public String getPort() {
         return this.port;
     }
