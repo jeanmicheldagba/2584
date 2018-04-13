@@ -25,6 +25,7 @@ public interface Parametres {
     static final String USERNAME = "java";
     static final String PASSWORD = "java";
     
+    public static final int DEPTH = 4; //la profondeur de l'arbre de l'IA
 
     /**
      * Méthode qui prend permet de savoir la direction choisie par un joueur
